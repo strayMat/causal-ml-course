@@ -1,0 +1,67 @@
+[tool.poetry]
+name = "mleco"
+version = "0.0.0"
+description = "Mleco"
+authors = ["Matthieu Doutreligne <matt.dout@gmail.com>"]
+license = "EUPL-v1.2"
+readme = "README.md"
+repository = "https://github.com/straymat/causal-ml-course"
+homepage = "https://github.com/straymat/causal-ml-course"
+include = ["bin"]
+keywords = []
+classifiers = [
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+# [tool.poetry.urls]
+# Changelog = "https://github.com/straymat/causal-ml-course/releases"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+# Project-Specific
+python-dotenv = "^0.20.0"
+click = "^8.0.4"
+[tool.poetry.group.notebooks.dependencies]
+# Jupyter Notebook
+jupyter = "^1.0.0"
+matplotlib = "^3.5.1"
+jupytext = "^1.13.7"
+[tool.poetry.group.documentation]
+optional = true
+[tool.poetry.group.documentation.dependencies]
+
+# Documentation
+importlib-metadata = { version = "^6" }
+myst-parser = { version = "^1" }
+pygments = { version = "^2.11.2" }
+sphinx = { version = "^6" }
+pydata-sphinx-theme = { version = "^0" }
+sphinx-click = { version = "^4" }
+
+[tool.poetry.group.dev.dependencies]
+
+[tool.poetry.scripts]
+cli = "bin.cli:cli"
+
+#################################################################################
+# Tooling configs                                                               #
+#################################################################################
+
+[tool.cruft]
+skip = [
+    ".git",
+    "README.md",
+]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
