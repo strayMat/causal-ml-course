@@ -71,8 +71,9 @@ html_favicon = "_static/favicon.ico"
 html_theme_options = {
     "footer_items": ["sphinx-version"],
     "logo": {
-        "image_light": "logo-light.svg",
-        "image_dark": "logo-dark.svg",
+        "image": "logo.svg",
+        # "image_light": "logo-light.svg",
+        #"image_dark": "logo-dark.svg",
     },
 }
 html_show_sourcelink = (
