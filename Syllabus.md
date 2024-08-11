@@ -35,15 +35,20 @@ Code samples :
 
 - Causal graph, front-door criteria and valid adjustment sets.
  
-- Coding session : Valid and unvalid adjustment sets, with simple linear models. Effects on  
+- Coding session : Valid and unvalid adjustment sets, with simple linear models. Effects on bias.
+
+### Lecture
 
 ## Session 2
 
 - ATE
 
-- Model-based or outcome based identification
+- Model-based / outcome based identification, propensity score estimation
 
 - Identification proofs 
+
+### Lecture
+
 
 
 ## Session 3
@@ -56,13 +61,15 @@ Code samples :
 
 - Loss function for CATE
 
+### Lecture
+
 ## Session 4
 
 - Sensitivity analysis 
 
-- Optimal policy?
+- Optimal policy ?
 
-
+### Lecture
 
 
 ## Session 5 (Advanced topics) 
@@ -73,6 +80,6 @@ Code samples :
 
 - DID
 
-- Synthetic controls ?  
+- Synthetic controls 
 
 # 
