@@ -2,11 +2,11 @@
 
 ## Content 
 
-Four sessions of three hours presenting important concepts and methods on modern causal inference. For step of the causal inference workflow, illustrate with well known examples from the econometric literature and run some codes for student to get some intuition.
+Four sessions of three hours presenting important concepts and methods on machine learning for econometrics focusing on modern causal inference. 
 
-Code samples : 
+Four steps for sound causal inference, illustrated with well known examples from the econometrics literature. 
 
-- Running example ? 
+Common thread : TODO 
 
 ## Evaluation 
 
@@ -80,6 +80,6 @@ Code samples :
 
 - DID
 
-- Synthetic controls 
+- Synthetic controls :
 
-# 
+# Puig-Codina, L., Pinilla, J., & Puig-Junoy, J. (2021). The impact of taxing sugar-sweetened beverages on cola purchasing in Catalonia: an approach to causal inference with time series cross-sectional data. The European Journal of Health Economics, 22(1), 155-168.

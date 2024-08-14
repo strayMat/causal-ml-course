@@ -28,8 +28,8 @@
 
 #title-slide(
   author: [Authors],
-  title: "Machine Learning for econometrics",
-  subtitle: "Causal perspective",
+  title: "Causal Machine Learning",
+  subtitle: "Introduction",
   date: "January 10, 2025",
   //extra: "Extra"
 )
@@ -43,6 +43,19 @@
 #slide()[
   Some inspiratong stuff
 ]
+
+#new-section-slide("Synthetic Controls")
+
+#slide()[
+  == Synthetic Controls
+
+  - A method for estimating the effect of a treatment on a single unit
+  - The treatment unit is compared to a weighted average of control units
+  - The weights are chosen to minimize the difference between the treated unit and the synthetic control
+
+  Example for the effect of taxes on sugar-based product consumption in @puig2021impact
+]
+
 
 #slide[
   == This slide changes!
@@ -64,3 +77,9 @@
 - https://alejandroschuler.github.io/mci/
 ]
 
+
+#slide[
+  == Bibliography
+  
+#bibliography("biblio.bib")  
+]
