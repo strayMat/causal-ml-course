@@ -161,6 +161,7 @@ coverage: clean
 ## `make docs-html` builds the docs in HTML format,
 ## `make docs-clean` cleans the docs build directory
 docs-%:
+	cp slides/biblio.bib docs/source/_static/
 	$(MAKE) $* -C docs
 
 .PHONY: test-docs
