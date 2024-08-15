@@ -1,11 +1,16 @@
 """Sphinx configuration."""
+
 import pathlib
 import sys
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List
 
 import importlib_metadata
+import sphinxcontrib.bibtex.plugin
 from dotenv import load_dotenv
+from sphinxcontrib.bibtex.style.referencing import BracketStyle
+from sphinxcontrib.bibtex.style.referencing.author_year import AuthorYearReferenceStyle
 
 # Load user-specific env vars (e.g. secrets) from a `.env` file
 load_dotenv()
@@ -49,8 +54,32 @@ extensions = [
     "sphinx.ext.viewcode",  # Add documentation links to/from source code (https://www.sphinx-doc.org/en/master/usage/extensions/viewcode.html)
     "sphinx.ext.autosectionlabel",  # Allow reference sections using its title (https://www.sphinx-doc.org/en/master/usage/extensions/autosectionlabel.html)
     "sphinx.ext.napoleon",  # Support for NumPy and Google style docstrings (https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html
-    "sphinx_click",  # Automatic documentation of click based CLI (https://github.com/click-contrib/sphinx-click)
+    "sphinxcontrib.bibtex",  # for citations
 ]
+
+
+def bracket_style() -> BracketStyle:
+    return BracketStyle(
+        left="(",
+        right=")",
+    )
+
+
+@dataclass
+class MyReferenceStyle(AuthorYearReferenceStyle):
+    bracket_parenthetical: BracketStyle = field(default_factory=bracket_style)
+    bracket_textual: BracketStyle = field(default_factory=bracket_style)
+    bracket_author: BracketStyle = field(default_factory=bracket_style)
+    bracket_label: BracketStyle = field(default_factory=bracket_style)
+    bracket_year: BracketStyle = field(default_factory=bracket_style)
+
+
+sphinxcontrib.bibtex.plugin.register_plugin(
+    "sphinxcontrib.bibtex.style.referencing", "author_year_round", MyReferenceStyle
+)
+bibtex_bibfiles = ["_static/biblio.bib"]
+bibtex_default_style = "unsrt"
+bibtex_reference_style = "author_year_round"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -69,11 +98,9 @@ html_theme = "pydata_sphinx_theme"
 html_static_path = ["_static"]
 html_favicon = "_static/favicon.ico"
 html_theme_options = {
-    "footer_items": ["sphinx-version"],
     "logo": {
-        "image": "logo.svg",
-        # "image_light": "logo-light.svg",
-        #"image_dark": "logo-dark.svg",
+        "image_light": "logo.svg",
+        "image_dark": "logo.svg",
     },
 }
 html_show_sourcelink = (

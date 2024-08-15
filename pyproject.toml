@@ -25,29 +25,24 @@ classifiers = [
 # Changelog = "https://github.com/straymat/causal-ml-course/releases"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.10"
 
 # Project-Specific
 python-dotenv = "^0.20.0"
 click = "^8.0.4"
+sphinxcontrib-bibtex = "^2.6.2"
 [tool.poetry.group.notebooks.dependencies]
 # Jupyter Notebook
 jupyter = "^1.0.0"
 matplotlib = "^3.5.1"
 jupytext = "^1.13.7"
-[tool.poetry.group.documentation]
-optional = true
+
 [tool.poetry.group.documentation.dependencies]
-
-# Documentation
-importlib-metadata = { version = "^6" }
-myst-parser = { version = "^1" }
-pygments = { version = "^2.11.2" }
-sphinx = { version = "^6" }
-pydata-sphinx-theme = { version = "^0" }
-sphinx-click = { version = "^4" }
-
-[tool.poetry.group.dev.dependencies]
+sphinx = "^8.0.2"
+importlib-metadata = "^8.2.0"
+myst-parser = "^4.0.0"
+pygments = "^2.18.0"
+pydata-sphinx-theme = "^0.15.4"
 
 [tool.poetry.scripts]
 cli = "bin.cli:cli"

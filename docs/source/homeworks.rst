@@ -1,0 +1,15 @@
+#########
+Homeworks 
+#########
+
+==================
+Synthetic controls
+==================
+
+Synthetic controls are a method to estimate the effect of an intervention on a single unit. The method is based on the idea of creating a synthetic control group that mimics the characteristics of the treated unit before the intervention. 
+
+It has been applied in diverse fields such as econometrics and political science. It is gaining popularity in population health  :cite:p:`craig2022making`.
+
+.. bibliography:: _static/biblio.bib
+   :cited:
+ 

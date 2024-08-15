@@ -48,12 +48,12 @@
 
 #slide()[
   == Synthetic Controls
-
+  Introduced in @abadie2003economic and @abadie2010synthetic, well described in @abadie2021using
   - A method for estimating the effect of a treatment on a single unit
   - The treatment unit is compared to a weighted average of control units
   - The weights are chosen to minimize the difference between the treated unit and the synthetic control
-
-  Example for the effect of taxes on sugar-based product consumption in @puig2021impact
+  
+  Example for the effect of taxes on sugar-based product consumption in @puig2021impact, review of usage in healthcare @bouttell2018synthetic.
 ]
 
 
