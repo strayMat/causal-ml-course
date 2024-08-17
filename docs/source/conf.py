@@ -58,6 +58,7 @@ extensions = [
 ]
 
 
+# -- Citation configuration for bracket and author year style --
 def bracket_style() -> BracketStyle:
     return BracketStyle(
         left="(",
@@ -99,13 +100,27 @@ html_static_path = ["_static"]
 html_favicon = "_static/favicon.ico"
 html_theme_options = {
     "logo": {
-        "image_light": "logo.svg",
-        "image_dark": "logo.svg",
+        "image_light": "logo.png",
+        "image_dark": "logo.png",
     },
+    "icon_links": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/strayMat/causal-ml-course",
+            "icon": "fa-brands fa-github",
+        },
+    ],
 }
 html_show_sourcelink = (
     False  # Remove 'view source code' from top of page (for html, not python)
 )
+# html_context = {
+#     # "github_url": "https://github.com",  # or your GitHub Enterprise site
+#     "github_user": "strayMat",
+#     "github_repo": "causal-ml-course",
+#     "github_version": "main",
+#     "doc_path": "docs",
+# }
 
 # -- Extension configurations ---------------------------------------------------
 

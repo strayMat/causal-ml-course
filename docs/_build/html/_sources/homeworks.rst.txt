@@ -11,6 +11,5 @@ Synthetic controls are a method to estimate the effect of an intervention on a s
 It has been applied in diverse fields such as econometrics and political science. It is gaining popularity in population health  :cite:p:`craig2022making`.
 
 .. bibliography:: _static/biblio.bib
-   :style: unsrt
    :cited:
  
