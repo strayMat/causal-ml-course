@@ -10,7 +10,7 @@ Four sessions of three hours presenting important concepts and methods on machin
 
 Four steps for sound causal inference, illustrated with well known examples from the econometrics literature. 
 
-Common thread : TODO 
+Common practical example : TODO 
 
 ==========
 Evaluation 

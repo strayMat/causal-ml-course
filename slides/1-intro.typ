@@ -7,7 +7,7 @@
 #import themes.metropolis: *
 
 #show: metropolis-theme.with(
-    footer: [Custom footer]
+    footer: [ENSAE, Introduction course]
 )
 
 // Make the paper dimensions fit for a presentation and the text larger
@@ -41,7 +41,13 @@
 #new-section-slide("Introduction")
 
 #slide()[
-  Some inspiratong stuff
+  Causal inference: subfield of statistics dealing with "why questions".
+
+  At the center of epidemiology, econometrics, social sciences. Now, bridging with ML.
+
+  #set align(horizon + center)
+  #image("img/intro/confounder.png", width: 15%)
+  
 ]
 
 #slide[
@@ -54,6 +60,32 @@
 
 #focus-slide[
   Wake up!
+]
+
+
+#new-section-slide("Asking a sound causal question")
+
+#slide[
+  A slide without a title but with #alert[important] infos
+]
+
+#new-section-slide("Causal graphs")
+
+#new-section-slide("Causal graphs")
+
+#new-section-slide("Potential outcomes")
+
+#new-section-slide("Related concepts")
+
+#set align(horizon + center)
+
+Structural equations.
+
+
+#slide[
+  #set align(start + top)
+
+  Hello world
 ]
 
 #slide[
