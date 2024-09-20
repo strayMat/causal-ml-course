@@ -63,11 +63,26 @@
 ]
 
 
-#new-section-slide("Asking a sound causal question")
+#new-section-slide("Asking a sound causal question: PICO framework")
+
 
 #slide[
-  A slide without a title but with #alert[important] infos
+  == Identify the target trial
+
+  What would be the ideal *randomized experiment* to answer the question?
+
+  #uncover(2)[#cite(<hernan2016using>)]
 ]
+
+#slide[
+  == PICO framework
+
+  - Population : Who are we interested in?
+  - Intervention : What treatment/intervention do we study?
+  - Comparison : What are we comparing it to?
+  - Outcome : What are we interested in?
+]
+
 
 #new-section-slide("Causal graphs")
 
@@ -96,3 +111,7 @@ Structural equations.
 - https://alejandroschuler.github.io/mci/
 ]
 
+
+#slide[
+  #bibliography("biblio.bib", style: "harvard-cite-them-right")
+]
