@@ -27,7 +27,7 @@
 // ]
 
 #title-slide(
-  author: [Authors],
+  author: [Matthieu Doutreligne],
   title: "Machine Learning for econometrics",
   subtitle: "Causal perspective",
   date: "January 10, 2025",
@@ -53,27 +53,6 @@
   #uncover(2)[Now, bridging with Machine Learning @kaddour2022causal]
   
 ]
-
-#new-section-slide("Asking a sound causal question: PICO framework")
-
-#slide[
-  == Identify the target trial
-  What would be the ideal *randomized experiment* to answer the question?
-  #cite(<hernan2016using>)
-
-]
-
-#slide[
-  == PICO framework
-
-  - Population : Who are we interested in?
-  - Intervention : What treatment/intervention do we study?
-  - Comparison : What are we comparing it to?
-  - Outcome : What are we interested in?
-]
-
-
-#new-section-slide("Causal graphs")
 
 #new-section-slide("How to ask a sound causal question")
 
@@ -107,23 +86,43 @@
   == Why is #alert[prediction different from causation]?
 
 
-  - Prediction assumes stability between train and test data
-  #uncover(2)[- Causal inference search the effect of an intervention]
+  - Prediction (most part of Machine Learning) focus on understanding what usually happens in a given situation.
+  
+  #uncover(2)[It assumes iid between train and test data.]
+
+  #uncover(3)[
+  
+  - Causal inference (most part of economists) focus on what would happen if we changed the system ie. under intervention.
+  
+  It models the covariate shift between treated and control units.  
+  ]
 ]
 
+//TODO: insert images of covariate shifts to illustrate. 
+
+#new-section-slide("How to ask a sound causal question: The PICO framework")
 
 #slide[
-  == How to ask a sound causal question
+  == Identify the target trial
+  What would be the ideal *randomized experiment* to answer the question?
+  #cite(<hernan2016using>)
 
-  - Define the population of interest
-  - Define the intervention
-  - Define the outcome
-  - Define the counterfactual
-  - Define the causal effect
 ]
 
+#slide[
+  == PICO framework
 
-#new-section-slide("Different steps : identification, estimation, inference")
+  - Population : Who are we interested in?
+  - Intervention : What treatment/intervention do we study?
+  - Comparison : What are we comparing it to?
+  - Outcome : What are we interested in?
+  //- Define the causal measure //a bit too much for intro 
+]
+
+#new-section-slide("Causal graphs")
+
+
+#new-section-slide("The three steps of causal inference:\n identification, estimation, inference")
 
 #slide[
   Identification: what can we learn from the data?
