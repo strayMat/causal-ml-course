@@ -31,6 +31,8 @@ python = "^3.10"
 python-dotenv = "^0.20.0"
 click = "^8.0.4"
 sphinxcontrib-bibtex = "^2.6.2"
+ipython = "^8.29.0"
+numpy = "^2.1.2"
 [tool.poetry.group.notebooks.dependencies]
 # Jupyter Notebook
 jupyter = "^1.0.0"
