@@ -119,35 +119,54 @@
   //- Define the causal measure //a bit too much for intro 
 ]
 
-#new-section-slide("Causal graphs")
-
-
-#new-section-slide("The three steps of causal inference:\n identification, estimation, inference")
 
 #slide[
-  Identification: what can we learn from the data?
-]
+  == PICO framework (illustration)
 
-#slide[
-  Identification: what can we learn from the data?
+  - P 
+  - I 
+  - C 
+  - O 
 ]
 
 #new-section-slide("Causal graphs")
+
+
+#new-section-slide("The four steps of causal inferenceidentification, statistical estimand, statistical inference")
+
+
+#slide[
+  = Causal estimand
+  
+  What can we learn from the data?
+]
+
+#slide[
+  = Identification
+
+  What can we learn from the data?
+
+  Knowledge based
+
+  Cannot be validated with data 
+]
 
 #new-section-slide("Potential outcomes")
+
+#new-section-slide("Causal estimands")
+
+#new-section-slide("Causal graphs")
+
+#new-section-slide("Statistical estimand")
+
+#new-section-slide("Statistical inference ie. estimation")
 
 #new-section-slide("Related concepts")
 
 #set align(horizon + center)
 
-Structural equations.
+- Structural equations: 
 
-
-#slide[
-  #set align(start + top)
-
-  Hello world
-]
 
 #slide[
   == Resources
