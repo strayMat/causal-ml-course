@@ -13,7 +13,10 @@
 // Make the paper dimensions fit for a presentation and the text larger
 #set page(paper: "presentation-16-9")
 #set text(size: 22pt)
-
+#set figure(numbering: none)
+#show math.equation: set text(font: "Fira Math")
+#set strong(delta: 100)
+#set par(justify: true)
 
 // Use #polylux-slide to create a slide and style it using your favourite Typst functions
 // #polylux-slide[
@@ -40,12 +43,12 @@
 
 #new-section-slide("Introduction")
 
-#slide()[
-  Causal inference: subfield of statistics dealing with "why questions".
-  #set align(horizon + center)
+#slide(title: "Causal inference: subfield of statistics dealing with \"why questions\"")[
+  
+  #set align(top + center)
   #image("img/intro/confounder.png", width: 15%)
   
-  #set align(horizon + left)
+  #set align(top + left)
 
   At the center of epidemiology, econometrics, social sciences...  
   
@@ -54,10 +57,7 @@
   
 ]
 
-#new-section-slide("How to ask a sound causal question")
-
-#slide[
-  == What is a #alert[why question] ?
+#slide(title: "What is a \"why question\"?")[
 
 - Economics: How does supply and demand (causally) depend on price?
 
@@ -67,13 +67,12 @@
 
 - Public health : Is this prevention campaign effective?
 
-- Psychology: What is the effect of family structure on children’s outcome?
+- Psychology: What is the effect of family structure on children's outcome?
 
 - Sociology: What is the effect of social media on political opinions?
 ]
 
-#slide[
-  == This is different from a #alert[predictive question]
+#slide(title: "This is different from a predictive question")[
 
   - What will be the weather tomorrow?
   - What will be the outcome of the next election?
@@ -82,37 +81,54 @@
   - How much will the price of a stock be tomorrow?
 ]
 
-#slide[
-  == Why is #alert[prediction different from causation]?
-
-
-  - Prediction (most part of Machine Learning) focus on understanding what usually happens in a given situation.
+#slide(title: "Why is prediction different from causation?")[
+    - Prediction (most part of machine learning) focus on understanding what usually happens in a given situation.
   
-  #uncover(2)[It assumes iid between train and test data.]
+  #uncover(2)[#alert([Important assumption]) Train and test data are drawn from the same distribution.]
 
-  #uncover(3)[
+  #uncover((3, 4))[
   
   - Causal inference (most part of economists) focus on what would happen if we changed the system ie. under intervention.
-  
   It models the covariate shift between treated and control units.  
   ]
+  
+
+  #uncover(4)[#alert([Important assumption]) Train and test data are drawn from the same distribution.]
 ]
 
-//TODO: insert images of covariate shifts to illustrate. 
+#slide(title:"Machine learning is pattern matching (ie. curve fitting)")[
+  Find an estimator $f : x arrow y$ that approximates the true value of y so that $f(x) approx y$
+  #figure(
+    image("img/intro/ml_curve_fitting.png", width: 55%),
+    caption: "Boosted trees : iterative ensemble of decision trees"
+  )
+]
+
+
+#slide(title: "Machine learning is pattern matching that generalizes to new data")[
+  Select models based on their ability to generalize to new data : 
+  (train, test) splits and cross validation @stone1974cross.
+
+  #figure(
+    image("img/intro/cross_validation.png", width: 50%),
+    caption: ["Cross validation" @varoquaux2017assessing]
+  )
+
+]
+
+//TODO: insert images of pattern matching and covariate shifts to illustrate. 
 
 #new-section-slide("How to ask a sound causal question: The PICO framework")
 
-#slide[
-  == Identify the target trial
+#slide(title: "Identify the target trial")[
+  == 
   What would be the ideal *randomized experiment* to answer the question?
   #cite(<hernan2016using>)
 
 ]
 
-#slide[
-  == PICO framework
-
-  - Population : Who are we interested in?
+#slide(title: "PICO framework")[
+    - Population : Who are we interested in?
   - Intervention : What treatment/intervention do we study?
   - Comparison : What are we comparing it to?
   - Outcome : What are we interested in?
@@ -120,8 +136,7 @@
 ]
 
 
-#slide[
-  == PICO framework (illustration)
+#slide(title: "PICO framework, an illustration")[
 
   - P 
   - I 
@@ -131,18 +146,19 @@
 
 #new-section-slide("Causal graphs")
 
+#slide(title: "Directed acyclic graphs (DAG): reason about causality")[
+  What are the important depedencies between variables?
+]
 
 #new-section-slide("The four steps of causal inferenceidentification, statistical estimand, statistical inference")
 
 
-#slide[
-  = Causal estimand
-  
+#slide(title: "Causal estimand")[
+ 
   What can we learn from the data?
 ]
 
-#slide[
-  = Identification
+#slide(title: "Identification")[
 
   What can we learn from the data?
 
@@ -152,10 +168,6 @@
 ]
 
 #new-section-slide("Potential outcomes")
-
-#new-section-slide("Causal estimands")
-
-#new-section-slide("Causal graphs")
 
 #new-section-slide("Statistical estimand")
 
