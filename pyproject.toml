@@ -35,6 +35,7 @@ ipython = "^8.29.0"
 numpy = "^2.1.2"
 networkx = "^3.4.1"
 pgmpy = "^0.1.26"
+wooldridge = "^0.4.5"
 
 [tool.poetry.group.notebooks.dependencies]
 # Jupyter Notebook
