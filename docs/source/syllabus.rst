@@ -20,22 +20,37 @@ Evaluation
 - Mini-project (Choosing a running example among different data-sets/problems).
 
 =========
-Data sets
+Data
 =========
 
-[Aller explorer](https://www.data.gouv.fr/fr/pages/donnees_apprentissage-automatique/)
+---------
+Resources 
+---------
+
+- [causal data, mixtape course](https://cran.r-project.org/web/packages/causaldata/causaldata.pdf)
+
+- [Aller explorer](https://www.data.gouv.fr/fr/pages/donnees_apprentissage-automatique/)
+
+--------------------
+Datasets for project
+--------------------
+
 
 - [Offres d'emplois diffusées à Pôle emploi](https://www.data.gouv.fr/fr/datasets/offres-demploi-diffusees-a-pole-emploi/), effet sur l'emploi ? 
-
-- Wages and sex ? Un classique expliqué dans le applied causal inference, p.156, que l'on peut refaire jouer avec [la base tout salarié de l'Insee](https://www.insee.fr/fr/statistiques/7651654#dictionnaire).
-
-- [Proposition d'admission](https://www.data.gouv.fr/fr/datasets/parcoursup-propositions-dadmission-dans-lenseignement-superieur-des-eleves-de-terminale-diplomes-du-baccalaureat-general-selon-leurs-enseignements-de-specialite/)
 
 - [The Welfare experiment](https://gssdataexplorer.norc.org/variables/vfilter)
 
 - [Education: Taille des classes sur la réussite au brevet](https://www.data.gouv.fr/fr/pages/donnees_education/)
 
 - [Périnatalité](https://opendata-perinat.sante-idf.fr/app/)
+
+- [marketing](http://archive.ics.uci.edu/dataset/222/bank+marketing)
+
+
+- [nutritional followup](https://wwwn.cdc.gov/nchs/nhanes/nhefs/)
+
+
+- Wages and sex ? Un classique expliqué dans le applied causal inference, p.156, que l'on peut refaire jouer avec [la base tout salarié de l'Insee](https://www.insee.fr/fr/statistiques/7651654#dictionnaire). Pas trop fan, car ce n'est pas une intervention.
 
 =========
 Session 1

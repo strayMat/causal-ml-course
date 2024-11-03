@@ -39,3 +39,9 @@ def build_lalonde():
     lalonde_data.columns = columns
     lalonde_data.to_csv(DIR2DATA / "lalonde.csv", index=False)
     return lalonde_data
+
+
+# def build_ccdrug():
+#     ccdrug_data = pd.read_stata(
+#         "https://github.com/NickCH-K/causaldata/blob/main/Python/causaldata/ccdrug/ccdrug.dta"
+#     )
