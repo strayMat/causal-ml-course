@@ -3,7 +3,7 @@
 // documentation link : https://typst.app/universe/package/polylux
 
 #import "@preview/polylux:0.3.1": *
-
+#import "@preview/embiggen:0.0.1": *
 #import themes.metropolis: *
 
 #show: metropolis-theme.with(footer: [ENSAE, Introduction course])
@@ -46,10 +46,8 @@
   title: "Causal inference: subfield of statistics dealing with \"why questions\"",
 )[
 
-  #set align(top + center)
+  //#set align(top + center)
   #image("img/intro/confounder.svg", width: 15%)
-
-  #set align(top + left)
 
   At the center of epidemiology, econometrics, social sciences, #only(2)[machine learning]...
 
@@ -155,30 +153,113 @@
 
 ]
 
-//TODO: insert images of pattern matching and covariate shifts to illustrate.
+#new-section-slide(
+  "Four steps of causal inference : Framing, identification, statistical inference, vibration analysis",
+)
 
-#new-section-slide("How to ask a sound causal question: The PICO framework")
-//lalonde example from the book or wage gap example (I am less fan of no intervention examples).
+#slide(
+  title: "Complete inference flow",
+)[
+  #set align(center)
+  #image("img/intro/complete_inference_flow.png", width: 90%)
+]
+
+#new-section-slide("Framing: How to ask a sound causal question")
+//lalonde example from the book (I am less fan of no intervention examples).
 
 #slide(
   title: "Identify the target trial",
 )[
-  ==
   What would be the ideal *randomized experiment* to answer the question?
   #cite(<hernan2016using>)
-
 ]
 
-#slide(title: "PICO framework")[
+#slide(
+  title: [PICO framework @richardson1995well]
+)[
+  
   - Population : Who are we interested in?
   - Intervention : What treatment/intervention do we study?
   - Comparison : What are we comparing it to?
   - Outcome : What are we interested in?
   //- Define the causal measure //a bit too much for intro
+  #uncover(2)[
+  == Example with the job dataset @lalonde1986evaluating
+  Built to evaluate the impact of the
+  National Supported Work (NSW) program. The NSW is a transitional, subsidized
+  work experience program targeted towards people with longstanding employment
+  problems.
+  ]
 ]
 
 #slide(
-  title: "PICO framework, an illustration",
+  title: "The PICO framework",
+)[
+  #set text(size: 16pt)
+  #table(
+    columns: (auto, auto, auto),
+    inset: 10pt,
+    align: horizon,
+    table.header([*Component*], [*Description*], [*Example*]),
+    "Population",
+    "What is the target population of interest?",
+    "People with longstanding employment problems",
+    "Intervention",
+    "What is the intervention?",
+    "On-the-job training lasting between nine months and a year",
+    "Control",
+    "What is the relevant comparator?",
+    "No training",
+    "Outcome",
+    "What are the outcomes?",
+    "Earnings in 1978",
+    "Time",
+    "Is the start of follow-up aligned with intervention assignment?",
+  
+    "The period of follow-up for the earning is the year after the intervention",
+  )
+
+]
+
+//TODO: what could go wrong : selection bias, and other design issues 
+
+#new-section-slide("Identification")
+
+#slide(
+  title: [Potential outcomes, @neyman1923applications @rubin1974estimating],
+)[
+  The Neyman-Rubin model, let:
+  - $Y$ be the outcome,
+  - $A$ the (binary) treatment
+
+  For each individual, we have two potential outcomes: $Y(1)$ and $Y(0)$.
+  But only one is observed, depending on the treatment assignment: $Y(A)$.
+]
+
+
+#slide(
+  title: [RCT case: No problem of confounding],
+)[
+  TODO
+]
+
+
+
+#slide(
+  title: [Observational case: confounding],
+)[
+  TODO
+]
+
+#slide(title: "Directed acyclic graphs (DAG)")[
+  === A tool to reason about causality
+  What are the causal status of each variable?
+]
+
+
+
+#slide(
+  title: "PICO framework, link to the potential outcomes",
 )[
   #set text(size: 16pt)
   #table(
@@ -189,104 +270,89 @@
     "Population",
     "What is the target population of interest?",
     $ X ∼ P(X) $,
-    "Patients with sepsis in the ICU",
+    "People with longstanding employment problems",
     "Intervention",
-    "What is the treatment?",
+    "What is the intervention?",
     $ A ∼ P(A = 1) = p_A $,
-    "Crystalloids and albumin combination",
+    "On-the-job training lasting between nine months and a year",
     "Control",
-    "What is the clinically relevant comparator?",
+    "What is the relevant comparator?",
     $ 1 - A ∼ 1 - p_A $,
-    "Crystalloids only",
+    "No training",
     "Outcome",
     "What are the outcomes?",
     $ Y(1), Y(0) ∼ P(Y(1), Y(0)) $,
-    "28-day mortality",
+    "Earnings in 1978",
     "Time",
     "Is the start of follow-up aligned with intervention assignment?",
     "N/A",
-    "Intervention administered within the first 24 hours of admission",
-  )
-
-]
-
-#new-section-slide("Causal graphs")
-
-#slide(title: "Directed acyclic graphs (DAG): reason about causality")[
-  What are the important depedencies between variables?
-]
-
-#new-section-slide(
-  "Four steps of causal inference : identification, estimand, causal and statistical inference, vibration analysis",
-)
-
-#slide(title: "Causal estimand")[
-  What can we learn from the data?
-]
-
-#slide(
-  title: "Identification",
-)[
-
-  What can we learn from the data?
-
-  Knowledge based
-
-  Cannot be validated with data //#uncover(2)[Still, there is some work on causal discovery, mostly based on conditional independence tests @glymour2019review.]
-]
-
-#new-section-slide("Potential outcomes")
-
-#new-section-slide("Causal inference")
-
-#slide(
-  title: "PICO framework and the potential outcomes",
-)[
-  #set text(size: 16pt)
-  #table(
-    columns: (auto, auto, auto, auto),
-    inset: 10pt,
-    align: horizon,
-    table.header([*Component*], [*Description*], [*Notation*], [*Example*]),
-    "Population",
-    "What is the target population of interest?",
-    $ X ∼ P(X) $,
-    "Patients with sepsis in the ICU",
-    "Intervention",
-    "What is the treatment?",
-    $ A ∼ P(A = 1) = p_A $,
-    "Crystalloids and albumin combination",
-    "Control",
-    "What is the clinically relevant comparator?",
-    $ 1 - A ∼ 1 - p_A $,
-    "Crystalloids only",
-    "Outcome",
-    "What are the outcomes?",
-    $ Y(1), Y(0) ∼ P(Y(1), Y(0)) $,
-    "28-day mortality",
-    "Time",
-    "Is the start of follow-up aligned with intervention assignment?",
-    "N/A",
-    "Intervention administered within the first 24 hours of admission",
+    "The period of follow-up for the earning is the year after the intervention",
   )
 ]
 
-#new-section-slide("Statistical estimand")
 
-#new-section-slide("Statistical inference ie. estimation")
+#slide(
+  title: "Causal estimand: What is the targeted quantity (with potential outcomes)?",
+)[
+  #only(
+    2,
+  )[
+    - Average treatment effect (ATE) #linebreak()$EE[Y(1) - Y(0)]$
+    - Conditional average treatment effect (CATE) #linebreak()$EE[Y(1) - Y(0) | X]$
+  ]
+  #only(
+    3,
+  )[
+    - Average treatment effect on the treated (ATT): $EE[Y(1) - Y(0) | A = 1]$
+    - Conditional average treatment effect on the treated (CATT): $EE[Y(1) - Y(0) | A = 1, X]$
+  ]
+  #only(
+    4,
+  )[ Other estimands (more used in epidemiology) cover:
+    - Risk ratio (RR): $EE[Y(1)] / EE[Y(0)]$
+    - Odd ratio (OR) for binary outcome: $big(paren.l) PP[Y(1)=1] / PP[Y(1)=0] Big(paren.r) big(slash) big(paren.l)PP[Y(0)=1] / PP[Y(0)=0]big(paren.r)$ 
 
-#new-section-slide("Related concepts")
+    See @colnet2023risk for a review of the different estimands and the impact on generalization.
+    ]
+]
 
-#set align(horizon + center)
+#slide(
+  title: "Identification: assumptions",
+)[
 
-- Structural equations:
+  - What can we learn from the data?
+
+  - Knowledge based
+
+  - Cannot be validated with data//#uncover(2)[Still, there is some work on causal discovery, mostly based on conditional independence tests @glymour2019review.]
+]
+
+#slide(
+  title: "Identification: proofs",
+)[
+
+]
+
+#new-section-slide("Causal Estimator")
+// example with an outcome identification
+
+#new-section-slide("Statistical inference")
+// example with a simple linear model
+
+#new-section-slide("Session summary")
+
+
+
+#new-section-slide("Going further")
 
 #slide[
-  == Resources
+  
+  = Resources
 
   - https://web.stanford.edu/~swager/stats361.pdf
   - https://www.mixtapesessions.io/
   - https://alejandroschuler.github.io/mci/
+  - https://theeffectbook.net/index.html
 ]
 
 #let bibliography = bibliography("biblio.bib", style: "apa")
