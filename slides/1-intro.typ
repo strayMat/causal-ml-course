@@ -6,16 +6,53 @@
 #import "@preview/embiggen:0.0.1": *
 #import themes.metropolis: *
 
-#show: metropolis-theme.with(footer: [ENSAE, Introduction course])
+#show: metropolis-theme//.with(footer: [ENSAE, Introduction course])
 
 // Make the paper dimensions fit for a presentation and the text larger
-#set page(paper: "presentation-16-9")
+//#set page(paper: "4:3")
 #set text(size: 22pt)
-#set figure(numbering: none)
-#show math.equation: set text(font: "Fira Math")
-#set strong(delta: 100)
 #set par(justify: true)
+#set figure(numbering: none)
+//#show math.equation: set text(font: "Fira Math")
+#set strong(delta: 100)
 #show figure.caption: set text(size: 18pt)
+
+#let slide(title: none, body) = {
+  let header = {
+    set align(top)
+    if title != none {
+      show: m-cell.with(fill: m-dark-teal, inset: 1em)
+      set align(horizon)
+      set text(fill: m-extra-light-gray, size: 1.2em)
+      strong(title)
+    } else { [] }
+  }
+
+  let footer = {
+    set text(size: 0.8em)
+    show: pad.with(.5em)
+    set align(bottom)
+    text(fill: m-dark-teal.lighten(40%), m-footer.display())
+    h(1fr)
+    text(fill: m-dark-teal, logic.logical-slide.display())
+  }
+
+  set page(
+    header: header,
+    footer: footer,
+    margin: (top: 3em, bottom: 1.5em),
+    fill: m-extra-light-gray,
+  )
+
+  let content = {
+    show: align.with(top)
+    show: pad.with(left: 1em, top: 0em, right: 1em, bottom: 0em) // super important to have a proper padding (not 1/3 of the slide blank...)
+    set text(fill: m-dark-teal)
+    body
+  }
+
+  logic.polylux-slide(content)
+}
 
 // Use #polylux-slide to create a slide and style it using your favourite Typst functions
 // #polylux-slide[
@@ -46,10 +83,14 @@
   title: "Causal inference: subfield of statistics dealing with \"why questions\"",
 )[
 
-  //#set align(top + center)
-  #image("img/intro/confounder.svg", width: 15%)
-
-  At the center of epidemiology, econometrics, social sciences, #only(2)[machine learning]...
+  #grid(
+    columns: (auto, auto),
+    gutter: 3pt,
+    image("img/intro/what_if.jpg", width: 40%),
+    image("img/intro/causal_ml_book.png", width: 47%),
+  )
+  At the center of epidemiology @hernan2016using, econometrics #cite(<chernozhukov2024applied>),
+  social sciences, #only(2)[machine learning...]
 
   #only(
     2,
@@ -57,11 +98,11 @@
     Now, bridging with machine learning @kaddour2022causal : Fairness, reinforcement
     learning, causal discovery, causal inference for LLM, causal representations... //#footnote[Eg. #link("https://nips.cc/virtual/2024/events/workshop")[neurips 2024 workshops]]
   ]
-  #uncover(
-    3,
-  )[
-    This course: #alert[Basis of causal inference using ML appraoches (semi-parametric), inspiration
-      from epidemiology and application for applied econometrics.]
+  #only(3)[
+    #alert[This course:]
+    - Basis of causal inference using ML appraoches (semi-parametric),
+    - Inspiration from epidemiology,
+    - Application for applied econometrics.
   ]
 ]
 
@@ -85,16 +126,20 @@
 #slide(title: "This is different from a predictive question")[
 
   - What will be the weather tomorrow?
+
   - What will be the outcome of the next election?
+
   - How many people will get infected by flue next season?
+
   - What is the cardio-vacular risk of this patient?
+
   - How much will the price of a stock be tomorrow?
 ]
 
 #slide(
   title: "Why is prediction different from causation? (1/2)",
 )[
-  - Prediction (most part of ML): What usually happens in a given situation?
+  === Prediction (most part of ML): What usually happens in a given situation?
   #uncover(
     2,
   )[
@@ -109,29 +154,7 @@
 ]
 
 #slide(
-  title: "Why is prediction different from causation? (2/2)",
-)[
-  - Causal inference (most part of economists) : What would happen if we changed the
-    system ie. under intervention?
-  #uncover(
-    2,
-  )[
-    #alert([Assumption]): No unmeasured variables influencing both treatment and
-    outcome $arrow$ confounders.
-    #side-by-side(
-      gutter: 3mm,
-      columns: (1fr, 1fr),
-    )[
-      #figure(image("img/intro/confounder.svg", width: 40%))
-    ][
-      Causal inference models $(X, A, Y(A=1), Y(A=0))$, the covariate shift between
-      treated and control units.
-    ]
-  ]
-]
-
-#slide(
-  title: "Machine learning is pattern matching (ie. curve fitting)",
+  title: "Machine learning is (basically) pattern matching",
 )[
   Find an estimator $f : x arrow y$ that approximates the true value of y so that $f(x) approx y$
   #figure(
@@ -150,16 +173,32 @@
     image("img/intro/cross_validation.png", width: 50%),
     caption: ["Cross validation" @varoquaux2017assessing],
   )
+]
 
+#slide(
+  title: "Why is prediction different from causation? (2/2)",
+)[
+  === Causal inference (most part of economists) : What would happen if we changed the system ie. under an intervention?
+  #uncover(
+    2,
+  )[
+    #alert([Assumption]): No unmeasured variables influencing both treatment and
+    outcome $arrow$ confounders.
+    #side-by-side(gutter: 3mm, columns: (1fr, 2fr))[
+      #figure(image("img/intro/confounder.svg", width: 60%))
+    ][
+      Causal inference models #linebreak()
+      $(X, A, Y(A=1), Y(A=0))$ #linebreak()
+      the covariate shift between treated and control units.
+    ]
+  ]
 ]
 
 #new-section-slide(
   "Four steps of causal inference : Framing, identification, statistical inference, vibration analysis",
 )
 
-#slide(
-  title: "Complete inference flow",
-)[
+#slide(title: "Complete inference flow")[
   #set align(center)
   #image("img/intro/complete_inference_flow.png", width: 90%)
 ]
@@ -175,20 +214,21 @@
 ]
 
 #slide(
-  title: [PICO framework @richardson1995well]
+  title: [PICO framework @richardson1995well],
 )[
-  
+
   - Population : Who are we interested in?
   - Intervention : What treatment/intervention do we study?
   - Comparison : What are we comparing it to?
   - Outcome : What are we interested in?
   //- Define the causal measure //a bit too much for intro
-  #uncover(2)[
-  == Example with the job dataset @lalonde1986evaluating
-  Built to evaluate the impact of the
-  National Supported Work (NSW) program. The NSW is a transitional, subsidized
-  work experience program targeted towards people with longstanding employment
-  problems.
+  #uncover(
+    2,
+  )[
+    == Example with the job dataset @lalonde1986evaluating
+    Built to evaluate the impact of the National Supported Work (NSW) program. The
+    NSW is a transitional, subsidized work experience program targeted towards
+    people with longstanding employment problems.
   ]
 ]
 
@@ -215,13 +255,12 @@
     "Earnings in 1978",
     "Time",
     "Is the start of follow-up aligned with intervention assignment?",
-  
     "The period of follow-up for the earning is the year after the intervention",
   )
 
 ]
 
-//TODO: what could go wrong : selection bias, and other design issues 
+//TODO: what could go wrong : selection bias, and other design issues
 
 #new-section-slide("Identification")
 
@@ -232,22 +271,15 @@
   - $Y$ be the outcome,
   - $A$ the (binary) treatment
 
-  For each individual, we have two potential outcomes: $Y(1)$ and $Y(0)$.
-  But only one is observed, depending on the treatment assignment: $Y(A)$.
+  For each individual, we have two potential outcomes: $Y(1)$ and $Y(0)$. But only
+  one is observed, depending on the treatment assignment: $Y(A)$.
 ]
 
-
-#slide(
-  title: [RCT case: No problem of confounding],
-)[
+#slide(title: [RCT case: No problem of confounding])[
   TODO
 ]
 
-
-
-#slide(
-  title: [Observational case: confounding],
-)[
+#slide(title: [Observational case: confounding])[
   TODO
 ]
 
@@ -255,8 +287,6 @@
   === A tool to reason about causality
   What are the causal status of each variable?
 ]
-
-
 
 #slide(
   title: "PICO framework, link to the potential outcomes",
@@ -290,7 +320,6 @@
   )
 ]
 
-
 #slide(
   title: "Causal estimand: What is the targeted quantity (with potential outcomes)?",
 )[
@@ -310,10 +339,10 @@
     4,
   )[ Other estimands (more used in epidemiology) cover:
     - Risk ratio (RR): $EE[Y(1)] / EE[Y(0)]$
-    - Odd ratio (OR) for binary outcome: $big(paren.l) PP[Y(1)=1] / PP[Y(1)=0] Big(paren.r) big(slash) big(paren.l)PP[Y(0)=1] / PP[Y(0)=0]big(paren.r)$ 
+    - Odd ratio (OR) for binary outcome: $big(paren.l) PP[Y(1)=1] / PP[Y(1)=0] Big(paren.r) big(slash) big(paren.l)PP[Y(0)=1] / PP[Y(0)=0]big(paren.r)$
 
-    See @colnet2023risk for a review of the different estimands and the impact on generalization.
-    ]
+    See @colnet2023risk for a review of the different estimands and the impact on
+    generalization. ]
 ]
 
 #slide(
@@ -327,9 +356,7 @@
   - Cannot be validated with data//#uncover(2)[Still, there is some work on causal discovery, mostly based on conditional independence tests @glymour2019review.]
 ]
 
-#slide(
-  title: "Identification: proofs",
-)[
+#slide(title: "Identification: proofs")[
 
 ]
 
@@ -341,12 +368,10 @@
 
 #new-section-slide("Session summary")
 
-
-
 #new-section-slide("Going further")
 
 #slide[
-  
+
   = Resources
 
   - https://web.stanford.edu/~swager/stats361.pdf
