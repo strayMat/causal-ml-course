@@ -17,6 +17,18 @@
 #set strong(delta: 100)
 #show figure.caption: set text(size: 18pt)
 
+#let c_control(body) = {
+  set text(fill: orange)
+  body
+}
+
+#let c_treated(body) = {
+  set text(fill: blue)
+  body
+}
+
+
+
 #let slide(title: none, body) = {
   let header = {
     set align(top)
@@ -194,6 +206,40 @@
   ]
 ]
 
+
+#slide(title: [Illustration of the fundamental problem of causal inference])[
+  Consider an example from epidemiology:
+  - Population: patients experiencing a stroke 
+  - #c_treated[Intervention $A = 1$: patients had access to a MRI scan  #text(weight: "extrabold")[in less than 3 hours] after the first symptoms]
+  - #c_control[Comparator $A = 0$: patients had access to a MRI scan #text(weight: "extrabold")[in more than 3 hours] after the first symptoms]
+  - $Y = PP[text("Mortality")]$: the mortality at 7 days 
+  - $X = PP[text("Charlson score")]$: a comorbidity index summarizing the overall health state of the patient. Higher is bad for the patient.
+]
+
+
+#slide(title: [Example])[
+  == Without treatment status
+  #figure(
+    image("img/intro/sample_wo_oracles_gray.png", width: 85%),
+    //caption: "DAG for a RCT: the treatment is independent of the confounders",
+  )
+]
+
+#slide(title: [Example])[
+  == With treatment status
+  #figure(
+    image("img/intro/sample.svg", width: 85%),
+    //caption: "DAG for a RCT: the treatment is independent of the confounders",
+  )
+]
+
+#slide(title: [RCT case: Example in one dimension (1/2)])[
+  #figure(
+    image("img/intro/sample_rct.svg", width: 85%),
+    //caption: "DAG for a RCT: the treatment is independent of the confounders",
+  )
+]
+
 #new-section-slide(
   "Four steps of causal inference : Framing, identification, statistical inference, vibration analysis",
 )
@@ -202,6 +248,20 @@
   #set align(center)
   #image("img/intro/complete_inference_flow.png", width: 90%)
 ]
+
+#slide(title: [RCT case: No problem of confounding])[
+ == Randomized controlled trial (RCT) principle
+  
+  - Random assignment of treatment
+  
+  - Force $Y(1), Y(0) perp A$ 
+
+  #figure(
+    image("img/intro/rct_dag.excalidraw.svg", width: 25%),
+    caption: "DAG for a RCT: the treatment is independent of the confounders",
+  )
+]
+
 
 #new-section-slide("Framing: How to ask a sound causal question")
 //lalonde example from the book (I am less fan of no intervention examples).
@@ -259,7 +319,6 @@
   )
 
 ]
-
 //TODO: what could go wrong : selection bias, and other design issues
 
 #new-section-slide("Identification")
@@ -275,13 +334,8 @@
   one is observed, depending on the treatment assignment: $Y(A)$.
 ]
 
-#slide(title: [RCT case: No problem of confounding])[
-  TODO
-]
+//TODO: proof of the identification
 
-#slide(title: [Observational case: confounding])[
-  TODO
-]
 
 #slide(title: "Directed acyclic graphs (DAG)")[
   === A tool to reason about causality
