@@ -16,41 +16,47 @@ Common practical example : TODO
 Evaluation 
 ==========
 
-- Articles implementation/read and presentation
-- Mini-project (Choosing a running example among different data-sets/problems).
+Either a project on a dataset among those proposed, or a presentation (with implementation) of a paper among those proposed.
 
-=========
-Data
-=========
+----------------------------------------
+Articles implementation and presentation
+----------------------------------------
+
+Articles : 
+
+- [Cinelli, C., & Hazlett, C. (2020). Making sense of sensitivity: Extending omitted variable bias. Journal of the Royal Statistical Society Series B: Statistical Methodology, 82(1), 39-67.](https://academic.oup.com/jrsssb/article/82/1/39/7056023) : The recalls and extends the omitted variable bias framework by introducing tools for sensitivity analysis in regression models, accommodating multiple and nonlinear confounders without strong assumptions about their distributions.
+
 
 ---------
-Resources 
+Projects 
 ---------
 
-- [causal data, mixtape course](https://cran.r-project.org/web/packages/causaldata/causaldata.pdf)
+Run through the different steps of causal inference on a dataset of your choice: asking a sound question, identification, estimation, inference, vibration analysis.
 
-- [Aller explorer](https://www.data.gouv.fr/fr/pages/donnees_apprentissage-automatique/)
-
---------------------
-Datasets for project
---------------------
+Datasets : 
 
 
-- [Offres d'emplois diffusées à Pôle emploi](https://www.data.gouv.fr/fr/datasets/offres-demploi-diffusees-a-pole-emploi/), effet sur l'emploi ? 
-
-- [The Welfare experiment](https://gssdataexplorer.norc.org/variables/vfilter)
-
-- [Education: Taille des classes sur la réussite au brevet](https://www.data.gouv.fr/fr/pages/donnees_education/)
+- [Offres d'emplois diffusées à Pôle emploi](https://www.data.gouv.fr/fr/datasets/offres-demploi-diffusees-a-pole-emploi/). 
 
 - [Périnatalité](https://opendata-perinat.sante-idf.fr/app/)
 
 - [marketing](http://archive.ics.uci.edu/dataset/222/bank+marketing)
 
-
 - [nutritional followup](https://wwwn.cdc.gov/nchs/nhanes/nhefs/)
 
+- Wages: [la base tout salarié de l'Insee](https://www.insee.fr/fr/statistiques/7651654#dictionnaire)
 
-- Wages and sex ? Un classique expliqué dans le applied causal inference, p.156, que l'on peut refaire jouer avec [la base tout salarié de l'Insee](https://www.insee.fr/fr/statistiques/7651654#dictionnaire). Pas trop fan, car ce n'est pas une intervention.
+- The effect of gun ownership on crime rates : [data in causal ML book](https://raw.githubusercontent.com/CausalAIBook/MetricsMLNotebooks/main/data/gun_clean.csv)
+
+====================================
+Other potential sources for Datasets
+====================================
+
+- [causal data, mixtape course](https://cran.r-project.org/web/packages/causaldata/causaldata.pdf)
+
+- [Aller explorer](https://www.data.gouv.fr/fr/pages/donnees_apprentissage-automatique/)
+
+- [The Welfare experiment](https://gssdataexplorer.norc.org/variables/vfilter)
 
 =========
 Session 1
@@ -161,6 +167,14 @@ Session 5 -- Advanced topics
 - Proxy causal learning
 
 - IV (seen in another course ?) : is it a good idea to introduce it in a course focused on ML ?
+
+
+======================================
+Reading materials close to the course
+=====================================
+
+- [Econometric methods for program evaluation, :cite:t:`abadie2018econometric`](https://www.annualreviews.org/content/journals/10.1146/annurev-economics-080217-053402)
+
 
 
 ============
