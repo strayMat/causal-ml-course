@@ -6,17 +6,20 @@ Course syllabus
 Content
 =======
 
-Four sessions of three hours presenting important concepts and methods on machine learning for econometrics focusing on modern causal inference. 
+Four sessions of three hours presenting important concepts and methods on
+machine learning for econometrics focusing on modern causal inference. 
 
-Four steps for sound causal inference, illustrated with well known examples from the econometrics literature. 
+Four steps for sound causal inference, illustrated with well known examples from
+the econometrics literature. 
 
-Common practical example : TODO 
+Les sujets importants : DAG, lasso, forest, causal forest, double ML, optimal
+assignment, vibration/selection of models for CATE.
 
 ==========
 Evaluation 
 ==========
 
-Either a project on a dataset among those proposed, or a presentation (with implementation) of a paper among those proposed.
+A project on a dataset among those proposed.
 
 ----------------------------------------
 Articles implementation and presentation
