@@ -450,12 +450,13 @@
 #new-section-slide("Identification: List necessary information to answer the causal question")
 
 #slide(
-  title: [Build a causal model],
+  title: [Identification: Build the causal model],
 )[
-  The identification step builds a causal model to answer the research question. 
-  
-  Several important steps:
 
+#quote(attribution: [@elwert2014endogenous])[A causal effect is said to be identified if it is possible, with ideal data (infinite sample size and no measurement error), to purge an observed association of all noncausal components such that only the causal effect of interest remains.]
+
+
+  == Steps
   - Potential outcome framework : mathematical tool to reason about causality
 
   - Directed acyclic graphs (DAG) : graphical tool to reason about causality
@@ -568,12 +569,13 @@ ${Y(1), Y(0)} tack.t.double A | X$
 
 #eq[${Y(1), Y(0)} A | e(X)$]
 
-#uncover(2)[- Knowledge based ie. cannot be validated with data //#uncover(2)[Still, there is some work on causal discovery, mostly based on conditional independence tests @glymour2019review.
+#uncover(2)[- Knowledge based ie. cannot be validated with data //Still, there is some work on causal discovery, mostly based on conditional independence tests @glymour2019review.
 - Because of possibly unmeasured confounders
 
 - In practice : ask yourself if you have measured all the relevant variables that could influence both the treatment and the outcome.
 ]
 ]
+
 
 
 #slide(title: "Assumption 2: Overlap, also known as positivity")[
@@ -605,16 +607,144 @@ ${Y(1), Y(0)} tack.t.double A | X$
 ]
 ]
 
-#slide(title: "Directed acyclic graphs (DAG)")[
-  === A tool to reason about causality: What are the causal status of each variable?
+#slide(title: "Directed acyclic graphs (DAG), a tool to reason about causality: ")[
+  == DAGs encode the causal structure of the data generating process
+  
+  Introduced by @pearl1995causal, @pearl2000models. Good practical overview in @vanderweele2019principles
 
-  The confounder: a variable that influences both the treatment and the outcome.
+  == What is the causal status of each variable?
+  
+  - Confounders
+  - Instrumental variables
+  - Colliders
+  - Mediators
+  - Treatment effect modifiers
+]
+
+#slide(title: "DAG: confounders")[
+    === The confounder: a variable that influences both the treatment and the outcome.
+
+    #figure(
+      image("img/intro/confounder.svg", width: 20%),
+    )
+  
+  #uncover(2)[
+    Examples : 
+    - AVC illustration : Charlson score, both  
+    - Effect of education on earnings, family background can act as a confounder: Wealthier families may provide better education opportunities AND influence earnings independently of the education itself.
+    ]
+]
+
+
+#slide(title: "DAG: instrumental variable")[
+  === Instrumental variable (IV): influences only the treatment.
+
+  #figure(
+    image("img/intro/instrumental_variable.svg", width: 20%),
+  )
 
   #uncover(2)[
-    #figure(
-      image("img/intro/confounder.svg", width: 30%),
-    )
+ 
+  Examples : 
+  - Effect of education on earnings: quarter of birth are randomly assigned but influence the lengths of schooling due to school entry laws @angrist1991does.
   ]
+]
+
+
+#slide(title: "DAG: Collider")[
+  === Collider: Is a consequence of two variables along a path.
+
+  #figure(
+    image("img/intro/collider.svg", width: 20%),
+    caption: "Special case of collider: consequence of both the treatment and the outcome.",
+  )
+
+   #uncover(2)[
+ 
+  Examples : 
+  - TODO
+  ]
+]
+
+
+#slide(title: "DAG: Collider")[
+  === Collider: Is a consequence of two variables along a path.
+
+  #figure(
+    image("img/intro/collider_pre_outcome.excalidraw.svg", width: 20%),
+  )
+
+   #uncover(2)[
+ 
+  Examples : 
+  - Effect on mortality of smoking: Birth weight is influenced by smoking and other factors. Conditioning on birth weight (a collider) creates a spurious negative correlation between smoking and other risk factors, leading to the paradoxical conclusion that smoking reduces infant mortality, even though it harms overall health. @hernandez2006birth
+  ]
+]
+
+
+#slide(title: "DAG: mediator")[
+  === Mediator: block the path from the treatment to the outcome.
+
+  #figure(
+    image("img/intro/mediator.svg", width: 20%),
+  )
+
+   #uncover(2)[
+ 
+  Examples : 
+  - The effect of . TODO
+  ]
+]
+
+
+#slide(title: "DAG: Effect modifier")[
+  === Effect modifier: influences the treatment effect on the outcome.
+
+  #figure(
+    image("img/intro/effect_modifier.svg", width: 20%),
+  )
+
+   #uncover(2)[
+ 
+  Examples : 
+  - 
+  ]
+]
+
+
+#slide(title: "Which variable to include into your analysis?")[
+
+   #grid(
+    columns: (auto, auto, auto),
+    gutter: 1pt,
+      figure(
+      image("img/intro/confounder.svg", width: 40%),
+      caption: [Confounder #uncover(2)[✅]],
+    ),
+    figure(
+      image("img/intro/instrumental_variable.svg", width: 40%),
+    caption: [Instrumental variable #uncover(2)[✅ (generally)]],
+    ),
+    figure(
+      image("img/intro/collider.svg", width: 40%),
+    caption: [Collider #uncover(2)[❌]],
+    ),
+   )
+  
+  #set align(bottom)
+
+  #grid(
+    columns: (auto, auto),
+    gutter: 1pt,
+    figure(
+      image("img/intro/mediator.svg", width: 40%),
+    caption: [Mediator #uncover(2)[❌ (generally)]],
+    ),
+    figure(
+      image("img/intro/effect_modifier.svg", width: 40%),
+    caption: [Effect modifier #uncover(2)[✅ (generally)]],
+    ),
+    )
 ]
 
 
