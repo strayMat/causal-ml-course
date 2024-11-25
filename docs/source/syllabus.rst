@@ -7,13 +7,26 @@ Content
 =======
 
 Four sessions of three hours presenting important concepts and methods on
-machine learning for econometrics focusing on modern causal inference. 
+machine learning for econometrics focusing on flexible models and causal inference.
 
 Four steps for sound causal inference, illustrated with well known examples from
 the econometrics literature. 
 
-Les sujets importants : DAG, lasso, forest, causal forest, double ML, optimal
-assignment, vibration/selection of models for CATE.
+Important topics: 
+
+- PO reminder, DAG and proper conditionning set, 
+- Lasso, and forests,
+- Selecting a model for machine learning : statistical learning reminder and scikit-learn best practices 
+- Double-lasso for causal inference in PML settings, intro to Neyman-orthogonality.
+- Double ML,
+- Optimal assignment, 
+- Generic ML paper
+
+Other topics
+- importance of calibration when targeting probabilities 
+-  (bof),
+- Heterogeneous effect : Causal forest? inference on best linear approximation? Meta learning ?  
+- vibration analysis 
 
 ==========
 Evaluation 
