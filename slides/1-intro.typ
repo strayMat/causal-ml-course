@@ -4,6 +4,9 @@
 
 #import "@preview/polylux:0.3.1": *
 #import "@preview/embiggen:0.0.1": *
+#import "@preview/showybox:2.0.1": showybox
+#import "@preview/fletcher:0.5.1" as fletcher: diagram, node, edge // for dags
+
 #import themes.metropolis: *
 
 #show: metropolis-theme//.with(footer: [ENSAE, Introduction course])
@@ -33,8 +36,6 @@
   body
 }
 
-
-
 #let slide(title: none, body) = {
   let header = {
     set align(top)
@@ -63,8 +64,8 @@
   )
 
   let content = {
-    show: align.with(top)
-    show: pad.with(left: 1em, top: 0em, right: 1em, bottom: 0em) // super important to have a proper padding (not 1/3 of the slide blank...)
+    show: align.with(horizon)
+    show: pad.with(left: 1em, top: 0em, right: 1em, bottom: 1em) // super important to have a proper padding (not 1/3 of the slide blank...)
     set text(fill: m-dark-teal)
     body
   }
@@ -72,6 +73,61 @@
   logic.polylux-slide(content)
 }
 
+
+#let imp_block(title: "", body) = {
+
+  showybox(
+    frame: (
+      border-color: red.darken(50%),
+      title-color: red.lighten(60%),
+      body-color: red.lighten(80%)
+    ),
+    title-style: (
+      color: black,
+      weight: "regular",
+      align: center
+    ),
+    title:title,
+    body
+  )
+}
+
+#let ex_block(title: "Example", body) = {
+
+  showybox(
+    title-style: (
+      color: black,
+      weight: "regular",
+      boxed-style: (
+        anchor: (
+          x: center,
+          y: horizon
+        ),
+        radius: 10pt,
+      )
+    ),
+    frame: (
+      border-color: green.darken(50%),
+      title-color: green.lighten(60%),
+      body-color: green.lighten(80%)
+    ),
+    title:title,
+    body
+  )
+}
+
+
+
+/* 
+#let imp_block(body) = {
+  block(
+    fill: aqua,
+    inset: 6pt,
+    radius: 4pt,
+    body
+  )
+}
+ */
 // Use #polylux-slide to create a slide and style it using your favourite Typst functions
 // #polylux-slide[
 //   #align(horizon + center)[
@@ -86,9 +142,9 @@
 #title-slide(
   author: [Matthieu Doutreligne],
   title: "Machine Learning for econometrics",
-  subtitle: "Causal perspective",
+  subtitle: [Reminders of potential outcomes and Directed Acyclic Graphs],
   date: "January 10, 2025",
-  //extra: "Extra"
+  extra: "Thanks to Judith Abecassis for the slides on DAGs"
 )
 
 #slide(title: "Table of contents")[
@@ -607,95 +663,599 @@ ${Y(1), Y(0)} tack.t.double A | X$
 ]
 ]
 
-#slide(title: "Directed acyclic graphs (DAG), a tool to reason about causality: ")[
+#slide(title: "Directed acyclic graphs (DAG), a tool to reason about causality")[
   == DAGs encode the causal structure of the data generating process
   
-  Introduced by @pearl1995causal, @pearl2000models. Good practical overview in @vanderweele2019principles
+  Introduced by @pearl1995causal, @pearl2000models. Good practical overview in @vanderweele2019principles.
 
-  == What is the causal status of each variable?
+  == Motivation
   
-  - Confounders
-  - Instrumental variables
-  - Colliders
-  - Mediators
-  - Treatment effect modifiers
+  - Reason about the relation between variables.
+  - Help identify for which (minimal) set of variables, the ATE is identifiable.
 ]
 
-#slide(title: "DAG: confounders")[
-    === The confounder: a variable that influences both the treatment and the outcome.
+#slide(title: "Directed acyclic graphs (DAG), definitions")[
+  
+  #figure(
+      image("img/intro/confounder.svg", width: 20%),
+    )
 
+  - #alert[Graph:] A set of relations between nodes described by edges between those nodes
+  - #alert[Directed:] Edges between nodes have direction (the direction of the arrow
+represents a cause-effect relationsh
+  - #alert[Acyclic:] : There are no cycles or loops in the causal structure. A variable can’t be a cause of itself.
+]
+
+#slide(title: "DAGs: nodes")[
+  
+  #figure(
+      image("img/intro/confounder.svg", width: 12%),
+  )
+
+  - #alert[Nodes] represent random variables.
+  - #alert[Edges] between nodes denote the presence of causal effects (i.e. difference in potential outcomes). Here, $Y_(i)(a) != Y_(i) (a')$ for two different levels of $A_(i)$ because there is an arrow from A to Y.
+  - #alert[Lack of edges] between nodes denotes the absence of a causal relationships.
+  
+  #imp_block[Not drawing an arrow makes a stronger assumption about the relationship between those two variables than drawing an arrow.]
+]
+
+#slide(title: "DAGs: paths")[
+
+  - #alert[A path] between two nodes is a route that connects the two nodes
+following non-intersecting edges.
+  - A path exists even if the arrows are not pointing in the good direction.
+
+  - Two examples of paths between A and Y: 
+
+  #grid(
+    columns: (1fr, 1fr),
+    gutter: 3pt,
+    align: center,
+    [
+      $A arrow.l X arrow Y$ #linebreak() 
+      #diagram(
+        cell-size: 10mm,
+        node-stroke: 0.6pt,
+        spacing: 1.5em,
+        let (X, A, Y) = ((0,0), (-1,1), (1,1)),
+        node(A, "A"),
+        node(Y, "Y"),
+        node(X, "X"),
+        edge(X, Y, "->"),
+        edge(X, A, "->"),
+      )
+    ],
+    [
+      $A arrow Y$ #linebreak() 
+      #diagram(
+        cell-size: 10mm,
+        node-stroke: 0.6pt,
+        spacing: 1.5em,
+        let (X, A, Y) = ((0,0), (-1,1), (1,1)),
+        node(A, "A"),
+        node(Y, "Y"),
+        node(X, "X"),
+        edge(A, Y, "->"),
+      ) 
+    ]
+  )
+]
+
+
+#slide(title: "DAGs: causal paths")[
+
+  - Paths encode dependencies between random variables (not necessarily causal dependecies; it can be mere associations).
+  
+  - We distinguish:
+    - #alert[Causal] paths: arrows are all in the same direction.
+    - From #alert[Non-causal] paths: arrows pointing in different directions
+  - When there is a causal path between two variables A and B, we say that B is a #alert[descendant] of A (it is causally impacted by A)
+
+  #grid(
+    columns: (1fr, 1fr),
+    gutter: 3pt,
+    align: center,
+    [ 
+      #diagram(
+        cell-size: 10mm,
+        node-stroke: 0.6pt,
+        spacing: 1.5em,
+        let (X, A, Y) = ((0,0), (-1,1), (1,1)),
+        node(A, "A"),
+        node(Y, "Y"),
+        node(X, "X"),
+        edge(X, Y, "->"),
+        edge(X, A, "->"),
+        edge(A, Y, "->"),
+      )
+    ],
+    [
+      $A arrow Y$ is #alert[causal] #linebreak()
+      $A arrow Y$ is #alert[non-causal]
+    ]
+  )
+]
+
+#slide(title: [Your turn])[
+
+#set align(center)
+#diagram(
+        cell-size: 10mm,
+        node-stroke: 0.6pt,
+        spacing: 2.5em,
+        node-shape: circle,
+  let (X_1, X_2, X_3, X_4, X_5) = ((0,0), (0,1), (1,0), (1,1), (-1,2)),
+  node(X_1, $X_1$),
+  node(X_2, $X_2$),
+  node(X_3, $X_3$),
+  node(X_4, $X_4$),
+  node(X_5, $X_5$),
+  edge(X_1, X_2, "->"),
+  edge(X_1, X_3, "->"),
+  edge(X_2, X_4, "->"),
+  edge(X_2, X_4, "->"),
+  edge(X_5, X_1, "->"),
+  edge(X_5, X_4, "->"),
+  )
+
+  Paths between $X_1$ and $X_4$? Which of them are causal?   
+]
+
+#slide(title: "Three types of directed edges: path")[
+
+
+  There are three kinds of “triples" or paths with three nodes: These constitute the most basic building blocks for causal DAGs.
+
+
+== First, a #alert[causal] path (or chain): $A arrow B arrow C$
+
+#align(center)[
+ #diagram(
+        cell-size: 10mm,
+        node-stroke: 0.6pt,
+        spacing: 1.5em,
+        node-shape: circle,
+  let (A, B, C) = ((-1,1), (0,0), (1,1)),
+  node(A, $A$),
+  node(B, $B$),
+  node(C, $C$),
+  edge(A, B, "->"),
+  edge(B, C, "->")
+)
+]
+
+#only(1)[
+- The effect of A “flows" through B. A and C are not independent and the relationship is causal.
+]
+
+#only(2)[
+  #ex_block(
+  "An individual receiving a message (A) encouraging them to vote causes that individual to actually vote (C) only if the individual actually reads (B) the message."
+  )
+]
+]
+
+#slide(title: "Three types of directed edges: mutual depence")[
+
+== Second, #alert[mutual dependence] or fork or confounder: $A arrow.l B arrow C$
+
+#align(center)[
+ #diagram(
+        cell-size: 10mm,
+        node-stroke: 0.6pt,
+        spacing: 1em,
+        node-shape: circle,
+  let (A, B, C) = ((-1,1), (0,0), (1,1)),
+  node(A, $A$),
+  node(B, $B$),
+  node(C, $C$),
+  edge(B, A, "->"),
+  edge(B, C, "->")
+)
+]
+  
+  - A and C are not causally related but B is a common cause of both.
+  - A and C are not independent, but are independent conditional on B.
+  - #alert[Not conditionning on X] introduces bias.
+  
+  #ex_block(title:"")[
+  - a rise in temperature (B) causes both the thermometer (A) to change, and ice to melt (C), but the thermometer changing does not cause ice to melt.
+  - A is prostate cancer; B is age; and C is Alzheimer’s disease. 
+  ]
+]
+
+#slide(title: "Three types of directed edges: collider")[
+
+== Third, #alert[collider]: $A arrow B arrow.l C$
+
+#align(center)[
+ #diagram(
+        cell-size: 10mm,
+        node-stroke: 0.6pt,
+        spacing: 1.5em,
+        node-shape: circle,
+  let (A, B, C) = ((-1,1), (0,0), (1,1)),
+  node(A, $A$),
+  node(B, $B$),
+  node(C, $C$),
+  edge(A, B, "->"),
+  edge(C, B, "->")
+)
+]
+  
+  - A and C are both common causes of B : they collide into B.
+  - A and C are independent, but *conditionnaly* dependent given B.
+  - #alert[Conditionning on B] introduces a spurious correlation between A and C. 
+  
+  #ex_block(title:"")[
+  - A is result from dice 1, C is results from dice 2, B is sum of dice 1 and dice 2.
+  - A is height, C is speed, B is whether an athlete plays in the NBA.
+  ]
+]
+
+
+#slide(title: "Open and blocked paths ")[
+
+We can open or block paths between variables by conditionning on them:
+
+#align(center)[
+ #diagram(
+        cell-size: 5mm,
+        node-stroke: 0.6pt,
+        spacing: 1em,
+        node-shape: circle,
+  let (A, X, Y) = ((-1,1), (0,0), (1,1)),
+  node(A, $A$),
+  node(X, $X$),
+  node(Y, $Y$),
+  edge(X, A, "->"),
+  edge(X, Y, "->"),
+  edge(A, Y, "->")
+)
+]
+  A path is #alert[blocked] (or d-separated) if:
+  - the path contains a non-collider that has been conditioned on.
+  - or the path contains a collider that has not been conditioned on (and has no descendants that have been conditioned on).
+   
+  Conditioning on a variable:
+  - #alert[Blocks] a path if that variable is #alert[not a collider] on that path.
+  - #alert[Opens] a path if that variable is a #alert[collider] on that path. 
+]
+
+
+#slide(title: [Your turn])[
+
+#set align(center)
+#diagram(
+        cell-size: 10mm,
+        node-stroke: 0.6pt,
+        spacing: 2.5em,
+        node-shape: circle,
+  let (X_1, X_2, X_3, X_4, X_5) = ((0,0), (0,1), (1,0), (1,1), (-1,2)),
+  node(X_1, $X_1$),
+  node(X_2, $X_2$),
+  node(X_3, $X_3$),
+  node(X_4, $X_4$),
+  node(X_5, $X_5$),
+  edge(X_1, X_2, "->"),
+  edge(X_1, X_3, "->"),
+  edge(X_2, X_4, "->"),
+  edge(X_2, X_4, "->"),
+  edge(X_5, X_1, "->"),
+  edge(X_5, X_4, "->"),
+  )
+
+  Paths from $X_5$ to $X_2$? Which of them are blocked/open?
+  
+  Same condition after condition on $X_1$   
+]
+
+#slide(title: "Backdoor paths: a special type of paths")[
+
+
+  #imp_block[
+    Backdoor path: A Backdoor path from a variable A to another Y, is any non-causal path between A and Y that does not include descendants of A
+  ]
+
+  #alert[Identifying backdoor paths:] Backdoor paths from A to Y are all those paths that remain between A and Y after removing all arrows coming out of A.
+
+  These paths are responsible for confounding bias: they imply association not causation.
+
+#grid(
+    columns: (1fr, 1fr),
+    gutter: 3pt,
+    align: center,  
+  align(center)[
+  #diagram(
+          cell-size: 5mm,
+          node-stroke: 0.6pt,
+          spacing: 1em,
+          node-shape: circle,
+      let (A, X, Y) = ((-1,1), (0,0), (1,1)),
+      node(A, $A$),
+      node(X, $X$),
+      node(Y, $Y$),
+      edge(X, A, "->"),
+      edge(X, Y, "->"),
+      edge(A, Y, "->")
+      )
+  ],
+  align(center)[
+  #diagram(
+          cell-size: 5mm,
+          node-stroke: 0.6pt,
+          spacing: 1em,
+          node-shape: circle,
+      let (A, X, Y) = ((-1,1), (0,0), (1,1)),
+      node(A, $A$),
+      node(X, $X$),
+      node(Y, $Y$),
+      edge(X, A, "->"),
+      edge(X, Y, "->"),
+      )
+  ]
+)
+]
+
+
+#slide(title: [Your turn])[
+
+#set align(center)
+#diagram(
+        cell-size: 10mm,
+        node-stroke: 0.6pt,
+        spacing: 2.5em,
+        node-shape: circle,
+  let (X_1, X_2, X_3, X_4, X_5) = ((0,0), (0,1), (1,0), (1,1), (-1,2)),
+  node(X_1, $X_1$),
+  node(X_2, $X_2$),
+  node(X_3, $X_3$),
+  node(X_4, $X_4$),
+  node(X_5, $X_5$),
+  edge(X_1, X_2, "->"),
+  edge(X_1, X_3, "->"),
+  edge(X_2, X_4, "->"),
+  edge(X_2, X_4, "->"),
+  edge(X_5, X_1, "->"),
+  edge(X_5, X_4, "->"),
+  )
+
+  What are the backdoor paths from $X_1$ to $X_4$? from $X_2$ tot $X_4$?.
+]
+
+
+#slide(title: "Graphical identification")[
+
+DAGs help us know whether observed covariates are enough to
+identify a treatment effect.
+
+#align(center)[
+ #diagram(
+        cell-size: 5mm,
+        node-stroke: 0.6pt,
+        spacing: 1em,
+        node-shape: circle,
+  let (A, X, Y) = ((-1,1), (0,0), (1,1)),
+  node(A, $A$),
+  node(X, $X$),
+  node(Y, $Y$),
+  edge(X, A, "->"),
+  edge(X, Y, "->"),
+  edge(A, Y, "->")
+)
+]
+
+In other words, how can we make it so that there are no non-causal
+dependencies between treatment and outcome? 
+
+#imp_block(title: [Graphical identification @pearl2000models])[
+  The effect of T on Y is identified if all backdoor paths from A to B are blocked, and no descendant of T is conditioned on.
+]
+]
+
+#slide(title: "On which variables should we condition? General rules")[
+
+  - Do not condition for variables on causal paths from treatment to outcome
+  - Condition on variables that block non-causal backdoor paths
+  - Don’t condition on colliders! Eg. don't condition on post-treatment variables.
+
+  In the following example, to estimate the effect of T on Y, we should:
+  - Condition on X
+  - NOT condition on M because it is a descendant of T
+  
+#align(center)[
+ #diagram(
+        cell-size: 5mm,
+        node-stroke: 0.6pt,
+        spacing: 1em,
+        node-shape: circle,
+  let (A, X, Y, C) = ((-1,1), (0,0), (1,1), (0, 2)),
+  node(A, $A$),
+  node(X, $X$),
+  node(Y, $Y$),
+  node(C, $C$),
+  edge(X, A, "->"),
+  edge(X, Y, "->"),
+  edge(A, Y, "->"),
+  edge(A, C, "->"),
+  edge(Y, C, "->")
+)  
+]
+]
+
+
+#slide(title: "Famous examples of confounders")[
+  
     #figure(
       image("img/intro/confounder.svg", width: 20%),
     )
   
-  #uncover(2)[
-    Examples : 
-    - AVC illustration : Charlson score, both  
-    - Effect of education on earnings, family background can act as a confounder: Wealthier families may provide better education opportunities AND influence earnings independently of the education itself.
+  #ex_block(title: [Effect of education on earnings])[ 
+    The family background can act as a confounder: Wealthier families may provide better education opportunities AND influence earnings independently of the education itself.
     ]
 ]
 
 
-#slide(title: "DAG: instrumental variable")[
+
+#slide(title: "Famous examples of instrumental variables")[
   === Instrumental variable (IV): influences only the treatment.
 
   #figure(
     image("img/intro/instrumental_variable.svg", width: 20%),
   )
 
-  #uncover(2)[
- 
-  Examples : 
-  - Effect of education on earnings: quarter of birth are randomly assigned but influence the lengths of schooling due to school entry laws @angrist1991does.
+   #ex_block(title: [Effect of education on earnings, @angrist1991does])[ 
+  Quarter of birth are randomly assigned but influence the lengths of schooling due to school entry laws.
   ]
 ]
 
 
-#slide(title: "DAG: Collider")[
-  === Collider: Is a consequence of two variables along a path.
-
+#slide(title: "Famous examples of colliders")[
+  
   #figure(
-    image("img/intro/collider.svg", width: 20%),
+    image("img/intro/collider_pre_outcome.excalidraw.svg", width: 20%),
     caption: "Special case of collider: consequence of both the treatment and the outcome.",
   )
 
-   #uncover(2)[
- 
-  Examples : 
-  - TODO
+  #ex_block(title: [Effect of smoking on mortality @hernandez2006birth])[
+    Birth weight is influenced by smoking and other factors. Conditioning on birth weight (a collider) creates a spurious negative correlation between smoking and other risk factors, leading to the paradoxical conclusion that smoking reduces infant mortality, even though it harms overall health.
   ]
 ]
 
+#slide(title: "More colliders: M-bias")[
+  
+ #align(center)[
+  #diagram(
+          cell-size: 5mm,
+          node-stroke: 0.6pt,
+          spacing: 0.8em,
+          node-shape: circle,
+    let (A, X, Y, U_1, U_2) = ((-1,1), (0,0), (1,1), (-1, -1), (1, -1)),
+    node(A, $A$),
+    node(X, $X$),
+    node(Y, $Y$),
+    node(U_1, $U_1$, stroke: (dash: "dashed")),
+    node(U_2, $U_2$, stroke: (dash: "dashed")),
+    edge(A, Y, "->"),
+    edge(U_1, X, "-->"),
+    edge(U_2, X, "-->"),
+    edge(U_1, A, "-->"),
+    edge(U_2, Y, "-->"),
+  )  
+]
+  - Do not condition on any pre-exposure variable that you have at disposal!
 
-#slide(title: "DAG: Collider")[
-  === Collider: Is a consequence of two variables along a path.
+  - Should we condition on X in trying to estimate the effect of A on Y ?
+
+  - There is a backdoor path through two unobserved variables $(U_1 , U_2)$. But it is blocked because X is a collider along that path.
+  
+  - Conditioning on X opens up that path, inducing a non-causal association between T and Y.
+]
+
+
+#slide(title: "Which variable to include into your analysis?")[
+
+   #grid(
+    columns: (auto, auto, auto, auto),
+    gutter: 1pt,
+      figure(
+      image("img/intro/confounder.svg", width: 40%),
+      caption: [Confounder ✅],
+    ),
+    figure(
+      image("img/intro/instrumental_variable.svg", width: 40%),
+    caption: [Instrumental variable ❌ #linebreak() (generally)],
+    ),
+    figure(
+      image("img/intro/dag_x_to_y.svg", width: 40%),
+    caption: [Outcome parent ✅ #linebreak() (generally)],
+    ),
+    figure(
+      image("img/intro/collider.svg", width: 40%),
+    caption: [Collider ❌],
+    ),
+   )
+  
+  - High-level strategy: Control solely for pre-treatment variables that influences both the outcomes, the treatment or both.
+  /* #set align(bottom)
+
+  #grid(
+    columns: (auto, auto),
+    gutter: 1pt,
+    figure(
+      image("img/intro/mediator.svg", width: 40%),
+    caption: [Mediator #uncover(2)[❌ (generally)]],
+    ),
+    figure(
+      image("img/intro/effect_modifier.svg", width: 40%),
+    caption: [Effect modifier #uncover(2)[✅ (generally)]],
+    ),
+    ) */
+]
+
+
+
+
+
+#new-section-slide("Session summary")
+
+
+
+#new-section-slide("Going further")
+
+#slide(title: "A word on structural equation models")[
+]
+
+
+
+#slide(title: "Special types of variable: instrumental variables")[
+  === An instrumental variable (IV) influences only the treatment.
 
   #figure(
-    image("img/intro/collider_pre_outcome.excalidraw.svg", width: 20%),
+    image("img/intro/instrumental_variable.svg", width: 20%),
   )
 
-   #uncover(2)[
- 
-  Examples : 
-  - Effect on mortality of smoking: Birth weight is influenced by smoking and other factors. Conditioning on birth weight (a collider) creates a spurious negative correlation between smoking and other risk factors, leading to the paradoxical conclusion that smoking reduces infant mortality, even though it harms overall health. @hernandez2006birth
+   #ex_block(title: [Effect of education on earnings, @angrist1991does])[ 
+  Quarter of birth are randomly assigned but influence the lengths of schooling due to school entry laws.
   ]
 ]
 
+#slide(title: "Special types of variables: mediators")[
+  === A #alert[mediator] block the path from the treatment to the outcome.
 
-#slide(title: "DAG: mediator")[
-  === Mediator: block the path from the treatment to the outcome.
 
-  #figure(
-    image("img/intro/mediator.svg", width: 20%),
+#align(center)[
+  #diagram(
+        cell-size: 5mm,
+        node-stroke: 0.6pt,
+        spacing: 1em,
+        node-shape: circle,
+  let (A, M, Y) = ((-1,1), (0,0), (1,1)),
+  node(A, $A$),
+  node(M, $M$),
+  node(Y, $Y$),
+  edge(A, M, "->"),
+  edge(M, Y, "->"),
+  edge(A, Y, "->")
   )
+]
+Here, two causal paths from A:
+  - $A arrow Y$ - a “direct effect"
+  - $A arrow M arrow Y$ - an “indirect effect" through M
+  
+#only(2)[
+  - All causal paths from a treatment capture its overall treatment effect. 
 
-   #uncover(2)[
- 
-  Examples : 
-  - The effect of . TODO
-  ]
+  - The average treatment effect of T combines both the “direct effect" and the “indirect effect".
 ]
 
+#only(1)[
+  #ex_block(title: [Effect of children poverty on economic outcomes @bellani2019long])[
+    - Y is economic outcomes in adulthood, A is child poverty, M is education.
+    - What part of the effect of poverty on outcome is mediated by education?
+  ]
+]
+]
 
 #slide(title: "DAG: Effect modifier")[
   === Effect modifier: influences the treatment effect on the outcome.
@@ -710,55 +1270,6 @@ ${Y(1), Y(0)} tack.t.double A | X$
   - 
   ]
 ]
-
-
-#slide(title: "Which variable to include into your analysis?")[
-
-   #grid(
-    columns: (auto, auto, auto),
-    gutter: 1pt,
-      figure(
-      image("img/intro/confounder.svg", width: 40%),
-      caption: [Confounder #uncover(2)[✅]],
-    ),
-    figure(
-      image("img/intro/instrumental_variable.svg", width: 40%),
-    caption: [Instrumental variable #uncover(2)[✅ (generally)]],
-    ),
-    figure(
-      image("img/intro/collider.svg", width: 40%),
-    caption: [Collider #uncover(2)[❌]],
-    ),
-   )
-  
-  #set align(bottom)
-
-  #grid(
-    columns: (auto, auto),
-    gutter: 1pt,
-    figure(
-      image("img/intro/mediator.svg", width: 40%),
-    caption: [Mediator #uncover(2)[❌ (generally)]],
-    ),
-    figure(
-      image("img/intro/effect_modifier.svg", width: 40%),
-    caption: [Effect modifier #uncover(2)[✅ (generally)]],
-    ),
-    )
-]
-
-
-
-#slide(title: "A word on structural equation models")[
-]
-
-
-#new-section-slide("Session summary")
-
-
-
-#new-section-slide("Going further")
-
 #slide[
 
   = Resources

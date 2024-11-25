@@ -93,33 +93,37 @@ References
 Session 2
 =========
 
-- ATE
+- Reminder of statistical learning
 
-- Outcome based identification, propensity score estimation
+- Lasso model 
 
-- Orthogonal Machine Learning : theoretical advantages for high-dimensional data. 
+- Random Forest  
 
-- Identification proofs 
+- Boosting ? NN ? 
 
-- Sensitivity analysis 
+- Model selection for machine learning, pratical considerations
 
 --------------
 Coding session
 --------------
 
+[Common pitfalls of interpreting lasso coefficients](https://scikit-learn.org/stable/auto_examples/inspection/plot_linear_model_coefficient_interpretation.html#sphx-glr-auto-examples-inspection-plot-linear-model-coefficient-interpretation-py)  
+
 ----------
 References
 ----------
 
-- :cite:t:`chernozhukov2024applied`, `chapter 10 <https://causalml-book.org/assets/chapters/CausalML_chap_10.pdf>`_ , `chapter 11 <https://causalml-book.org/assets/chapters/CausalML_chap_11.pdf>`_ , 
+- :cite:t:`loic_esteve_2022_7220307`
 
-- :cite:t:`wager2020stats`, Lecture 2 and 3
+- :cite:t:`hastie2009elements`
 
-=========
-Session 3
-=========
+- :cite:t:`pml1Book`
 
-- Motivation for Heterogeneous Treatment Effect, optimal policy.
+=========================================================
+Session 3 : Lasso for statistical inference, double lasso
+=========================================================
+
+- Using 
 
 - Model selection for CATE : R loss function
 
@@ -135,7 +139,7 @@ Use example from session 2, but focus on CATE and policy learning.
 References
 ----------
 
-- :cite:t:`chernozhukov2024applied`, `chapter 14 <https://causalml-book.org/assets/chapters/CausalML_chap_14.pdf>`_ , `chapter 15 <https://causalml-book.org/assets/chapters/CausalML_chap_15.pdf>`_ ,
+- :cite:t:`chernozhukov2024applied`, `chapter 4 <https://causalml-book.org/assets/chapters/CausalML_chap_4.pdf>`_
 
 - :cite:t:`wager2020stats`, Lecture 4
 
