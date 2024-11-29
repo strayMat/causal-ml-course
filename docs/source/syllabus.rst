@@ -12,15 +12,21 @@ machine learning for econometrics focusing on flexible models and causal inferen
 Four steps for sound causal inference, illustrated with well known examples from
 the econometrics literature. 
 
+Motivation : 
+
+- high dimensions ie. sparsity in confounders (double lasso)
+- high dimensions, nonlinearities in confounders (double ML)
+- heterogeneities of effects (generic ML) -> only in RCT / optimal assignment
+
 Important topics: 
 
 - PO reminder, DAG and proper conditionning set, 
 - Lasso, and forests,
 - Selecting a model for machine learning : statistical learning reminder and scikit-learn best practices 
 - Double-lasso for causal inference in PML settings, intro to Neyman-orthogonality.
-- Double ML,
+- Double debiased ML,
+- Heterogeneous treatment effect (deux séances) : causal forests, generic ML 
 - Optimal assignment, 
-- Generic ML paper
 
 Other topics
 - importance of calibration when targeting probabilities 
@@ -51,18 +57,51 @@ Run through the different steps of causal inference on a dataset of your choice:
 
 Datasets : 
 
+.. list-table:: Dataset Information
+   :header-rows: 1
 
-- [Offres d'emplois diffusées à Pôle emploi](https://www.data.gouv.fr/fr/datasets/offres-demploi-diffusees-a-pole-emploi/). 
-
-- [Périnatalité](https://opendata-perinat.sante-idf.fr/app/)
-
-- [marketing](http://archive.ics.uci.edu/dataset/222/bank+marketing)
-
-- [nutritional followup](https://wwwn.cdc.gov/nchs/nhanes/nhefs/)
-
-- Wages: [la base tout salarié de l'Insee](https://www.insee.fr/fr/statistiques/7651654#dictionnaire)
-
-- The effect of gun ownership on crime rates : [data in causal ML book](https://raw.githubusercontent.com/CausalAIBook/MetricsMLNotebooks/main/data/gun_clean.csv)
+   * - Dataset Name
+     - URL
+     - N
+     - P
+     - Question Example
+     - Interventional
+   * - Marketing
+     - `Link <http://archive.ics.uci.edu/dataset/222/bank+marketing>`__
+     - 45211
+     - 16
+     - "What is the effect of multiple phone call on the term deposit subscription?"
+     - No
+   * - Nutritional Followup
+     - `Link <https://wwwn.cdc.gov/nchs/nhanes/nhefs/>`__
+     - Unknown
+     - Unknown
+     - "How do nutrition habits affect long-term health outcomes?"
+     - No
+   * - Wages (french version)
+     - `Link <https://www.insee.fr/fr/statistiques/7651654#dictionnaire>`__
+     - 2403775
+     - 31
+     - "What factors affect wage disparities?"
+     - No
+   * - Diabetes 130-US hospitals
+     - `Link <http://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008>`__
+     - 101766
+     - 47 
+     - "What is the effect of HbA1c measurement on hospital readmission rates at 30 days?"
+     - No  
+   * - Student's dropout and academic success
+     - `Link <http://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success>`__
+     - 4424
+     - 36
+     - "What factor influence the dropout of students?"
+     - No
+   * - Obesity levels in Mexico
+     - `Link <http://archive.ics.uci.edu/dataset/544/estimation+of+obesity+levels+based+on+eating+habits+and+physical+condition>`__
+     - 2111
+     - 16
+     - "What action is the most effective to prevent obesity?"
+     - No
 
 ====================================
 Other potential sources for Datasets
@@ -73,6 +112,8 @@ Other potential sources for Datasets
 - [Aller explorer](https://www.data.gouv.fr/fr/pages/donnees_apprentissage-automatique/)
 
 - [The Welfare experiment](https://gssdataexplorer.norc.org/variables/vfilter)
+
+- [UC Irvine ML repository](http://archive.ics.uci.edu/datasets?skip=10&take=10&sort=desc&orderBy=NumHits&search=&NumInstances=572&NumInstances=114237&NumFeatures=12&NumFeatures=3231961)
 
 =========
 Session 1
