@@ -6,11 +6,8 @@ Course syllabus
 Content
 =======
 
-Four sessions of three hours presenting important concepts and methods on
-machine learning for econometrics focusing on flexible models and causal inference.
-
-Four steps for sound causal inference, illustrated with well known examples from
-the econometrics literature. 
+Eight sessions of three hours presenting important concepts and methods on
+machine learning for econometrics. The course focuses on flexible models and causal inference in high dimensions. Most of the sessions will display a mix between theoretical considerations and practical application with hands-on in python or R.  
 
 Motivation : 
 
@@ -20,13 +17,14 @@ Motivation :
 
 Important topics: 
 
-- PO reminder, DAG and proper conditionning set, 
-- Lasso, and forests,
-- Selecting a model for machine learning : statistical learning reminder and scikit-learn best practices 
-- Double-lasso for causal inference in PML settings, intro to Neyman-orthogonality.
-- Double debiased ML,
-- Heterogeneous treatment effect (deux séances) : causal forests, generic ML 
-- Optimal assignment, 
+- Session 1: causal inference reminder, directed acyclic graphs and appropriate conditionning sets; 
+- Session 2: flexible models for prediction: lasso, trees, random forests and boosting
+- Session 3: reminder of statistical learning, selecting a model for prediction, practical best practices. 
+- Session 4: double-lasso for causal inference, partial linear mmodel, introduction to Neyman-orthogonality.
+- Session 5: double debiased machine learning,
+- Session 6: Heterogeneous treatment effect: introduction to Conditional Average Treatment Effect, causal forests, S-T-X-R learners
+- Session 7: Heterogeneous treatment effect, generic machine learning 
+- Session 8: Optimal assignment 
 
 Other topics
 - importance of calibration when targeting probabilities 
@@ -34,20 +32,141 @@ Other topics
 - Heterogeneous effect : Causal forest? inference on best linear approximation? Meta learning ?  
 - vibration analysis 
 
+========================================================================
+Session 1 -- Directed acyclic graph, valid adjustment sets
+========================================================================
+
+- Reminder on causal inference: prediction/causation, potential outcomes, asking a sound causal question (PICO)
+
+- Causal graph, front-door criteria and valid adjustment sets.
+ 
+- Coding session : 
+  - Valid and unvalid adjustment sets, with simple linear models and simulations. 
+  - [DAGs: D-Separation and Conditonal Independencies, Adjustment via Backdoor and Swigs, Equivalence Classes, Falsifiability Tests.](https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/CM3/python-pgmpy.ipynb)
+
+----------
+References
+----------
+
+- :cite:t:`chernozhukov2024applied`, `chapter 2 <https://causalml-book.org/assets/chapters/CausalML_chap_2.pdf>`_ , `chapter 3 <https://causalml-book.org/assets/chapters/CausalML_chap_3.pdf>`_ , `chapter 4 <https://causalml-book.org/assets/chapters/CausalML_chap_4.pdf>`_ , `chapter 5 <https://causalml-book.org/assets/chapters/CausalML_chap_5.pdf>`_ , `chapter 6 <https://causalml-book.org/assets/chapters/CausalML_chap_6.pdf>`_ , `chapter 7 <https://causalml-book.org/assets/chapters/CausalML_chap_7.pdf>`_ , `chapter 8 <https://causalml-book.org/assets/chapters/CausalML_chap_8.pdf>`_
+
+- :cite:t:`wager2020stats`, Lecture 1
+
+- :cite:t:`vanderweele2019principles`
+
+============================================
+Session 2 - reminder of statistical learning 
+============================================
+
+- Reminder of statistical learning: Bias variance tradeoff, appropriate representation, over/under-fitting
+
+- Regularized regression : lasso, ridge, elastic net, post-lasso
+
+- Coding session : 
+  - [Common pitfalls of interpreting lasso coefficients](https://scikit-learn.org/stable/auto_examples/inspection/plot_linear_model_coefficient_interpretation.html#sphx-glr-auto-examples-inspection-plot-linear-model-coefficient-interpretation-py)  
+
+  - [Wage analysis with regularized models]()
+
+
+- :cite:t:`loic_esteve_2022_7220307`
+
+- :cite:t:`hastie2009elements`
+
+
+============================================
+Session 3 - Flexible models for tabular data
+============================================
+
+- Trees, random forests, boosting
+
+- Cross-validation
+
+- Coding session: 
+  - Pratical consideration for model selection in high dimension
+  - Wage analysis with flexible models
+
+----------
+References
+----------
+
+- :cite:t:`loic_esteve_2022_7220307`
+
+- :cite:t:`hastie2009elements`
+
+- :cite:t:`pml1Book`
+
+==================================================
+Session 3 : double-lasso for statistical inference
+==================================================
+
+- Partial linear model 
+
+- Double-lasso 
+
+- introduction to Neyman-orthogonality
+
+- Coding session : 
+
+  - [Wage analysis from a statistical inference point of view]()
+
+----------
+References
+----------
+
+- :cite:t:`chernozhukov2024applied`, `chapter 4 <https://causalml-book.org/assets/chapters/CausalML_chap_4.pdf>`_
+
+- :cite:t:`wager2020stats`, Lecture 4
+
+====================================
+Session 4 -- Methods for time series
+====================================
+
+- Difference In Difference
+
+- Synthetic controls
+
+--------------
+Coding session
+--------------
+
+----------
+References
+----------
+
+- :cite:t:`chernozhukov2024applied`, `chapter 16 <https://causalml-book.org/assets/chapters/CausalML_chap_16.pdf>`_ 
+ 
+- :cite:t:`abadie2021using`
+
+- :cite:t:`bouttell2018synthetic`
+
+============================
+Session 5 --  
+============================
+
+- Going AI : feature engineering and causal inference  
+
+- Proxy causal learning
+
+- IV (seen in another course ?) : is it a good idea to introduce it in a course focused on ML ?
+
+
+================
+Reading material
+================
+
+- [Econometric methods for program evaluation, :cite:t:`abadie2018econometric`](https://www.annualreviews.org/content/journals/10.1146/annurev-economics-080217-053402)
+
+- [Causal ML Book]()
+
+- []()
+
+
+
 ==========
 Evaluation 
 ==========
 
 A project on a dataset among those proposed.
-
-----------------------------------------
-Articles implementation and presentation
-----------------------------------------
-
-Articles : 
-
-- [Cinelli, C., & Hazlett, C. (2020). Making sense of sensitivity: Extending omitted variable bias. Journal of the Royal Statistical Society Series B: Statistical Methodology, 82(1), 39-67.](https://academic.oup.com/jrsssb/article/82/1/39/7056023) : The recalls and extends the omitted variable bias framework by introducing tools for sensitivity analysis in regression models, accommodating multiple and nonlinear confounders without strong assumptions about their distributions.
-
 
 ---------
 Projects 
@@ -114,128 +233,6 @@ Other potential sources for Datasets
 - [The Welfare experiment](https://gssdataexplorer.norc.org/variables/vfilter)
 
 - [UC Irvine ML repository](http://archive.ics.uci.edu/datasets?skip=10&take=10&sort=desc&orderBy=NumHits&search=&NumInstances=572&NumInstances=114237&NumFeatures=12&NumFeatures=3231961)
-
-=========
-Session 1
-=========
-
-- Intro to causal inference. Different concepts, similar ideas for applied research from collected data : Intersection of different fields : stats, econometrics/epidemiology,  machine learning. 
-
-- Asking a sound causal question
-
-- Potential outcome notations
-
-- Causal graph, front-door criteria and valid adjustment sets.
- 
---------------
-Coding session
---------------
-
-- Coding session : Valid and unvalid adjustment sets, with simple linear models and simulations. Asses effects on bias. Take inspiration from [Causal ML, chapter 7 and 8, notebook ](https://colab.research.google.com/github/chernozhukov2024applied/MetricsMLNotebooks/blob/main/CM3/python-pgmpy.ipynb)
-
-----------
-References
-----------
-
-- :cite:t:`chernozhukov2024applied`, `chapter 2 <https://causalml-book.org/assets/chapters/CausalML_chap_2.pdf>`_ , `chapter 3 <https://causalml-book.org/assets/chapters/CausalML_chap_3.pdf>`_ , `chapter 4 <https://causalml-book.org/assets/chapters/CausalML_chap_4.pdf>`_ , `chapter 5 <https://causalml-book.org/assets/chapters/CausalML_chap_5.pdf>`_ , `chapter 6 <https://causalml-book.org/assets/chapters/CausalML_chap_6.pdf>`_ , `chapter 7 <https://causalml-book.org/assets/chapters/CausalML_chap_7.pdf>`_ , `chapter 8 <https://causalml-book.org/assets/chapters/CausalML_chap_8.pdf>`_
-
-- :cite:t:`wager2020stats`, Lecture 1
-
-- :cite:t:`vanderweele2019principles`
-
-=========
-Session 2
-=========
-
-- Reminder of statistical learning
-
-- Lasso model 
-
-- Random Forest  
-
-- Boosting ? NN ? 
-
-- Model selection for machine learning, pratical considerations
-
---------------
-Coding session
---------------
-
-[Common pitfalls of interpreting lasso coefficients](https://scikit-learn.org/stable/auto_examples/inspection/plot_linear_model_coefficient_interpretation.html#sphx-glr-auto-examples-inspection-plot-linear-model-coefficient-interpretation-py)  
-
-----------
-References
-----------
-
-- :cite:t:`loic_esteve_2022_7220307`
-
-- :cite:t:`hastie2009elements`
-
-- :cite:t:`pml1Book`
-
-=========================================================
-Session 3 : Lasso for statistical inference, double lasso
-=========================================================
-
-- Using 
-
-- Model selection for CATE : R loss function
-
-- Causal forest, targeted learning.
-
---------------
-Coding session
---------------
-
-Use example from session 2, but focus on CATE and policy learning.
-
-----------
-References
-----------
-
-- :cite:t:`chernozhukov2024applied`, `chapter 4 <https://causalml-book.org/assets/chapters/CausalML_chap_4.pdf>`_
-
-- :cite:t:`wager2020stats`, Lecture 4
-
-====================================
-Session 4 -- Methods for time series
-====================================
-
-- Difference In Difference
-
-- Synthetic controls
-
---------------
-Coding session
---------------
-
-----------
-References
-----------
-
-- :cite:t:`chernozhukov2024applied`, `chapter 16 <https://causalml-book.org/assets/chapters/CausalML_chap_16.pdf>`_ 
- 
-- :cite:t:`abadie2021using`
-
-- :cite:t:`bouttell2018synthetic`
-
-============================
-Session 5 -- Advanced topics 
-============================
-
-- Going AI : feature engineering and causal inference  
-
-- Proxy causal learning
-
-- IV (seen in another course ?) : is it a good idea to introduce it in a course focused on ML ?
-
-
-======================================
-Reading materials close to the course
-=====================================
-
-- [Econometric methods for program evaluation, :cite:t:`abadie2018econometric`](https://www.annualreviews.org/content/journals/10.1146/annurev-economics-080217-053402)
-
 
 
 ============
