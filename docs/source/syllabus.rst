@@ -42,7 +42,7 @@ Session 1 -- Directed acyclic graph, valid adjustment sets
  
 - Coding session : 
   - Valid and unvalid adjustment sets, with simple linear models and simulations. 
-  - [DAGs: D-Separation and Conditonal Independencies, Adjustment via Backdoor and Swigs, Equivalence Classes, Falsifiability Tests.](https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/CM3/python-pgmpy.ipynb)
+  - `DAGs: D-Separation and Conditonal Independencies, Adjustment via Backdoor and Swigs, Equivalence Classes, Falsifiability Tests. <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/CM3/python-pgmpy.ipynb>`__
 
 ----------
 References
@@ -54,18 +54,19 @@ References
 
 - :cite:t:`vanderweele2019principles`
 
-============================================
-Session 2 - reminder of statistical learning 
-============================================
+=========================================================================
+Session 2 - reminder of statistical learning, penalized linear regression
+=========================================================================
 
 - Reminder of statistical learning: Bias variance tradeoff, appropriate representation, over/under-fitting
 
 - Regularized regression : lasso, ridge, elastic net, post-lasso
 
-- Coding session : 
-  - [Common pitfalls of interpreting lasso coefficients](https://scikit-learn.org/stable/auto_examples/inspection/plot_linear_model_coefficient_interpretation.html#sphx-glr-auto-examples-inspection-plot-linear-model-coefficient-interpretation-py)  
+- Coding session :
 
-  - [Wage analysis with regularized models]()
+  - `Common pitfalls of interpreting lasso coefficients <https://scikit-learn.org/stable/auto_examples/inspection/plot_linear_model_coefficient_interpretation.html#sphx-glr-auto-examples-inspection-plot-linear-model-coefficient-interpretation-py>`__
+
+  - `Wage analysis with regularized models <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/PM2/python_ml_for_wage_prediction.ipynb>`__
 
 
 - :cite:t:`loic_esteve_2022_7220307`
@@ -79,10 +80,12 @@ Session 3 - Flexible models for tabular data
 
 - Trees, random forests, boosting
 
-- Cross-validation
+- Cross-validation, nested cross-validation
 
 - Coding session: 
-  - Pratical consideration for model selection in high dimension
+  
+  - Pratical consideration for model selection in high dimension : common metrics, calibration.
+
   - Wage analysis with flexible models
 
 ----------
@@ -96,18 +99,16 @@ References
 - :cite:t:`pml1Book`
 
 ==================================================
-Session 3 : double-lasso for statistical inference
+Session 4 : double-lasso for statistical inference
 ==================================================
 
 - Partial linear model 
 
-- Double-lasso 
-
-- introduction to Neyman-orthogonality
+- Double-lasso, introduction to Neyman-orthogonality
 
 - Coding session : 
 
-  - [Wage analysis from a statistical inference point of view]()
+  - `Wage analysis from a statistical inference point of view <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/PM2/python_ml_for_wage_prediction.ipynb>`__
 
 ----------
 References
@@ -115,51 +116,68 @@ References
 
 - :cite:t:`chernozhukov2024applied`, `chapter 4 <https://causalml-book.org/assets/chapters/CausalML_chap_4.pdf>`_
 
-- :cite:t:`wager2020stats`, Lecture 4
+- :cite:t:`wager2020stats`, lecture 4
+
+- :cite:t:`gaillac2019machine`, lecture 2
 
 ====================================
-Session 4 -- Methods for time series
+Session 5 -- Neyman-orthogonality
 ====================================
 
-- Difference In Difference
+- 
 
-- Synthetic controls
+Coding session: 
 
---------------
-Coding session
---------------
+  - `The Effect of Gun Ownership on Gun-Homicide Rates <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/PM4/python_dml_inference_for_gun_ownership.ipynb#scrollTo=hOcTlYfPi-5z>`__
 
 ----------
 References
 ----------
 
-- :cite:t:`chernozhukov2024applied`, `chapter 16 <https://causalml-book.org/assets/chapters/CausalML_chap_16.pdf>`_ 
+- :cite:t:`chernozhukov2024applied`, `chapter 10 <https://causalml-book.org/assets/chapters/CausalML_chap_10.pdf>`_ 
  
-- :cite:t:`abadie2021using`
 
-- :cite:t:`bouttell2018synthetic`
 
-============================
-Session 5 --  
-============================
+=============================================
+Session 6 -- Heterogeneous treatment effect
+=============================================
 
-- Going AI : feature engineering and causal inference  
 
-- Proxy causal learning
 
-- IV (seen in another course ?) : is it a good idea to introduce it in a course focused on ML ?
+
+=============================================
+Session 7 -- Heterogeneous treatment effect
+=============================================
+
+Coding session: 
+
+ -  `Heterogeneous Effect of Sex on Wage Using Double Lasso <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/PM2/python_heterogeneous_wage_effects.ipynb>`__ 
+
+
+
+
+=============================================
+Session 8 -- Generic machine learning
+=============================================
+
+- 
+
+----------
+References
+----------
+
+- :cite:t:`chernozhukov2018generic`
+
+- :
 
 
 ================
 Reading material
 ================
 
-- [Econometric methods for program evaluation, :cite:t:`abadie2018econometric`](https://www.annualreviews.org/content/journals/10.1146/annurev-economics-080217-053402)
+- Econometric methods for program evaluation :cite:t:`abadie2018econometric`
 
-- [Causal ML Book]()
-
-- []()
-
+- `Causal ML Book <https://causalml-book.org/>`__ :cite:t:`chernozhukov2024applied`
 
 
 ==========
