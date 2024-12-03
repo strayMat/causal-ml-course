@@ -112,6 +112,7 @@ html_theme_options = {
         },
     ],
 }
+html_sidebars = {"slides": [], "syllabus": []}
 html_show_sourcelink = (
     False  # Remove 'view source code' from top of page (for html, not python)
 )

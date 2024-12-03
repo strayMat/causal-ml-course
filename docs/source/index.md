@@ -1,12 +1,11 @@
+```{include} readme.md
+```
 
 ```{eval-rst}
-
-.. include:: readme
 
 .. toctree::
    :maxdepth: 1
    
-   readme
    Syllabus <syllabus>
    Slides <slides>
    ```
