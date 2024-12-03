@@ -6,47 +6,28 @@ Course syllabus
 Content
 =======
 
-Four sessions of three hours presenting important concepts and methods on machine learning for econometrics focusing on modern causal inference. 
+Eight sessions of three hours presenting important concepts and methods on
+machine learning for econometrics. The course focuses on flexible models and causal inference in high dimensions. Most of the sessions will display a mix between theoretical considerations and practical application with hands-on in python or R.  
 
-Four steps for sound causal inference, illustrated with well known examples from the econometrics literature. 
+Motivation : 
 
-Common thread : TODO 
+- high dimensions ie. sparsity in confounders (double lasso)
+- high dimensions, nonlinearities in confounders (double ML)
+- heterogeneities of effects (generic ML) -> only in RCT / optimal assignment
 
-==========
-Evaluation 
-==========
 
-- Articles implementation/read and presentation
-- Mini-project (Choosing a running example among different data-sets/problems).
 
-=========
-Data sets
-=========
+========================================================================
+Session 1 -- Directed acyclic graph, valid adjustment sets
+========================================================================
 
-[Aller explorer](https://www.data.gouv.fr/fr/pages/donnees_apprentissage-automatique/)
-- [Offres d'emplois diffusées à Pôle emploi](https://www.data.gouv.fr/fr/datasets/offres-demploi-diffusees-a-pole-emploi/) , effet sur l'emploi ? 
-- Wages and sex ? Un classique expliqué dans le applied causal inference, p.156, que l'on peut refaire jouer avec [la base tout salarié de l'Insee](https://www.insee.fr/fr/statistiques/7651654#dictionnaire).
-- [Proposition d'admission](https://www.data.gouv.fr/fr/datasets/parcoursup-propositions-dadmission-dans-lenseignement-superieur-des-eleves-de-terminale-diplomes-du-baccalaureat-general-selon-leurs-enseignements-de-specialite/)
-- [The Welfare experiment](https://gssdataexplorer.norc.org/variables/vfilter)
-- [Education: Taille des classes sur la réussite au brevet](https://www.data.gouv.fr/fr/pages/donnees_education/)
-
-=========
-Session 1
-=========
-
-- Intro to causal inference. Different concepts, similar ideas for applied research from collected data : Intersection of different fields : stats, econometrics/epidemiology,  machine learning. 
-
-- Asking a sound causal question
-
-- Potential outcome notations
+- Reminder on causal inference: prediction/causation, potential outcomes, asking a sound causal question (PICO)
 
 - Causal graph, front-door criteria and valid adjustment sets.
  
---------------
-Coding session
---------------
-
-- Coding session : Valid and unvalid adjustment sets, with simple linear models and simulations. Asses effects on bias. Take inspiration from [Causal ML, chapter 7 and 8, notebook ](https://colab.research.google.com/github/chernozhukov2024applied/MetricsMLNotebooks/blob/main/CM3/python-pgmpy.ipynb)
+- Coding session : 
+  - Valid and unvalid adjustment sets, with simple linear models and simulations. 
+  - `DAGs: D-Separation and Conditonal Independencies, Adjustment via Backdoor and Swigs, Equivalence Classes, Falsifiability Tests. <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/CM3/python-pgmpy.ipynb>`__
 
 ----------
 References
@@ -56,88 +37,205 @@ References
 
 - :cite:t:`wager2020stats`, Lecture 1
 
+- :cite:t:`vanderweele2019principles`
 
-=========
-Session 2
-=========
+=========================================================================
+Session 2 - reminder of statistical learning, penalized linear regression
+=========================================================================
 
-- ATE
+- Reminder of statistical learning: Bias variance tradeoff, appropriate representation, over/under-fitting
 
-- Outcome based identification, propensity score estimation
+- Regularized regression : lasso, ridge, elastic net, post-lasso
 
-- Orthogonal Machine Learning : theoretical advantages for high-dimensional data. 
+- Coding session :
 
-- Identification proofs 
+  - `Common pitfalls of interpreting lasso coefficients <https://scikit-learn.org/stable/auto_examples/inspection/plot_linear_model_coefficient_interpretation.html#sphx-glr-auto-examples-inspection-plot-linear-model-coefficient-interpretation-py>`__
 
-- Sensitivity analysis 
+  - `Wage analysis with regularized models <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/PM2/python_ml_for_wage_prediction.ipynb>`__
 
---------------
-Coding session
---------------
 
-----------
-References
-----------
+- :cite:t:`loic_esteve_2022_7220307`
 
-- :cite:t:`chernozhukov2024applied`, `chapter 10 <https://causalml-book.org/assets/chapters/CausalML_chap_10.pdf>`_ , `chapter 11 <https://causalml-book.org/assets/chapters/CausalML_chap_11.pdf>`_ , 
+- :cite:t:`hastie2009elements`
 
-- :cite:t:`wager2020stats`, Lecture 2 and 3
 
-=========
-Session 3
-=========
+============================================
+Session 3 - Flexible models for tabular data
+============================================
 
-- Motivation for Heterogeneous Treatment Effect, optimal policy.
+- Trees, random forests, boosting
 
-- Model selection for CATE : R loss function
+- Cross-validation, nested cross-validation
 
-- Causal forest, targeted learning.
+- Coding session: 
+  
+  - Pratical consideration for model selection in high dimension : common metrics, calibration.
 
---------------
-Coding session
---------------
-
-Use example from session 2, but focus on CATE and policy learning.
+  - Wage analysis with flexible models
 
 ----------
 References
 ----------
 
-- :cite:t:`chernozhukov2024applied`, `chapter 14 <https://causalml-book.org/assets/chapters/CausalML_chap_14.pdf>`_ , `chapter 15 <https://causalml-book.org/assets/chapters/CausalML_chap_15.pdf>`_ ,
+- :cite:t:`loic_esteve_2022_7220307`
 
-- :cite:t:`wager2020stats`, Lecture 4
+- :cite:t:`hastie2009elements`
+
+- :cite:t:`pml1Book`
+
+==================================================
+Session 4 : double-lasso for statistical inference
+==================================================
+
+- Partial linear model 
+
+- Double-lasso, introduction to Neyman-orthogonality
+
+- Coding session : 
+
+  - `Wage analysis from a statistical inference point of view <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/PM2/python_ml_for_wage_prediction.ipynb>`__
+
+----------
+References
+----------
+
+- :cite:t:`chernozhukov2024applied`, `chapter 4 <https://causalml-book.org/assets/chapters/CausalML_chap_4.pdf>`_
+
+- :cite:t:`wager2020stats`, lecture 4
+
+- :cite:t:`gaillac2019machine`, lecture 2
 
 ====================================
-Session 4 -- Methods for time series
+Session 5 -- Neyman-orthogonality
 ====================================
 
-- Difference In Difference
+- 
 
-- Synthetic controls
+Coding session: 
 
---------------
-Coding session
---------------
+  - `The Effect of Gun Ownership on Gun-Homicide Rates <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/PM4/python_dml_inference_for_gun_ownership.ipynb#scrollTo=hOcTlYfPi-5z>`__
 
 ----------
 References
 ----------
 
-- :cite:t:`chernozhukov2024applied`, `chapter 16 <https://causalml-book.org/assets/chapters/CausalML_chap_16.pdf>`_ 
+- :cite:t:`chernozhukov2024applied`, `chapter 10 <https://causalml-book.org/assets/chapters/CausalML_chap_10.pdf>`_ 
  
-- :cite:t:`abadie2021using`
 
-- :cite:t:`bouttell2018synthetic`
 
-============================
-Session 5 -- Advanced topics 
-============================
+=============================================
+Session 6 -- Heterogeneous treatment effect
+=============================================
 
-- Going AI : feature engineering and causal inference  
 
-- Proxy causal learning
 
-- IV (see before ?)
+
+=============================================
+Session 7 -- Heterogeneous treatment effect
+=============================================
+
+Coding session: 
+
+ -  `Heterogeneous Effect of Sex on Wage Using Double Lasso <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/PM2/python_heterogeneous_wage_effects.ipynb>`__ 
+
+
+
+
+=============================================
+Session 8 -- Generic machine learning
+=============================================
+
+- 
+
+----------
+References
+----------
+
+- :cite:t:`chernozhukov2018generic`
+
+- :
+
+
+================
+Reading material
+================
+
+- Econometric methods for program evaluation :cite:t:`abadie2018econometric`
+
+- `Causal ML Book <https://causalml-book.org/>`__ :cite:t:`chernozhukov2024applied`
+
+
+==========
+Evaluation 
+==========
+
+A project on a dataset among those proposed.
+
+---------
+Projects 
+---------
+
+Run through the different steps of causal inference on a dataset of your choice: asking a sound question, identification, estimation, inference, vibration analysis.
+
+Datasets : 
+
+.. list-table:: Dataset Information
+   :header-rows: 1
+
+   * - Dataset Name
+     - URL
+     - N
+     - P
+     - Question Example
+     - Interventional
+   * - Marketing
+     - `Link <http://archive.ics.uci.edu/dataset/222/bank+marketing>`__
+     - 45211
+     - 16
+     - "What is the effect of multiple phone call on the term deposit subscription?"
+     - No
+   * - Nutritional Followup
+     - `Link <https://wwwn.cdc.gov/nchs/nhanes/nhefs/>`__
+     - Unknown
+     - Unknown
+     - "How do nutrition habits affect long-term health outcomes?"
+     - No
+   * - Wages (french version)
+     - `Link <https://www.insee.fr/fr/statistiques/7651654#dictionnaire>`__
+     - 2403775
+     - 31
+     - "What factors affect wage disparities?"
+     - No
+   * - Diabetes 130-US hospitals
+     - `Link <http://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008>`__
+     - 101766
+     - 47 
+     - "What is the effect of HbA1c measurement on hospital readmission rates at 30 days?"
+     - No  
+   * - Student's dropout and academic success
+     - `Link <http://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success>`__
+     - 4424
+     - 36
+     - "What factor influence the dropout of students?"
+     - No
+   * - Obesity levels in Mexico
+     - `Link <http://archive.ics.uci.edu/dataset/544/estimation+of+obesity+levels+based+on+eating+habits+and+physical+condition>`__
+     - 2111
+     - 16
+     - "What action is the most effective to prevent obesity?"
+     - No
+
+====================================
+Other potential sources for Datasets
+====================================
+
+- [causal data, mixtape course](https://cran.r-project.org/web/packages/causaldata/causaldata.pdf)
+
+- [Aller explorer](https://www.data.gouv.fr/fr/pages/donnees_apprentissage-automatique/)
+
+- [The Welfare experiment](https://gssdataexplorer.norc.org/variables/vfilter)
+
+- [UC Irvine ML repository](http://archive.ics.uci.edu/datasets?skip=10&take=10&sort=desc&orderBy=NumHits&search=&NumInstances=572&NumInstances=114237&NumFeatures=12&NumFeatures=3231961)
 
 
 ============

@@ -7,6 +7,7 @@ from datetime import datetime
 from typing import List
 
 import importlib_metadata
+
 import sphinxcontrib.bibtex.plugin
 from dotenv import load_dotenv
 from sphinxcontrib.bibtex.style.referencing import BracketStyle
