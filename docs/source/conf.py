@@ -79,7 +79,7 @@ class MyReferenceStyle(AuthorYearReferenceStyle):
 sphinxcontrib.bibtex.plugin.register_plugin(
     "sphinxcontrib.bibtex.style.referencing", "author_year_round", MyReferenceStyle
 )
-bibtex_bibfiles = ["_static/biblio.bib"]
+bibtex_bibfiles = ["_static/slides/biblio.bib"]
 bibtex_default_style = "unsrt"
 bibtex_reference_style = "author_year_round"
 
