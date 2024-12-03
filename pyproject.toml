@@ -30,7 +30,6 @@ python = "^3.10"
 # Project-Specific
 python-dotenv = "^0.20.0"
 click = "^8.0.4"
-sphinxcontrib-bibtex = "^2.6.2"
 ipython = "^8.29.0"
 numpy = "^2.1.2"
 networkx = "^3.4.1"
@@ -50,7 +49,7 @@ importlib-metadata = "^8.2.0"
 myst-parser = "^4.0.0"
 pygments = "^2.18.0"
 pydata-sphinx-theme = "^0.15.4"
-sphinxcontrib-bibtex = "^2.6.2"
+sphinxcontrib-bibtex = "2.6.1"
 
 
 [tool.poetry.group.dev.dependencies]

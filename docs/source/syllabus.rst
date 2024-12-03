@@ -15,22 +15,7 @@ Motivation :
 - high dimensions, nonlinearities in confounders (double ML)
 - heterogeneities of effects (generic ML) -> only in RCT / optimal assignment
 
-Important topics: 
 
-- Session 1: causal inference reminder, directed acyclic graphs and appropriate conditionning sets; 
-- Session 2: flexible models for prediction: lasso, trees, random forests and boosting
-- Session 3: reminder of statistical learning, selecting a model for prediction, practical best practices. 
-- Session 4: double-lasso for causal inference, partial linear mmodel, introduction to Neyman-orthogonality.
-- Session 5: double debiased machine learning,
-- Session 6: Heterogeneous treatment effect: introduction to Conditional Average Treatment Effect, causal forests, S-T-X-R learners
-- Session 7: Heterogeneous treatment effect, generic machine learning 
-- Session 8: Optimal assignment 
-
-Other topics
-- importance of calibration when targeting probabilities 
--  (bof),
-- Heterogeneous effect : Causal forest? inference on best linear approximation? Meta learning ?  
-- vibration analysis 
 
 ========================================================================
 Session 1 -- Directed acyclic graph, valid adjustment sets
@@ -168,17 +153,6 @@ References
 
 - :cite:t:`chernozhukov2018generic`
 
-- :
-
-
-================
-Reading material
-================
-
-- Econometric methods for program evaluation :cite:t:`abadie2018econometric`
-
-- `Causal ML Book <https://causalml-book.org/>`__ :cite:t:`chernozhukov2024applied`
-
 
 ==========
 Evaluation 
@@ -244,13 +218,13 @@ Datasets :
 Other potential sources for Datasets
 ====================================
 
-- [causal data, mixtape course](https://cran.r-project.org/web/packages/causaldata/causaldata.pdf)
+- `causal data, mixtape course <https://cran.r-project.org/web/packages/causaldata/causaldata.pdf@>`__
 
-- [Aller explorer](https://www.data.gouv.fr/fr/pages/donnees_apprentissage-automatique/)
+- `Aller explorer <https://www.data.gouv.fr/fr/pages/donnees_apprentissage-automatique/>`__
 
-- [The Welfare experiment](https://gssdataexplorer.norc.org/variables/vfilter)
+- `The Welfare experiment <https://gssdataexplorer.norc.org/variables/vfilter>`__
 
-- [UC Irvine ML repository](http://archive.ics.uci.edu/datasets?skip=10&take=10&sort=desc&orderBy=NumHits&search=&NumInstances=572&NumInstances=114237&NumFeatures=12&NumFeatures=3231961)
+- `UC Irvine ML repository <http://archive.ics.uci.edu/datasets?skip=10&take=10&sort=desc&orderBy=NumHits&search=&NumInstances=572&NumInstances=114237&NumFeatures=12&NumFeatures=3231961>`__
 
 
 ============
