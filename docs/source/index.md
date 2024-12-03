@@ -1,17 +1,14 @@
-```{include} readme.md
-
-```
 
 ```{eval-rst}
-.. toctree::
-   :hidden:
-   :maxdepth: 1
 
+.. include:: readme
+
+.. toctree::
+   :maxdepth: 1
+   
    readme
    Syllabus <syllabus>
-   Data <data>
-   Notebooks <notebooks>
-   Homeworks <homeworks>
+   Slides <slides>
    ```
 
 ```{eval-rst}

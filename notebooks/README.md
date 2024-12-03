@@ -1,11 +1,6 @@
 # Notebooks Jupyter
 
-Les notebooks sont contenus dans le dossier `mleco/notebooks`.
-
-Ils peuvent correspondre à des travaux exploratoires, d'analyse interactive ou de restitution.
-
-La convention de nommage est un nombre (pour l'ordre), les initiales du créateur,
-et une description délimitée par des tirets, e.g. `001-paj-exploration-données`.
+Les notebooks sont contenus dans le dossier `notebooks`.
 
 ## Plugin JupyTEXT
 
