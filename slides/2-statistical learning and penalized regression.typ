@@ -95,7 +95,9 @@
 - Last session: importance of causal variable status
 - Today: #alert[predictive inference] in high dimensions
   - Statistical learning basics
-  - Penalized regression for predictive inference
+  - Penalized linear regression for predictive inference
+  - Hands-on with scikit-learn
+
 #uncover(2)[
 - Next session:
   - Flexible models: Trees, Random Forests, Gradient Boosting
@@ -144,7 +146,7 @@
 
 ]
 
-#new-section-slide("Motivation: Why prediction?")
+#new-section-slide("Motivation: why prediction?")
 
 #slide(title: "Why do we need prediction for ?")[
  
@@ -181,12 +183,19 @@
   
   == When do we have "high-dimension"?
 
-
-  - $p >> n$ is a common setting in economics
-  
+  - Is $p >> n$ a common setting in economics?
+  - Consider the wage dataset:
+    - $n = 5150$ individuals
+    - $d=18$ variables
+    
+    #uncover(2)[
+    - But, categorical variables, non-linearities and interactions increase the real number of features: 
+      - non-linearities: add polynomials of degree 2: $p=2 times 18=36$
+      - interactions: 
+        - Of degree 2: $binom(d, 2)=binom(18, 2)=153$
+        - All interactions: $2^(d)=2^(18)-k-1=262 125$
+    ]
 ]
-
-
 
 
 #new-section-slide("Statistical learning theory")
@@ -243,9 +252,9 @@
   
   - Usually, for continuous outcomes, the squared loss is used: $ell(f(x), y) = (f(x) - y)^2$
   
-  - We choose among a (finite) family of functions $f in cal(F)$, the best possible function $f^star$ minimizes the #alert[risk or expected loss] $R = EE(ell)$:
+  - We choose among a (finite) family of functions $f in cal(F)$, the best possible function $f^star$ minimizes the #alert[risk or expected loss] $cal(E)(f) = EE[(f(x) - y)^2]$:
   
-  #eq[$f^star = text("argmin")_(f in cal(F)) EE[(y - y)^2]$] 
+  #eq[$f^star = text("argmin")_(f in cal(F)) EE[(f(x)- y)^2]$] 
 ]
 
 #slide(title:"")[
@@ -257,11 +266,20 @@
 ]
 
 #slide(title: "Bayes error rate: Randomness of the problem")[
-In most interesting problems, there is some randomness: ie. $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
+
+- For interesting problems, there is some randomness: ie. $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
+
+- The best possible estimator is g, yielding the #alert[Bayes error], the unavoidable error:
+
+  #eq[$cal(E)(g) = EE[(g(x) + e - g(x))^2] = EE[e^2]$]
 ]
 
 #slide(title: "Bias variance trade-off")[
-In most interesting problems, there is some random
+
+- Decomposition of the empirical risk of a fitted model $hat(f)$:
+
+  #eq[$cal(E)(hat(f)) = #rect(fill:red.opacify(-50%))[$cal(E)(g)$] + #rect(fill:purple.opacify(-50%))[$cal(E)(f^(star)) - cal(E)(g)$] + #rect(fill:green.opacify(-50%))[$cal(E)(hat(f)) - cal(E)(f^(star))$]$]
+
 ]
 
 
