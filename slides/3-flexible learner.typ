@@ -86,7 +86,7 @@
 #title-slide(
   author: [Matthieu Doutreligne],
   title: "Machine Learning for econometrics",
-  subtitle: "Causal perspective",
+  subtitle: "Flexible models",
   date: "January 10, 2025",
   //extra: "Extra"
 )
@@ -98,20 +98,6 @@
 #new-section-slide("Recall from the previous session")
 
 
-#new-section-slide("Lasso for predictive inference")
-
-#slide(title: "")[
-
-]
-
-#slide(title: "")[
-
-]
-
-
-#slide(title: "")[
-
-]
 
 #new-section-slide("Random Forests for predictive inference")
 // example with a simple linear model
