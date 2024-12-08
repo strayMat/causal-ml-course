@@ -13,3 +13,6 @@ DIR2RESULTS = DIR2DATA / "results"
 
 DIR2DOCS = ROOT_DIR / "docs/source"
 DIR2DOCS_STATIC = DIR2DOCS / "_static"
+
+DIR2SLIDES = ROOT_DIR / "slides"
+DIR2FIG = DIR2SLIDES / "img" / "pyfigures"

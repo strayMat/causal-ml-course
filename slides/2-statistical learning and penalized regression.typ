@@ -113,7 +113,7 @@
 #slide(title: "Table of contents")[
   #metropolis-outline
 ]
-#new-section-slide("Settings: statistical learning")
+#new-section-slide("Statistical learning framework")
 
 #slide(title: "Statistical learning, ie. predictive inference")[
   == Goal
@@ -132,7 +132,7 @@
   Finding the appropriate model $hat(f)$ is called learning, training or fitting the model.
 ]
 
-#slide(title: "Statistical learning, two types of problems")[
+#slide(title: "Statistical learning, two classes of problems")[
   
 
   #side-by-side[
@@ -150,7 +150,7 @@
 ]
   
 
-#slide(title: "Statistical learning, two types of problems")[
+#slide(title: "Statistical learning, two classes of problems")[
   #side-by-side[
     #figure(
       image("img/ML_1/linear_classification.png", width: 80%),
@@ -177,7 +177,7 @@
  
   == Predictive inference
   
-   - Some problems in economics requires accurate prediction @kleinberg2015prediction without a causal interpretation
+   - Some problems in economics requires accurate prediction without a causal interpretation @kleinberg2015prediction 
    - Eg. Stratisfying on a risk score (loan, preventive care, ...)
 ]
 
@@ -191,12 +191,13 @@
 
   - Low-dimensional data: $n>>p$
 
-  - High predictive performances 
+  - No non-linearities, no or few interactions between features
 
   == Maybe yes
 
   - High-dimensional data: ie. $p >> n$
-  - Poor predictive performances
+
+  - Non-linearities, many interactions between features
 ]
 
 #slide(title: "Do we need more than linear models?")[
@@ -213,12 +214,30 @@
       - non-linearities: add polynomials of degree 2: $p=2 times 18=36$
       - interactions: 
         - Of degree 2: $binom(d, 2)=binom(18, 2)=153$
-        - All interactions: $2^(d)=2^(18)-k-1=262 125$
+        - All interactions: $2^(d)=2^(18)-18-1=262 125$
     ]
 ]
 
+#slide(title: "Is this common?")[
+  == Yes
 
-#new-section-slide("Statistical learning theory")
+  - Categorical or text data are increasingly common
+
+  - Image data is high-dimensional by nature
+
+  - Automation of data collection and storage leads to more collections of variables
+  
+  == Some examples:
+
+  - The #link("https://www.census.gov/data/datasets/time-series/demo/cps/cps-basic.html", "Current Population Survey (CPS)") dataset has hundreds of variables, many of which are categorical
+  
+  - The #link("https://health-data-hub.shinyapps.io/dico-snds/", "Système National des Données de Santé (SNDS)") in France collects all reimbursments : many hundreds of variables, many of which are categorical
+
+  - The #link("https://ssphub.netlify.app/post/parquetrp/", "population referencement dataset") from INSEE lists 800 pairs of (variables, categories).
+]
+
+
+#new-section-slide("Statistical learning theory and intutions")
 
 #slide(title: "Under vs. overfitting")[
    
@@ -248,19 +267,41 @@
   - The good way of framing the question is: #alert[how will the model perform on new data?]
 ]
 
-#slide(title: "Train vs test error")[
-  == Measure the performances on test data = generalization
-
-
-  == Measure the errors on the training data = fitting
-
+#slide(title: "Train vs test error: simple models")[
+  #side-by-side[
+    === Measure the errors on the training data = fitting
+    #figure(
+      image("img/pyfigures/ols_simple_w_r2.svg", width: 80%),
+    )
+  ][
+     === Measure the performances on test data = generalization
+    #figure(
+      image("img/pyfigures/ols_test_w_r2.svg", width: 80%),
+    )
+  ]
+  #emoji.party Here, no problem of overfitting: train vs test error are similar.
 ]
 
 
-#slide(title: "Bias-variance trade-off: Under vs. overfitting")[
+#slide(title: "Train vs test error: flexible models")[
+  #side-by-side[
+    === Measure the errors on the training data = fitting
+    #figure(
+      image("img/pyfigures/splines_cubic_w_r2.svg", width: 80%),
+    )
+  ][
+     === Measure the performances on test data = generalization
+    #figure(
+      image("img/pyfigures/splines_test_w_r2.svg", width: 80%),
+    )
+  ]
+  \u{1F62B} Overfitting: the model is too complex and captures noise.
+]
+  
 
-  = How to choose the complexity of the model?
 
+
+#slide(title: "How to choose the complexity of the model?")[
    #grid(
     columns: (auto, auto),
     gutter: 3pt,
@@ -271,7 +312,7 @@
   #only(2)[
     This trade-off is is called #alert[Bias variance trade-off]. 
 
-    - Let's recover this trade-off in the context of statistical learning theory.
+    - Let's recover it in the context of statistical learning theory.
 ]
 ]
 
@@ -294,11 +335,11 @@
   #eq[$hat(f) = text("argmin")_(f in cal(F)) sum_(i=1)^n (f(x_i) - y_i)^2$]
 
   - This creates the #highlight(fill:c_variance)[estimation error], related to sampling noise: 
-  #eq[$cal(E)(hat(f)) - cal(E)(f^(star)) = EE[(hat(f)(x) - y)^2] - EE[(f^(star)(x) - y)^2]$]
+  #eq[$cal(E)(hat(f)) - cal(E)(f^(star)) = EE[(hat(f)(x) - y)^2] - EE[(f^(star)(x) - y)^2] >= 0$]
 ]
 
 #slide(title:"Empirical risk minimization: estimation error illustration")[
-  = High estimation error means overfit
+  = High #highlight(fill: c_variance)[estimation error] means overfit
   
   #grid(
     columns: (auto, auto),
@@ -319,51 +360,127 @@
 
 #slide(title: "Bayes error rate: Randomness of the problem")[
 
-- For interesting problems, there is some randomness: ie. $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
+- Interesting problems exhibit randomness #linebreak()
+$y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 
-- The best possible estimator is g, yielding the #highlight(fill:c_bayes)[Bayes error], the unavoidable error:
+- The best possible estimator is $g(dot)$, yielding the #highlight(fill:c_bayes)[Bayes error], the unavoidable error:
   #eq[$cal(E)(g) = EE[(g(x) + e - g(x))^2] = EE[e^2]$]
-]
-
-#slide(title: "Bias variance trade-off")[
-
-- Decomposition of the empirical risk of a fitted model $hat(f)$:
-
-  #eq[$cal(E)(hat(f)) = #rect(fill:c_bayes)[$cal(E)(g)$] + #rect(fill:c_bias)[$cal(E)(f^(star)) - cal(E)(g)$] + #rect(fill:c_variance)[$cal(E)(hat(f)) - cal(E)(f^(star))$]$]
 
 ]
 
+#slide(title:"Empirical risk minimization: approximation error")[ 
+
+  - In practice you don't know the class of function in which the true function lies : $y approx g(x)$ : Every model is wrong ! 
+  
+  - You are choosing the best possible function in the class of functions you have access to: $f^star in cal(F)$ eg. linear models, polynomials, trees, ...
+  
+  - This creates the #highlight(fill:c_bias)[approximation error]: 
+  #eq[$cal(E)(f(star)) - cal(E)(g) = EE[(f^(star)(x) - y)^2] - EE[(g(x) - y)^2] >= 0$] 
+]
+
+
+#slide(title:"Empirical risk minimization: approximation error illustration")[
+  = High #highlight(fill: c_bias)[approximation error] means underfit
+  #h(1em)
+  #grid(
+    columns: (auto, auto),
+    gutter: 3pt,
+    align: center,
+   image("img/ML_1/polynomial_underfit_simple.svg", width: 90%),
+    [
+      #set align(left)
+     == Model is too simple for the data
+    - its best fit does not approximate the true generative process
+    - Yet it captures little noise
+    == Low noise
+    == Rapidly enough data to fit the model
+    ],
+  )
+  
+]
+
+
+#slide(title: "Bias variance trade-off: Putting the pieces together")[
+  == Decomposition of the empirical risk of a fitted model $hat(f)$
+  
+  #h(1em)
+  #eq[
+    $cal(E)(hat(f)) = 
+    #rect(fill:c_bayes,inset:15pt)[$underbrace(cal(E)(g), "Bayes error")$] + 
+    #rect(fill:c_bias,inset:15pt)[$underbrace(cal(E)(f^(star)) - cal(E)(g), "approximation error")$] + 
+    #rect(fill:c_variance, inset:15pt)[$underbrace(cal(E)(hat(f)) - cal(E)(f^(star)), "estimation error")$]$
+  ]
+
+#only(2)[
+  == Controls on this trade-off
+
+  - Increase/decrease the size of the hypothesis family : $cal(F)$ ie. more or less complex models.
+
+  - Increase your sample size: $n$ ie. more observations.
+]
+]
+
+#slide(title: "Increasing complexity")[
+
+]
+
+
+#slide(title: "Increasing sample size")[
+
+]
+
+#slide(title: "Remaining of this session (and the next)")[
+
+  = Explore common families of models suited to tables data
+
+  == Today
+
+  - Penalized linear regression: Lasso and Ridge
+
+  - Hands-on with scikit-learn
+
+  == Next session
+
+  - Flexible models: Trees, Random Forests, Gradient Boosting
+
+  - Cross-validation
+
+  - Practical scikit-learn
+]
 
 #new-section-slide("Lasso for predictive inference")
 
-#slide(title: "Bias-variance trade-off, take home messages")[
- == High bias == underfitting
-
-  - systematic prediction errors
-  - the model prefers to ignore some aspects of the data
-  - mispecified models
-
-== High variance == overfitting:
-
- - prediction errors without obvious structure
- - small change in the training set, large change in model
- - unstable models
-]
-
-#slide(title: "")[
+#slide(title:"Reminder on linear regression")[
 
 ]
 
-#slide(title: "")[
+#slide(title:"Transformation of the features")[
+  
+]
+
+
+#slide(title:"Sparsity")[
+
+]
+
+#slide(title:"Lasso: the idea")[
+
+]
+
+#slide(title:"Post-Lasso: the idea")[
+
+]
+
+#slide(title:"Pitfalls on using Lasso for variable selections")[
 
 ]
 
 
-#slide(title: "")[
+#slide(title:"Ridge regression")[
 
 ]
 
-#slide(title: "")[
+#slide(title:"Elastic net")[
 
 ]
 
@@ -396,6 +513,28 @@
     caption: "DAG for a RCT: the treatment is independent of the confounders",
   )
 ]
+
+
+#slide(title: "Take home messages: Bias-variance trade-off")[
+ == High bias == underfitting
+
+  - systematic prediction errors
+  - the model prefers to ignore some aspects of the data
+  - mispecified models
+
+== High variance == overfitting:
+
+ - prediction errors without obvious structure
+ - small change in the training set, large change in model
+ - unstable models
+]
+
+#slide(title: "Take home messages: Lasso and Ridge")[
+
+]
+
+#new-section-slide("Practical session")
+
 
 #slide[
 
