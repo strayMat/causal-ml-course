@@ -22,7 +22,6 @@
   body
 }
 
-
 #let c_treated(body) = {
   set text(fill: blue)
   body
@@ -33,6 +32,11 @@
   set text(size: size)
   body
 }
+
+//colors for the bias-variance trade-off
+#let c_bayes = red.opacify(-50%)
+#let c_bias = purple.opacify(-50%)
+#let c_variance = green.opacify(-50%)
 
 #let slide(title: none, body) = {
   let header = {
@@ -62,7 +66,7 @@
   )
 
   let content = {
-    show: align.with(top)
+    show: align.with(horizon)
     show: pad.with(left: 1em, top: 0em, right: 1em, bottom: 0em) // super important to have a proper padding (not 1/3 of the slide blank...)
     set text(fill: m-dark-teal)
     body
@@ -130,20 +134,36 @@
 
 #slide(title: "Statistical learning, two types of problems")[
   
-  === Regression
+
+  #side-by-side[
+    #figure(
+      image("img/ML_1/linear_regression.png", width: 80%),
+    )
+  ][
+    === Regression
 
    - The outcome is continuous: eg. wage prediction
 
    - The error is often measured by the mean squared error (MSE):
    #eq[$text("MSE") = EE[(Y - hat(f)(X))^2]$]
+  ]
+]
+  
 
+#slide(title: "Statistical learning, two types of problems")[
+  #side-by-side[
+    #figure(
+      image("img/ML_1/linear_classification.png", width: 80%),
+    )
+  ][
   === Classification
 
-    - The outcome is categorical: eg. diagnosis, loan default, ...
+    - Outcome is categorical: eg. diagnosis, loan default, ...
 
-    - The error is often measured by the accuracy: 
-    #eq[$text("Misclassification rate") = EE[bb(1)(Y != hat(f)(X))]$]
+    - Error is often measured with accuracy: 
+    #eq[$text("Misclassification rate") = EE[bb(1)(Y != hat(f)(X))]$] with $hat(f) in {0, 1}$ for binary classification
 
+]
 ]
 
 #new-section-slide("Motivation: why prediction?")
@@ -228,9 +248,18 @@
   - The good way of framing the question is: #alert[how will the model perform on new data?]
 ]
 
-#slide(title: "Under vs. overfitting")[
+#slide(title: "Train vs test error")[
+  == Measure the performances on test data = generalization
 
-  = Which data fit do you prefer? New example! 
+
+  == Measure the errors on the training data = fitting
+
+]
+
+
+#slide(title: "Bias-variance trade-off: Under vs. overfitting")[
+
+  = How to choose the complexity of the model?
 
    #grid(
     columns: (auto, auto),
@@ -257,20 +286,42 @@
   #eq[$f^star = text("argmin")_(f in cal(F)) EE[(f(x)- y)^2]$] 
 ]
 
-#slide(title:"")[
+#slide(title:"Empirical risk minimization: estimation error")[
    - In finite sample regimes, the expectation is not accessible since we only have access to a finite number of data pairs
   
   - In practice, we minimize the #alert[empirical risk] or average loss $R_(text("emp"))= sum_(i=1)^n (f(x_i) - y_i)^2$:
   
   #eq[$hat(f) = text("argmin")_(f in cal(F)) sum_(i=1)^n (f(x_i) - y_i)^2$]
+
+  - This creates the #highlight(fill:c_variance)[estimation error], related to sampling noise: 
+  #eq[$cal(E)(hat(f)) - cal(E)(f^(star)) = EE[(hat(f)(x) - y)^2] - EE[(f^(star)(x) - y)^2]$]
+]
+
+#slide(title:"Empirical risk minimization: estimation error illustration")[
+  = High estimation error means overfit
+  
+  #grid(
+    columns: (auto, auto),
+    gutter: 3pt,
+    align: center,
+   image("img/ML_1/polynomial_overfit_simple_legend.svg", width: 90%),
+    [
+      #set align(left)
+     == Model is too complex
+    - The model is able to recover the true generative process
+    - But its flexibility captures noise
+    == Too much noise
+    == Not enough data
+    ],
+  )
+  
 ]
 
 #slide(title: "Bayes error rate: Randomness of the problem")[
 
 - For interesting problems, there is some randomness: ie. $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 
-- The best possible estimator is g, yielding the #alert[Bayes error], the unavoidable error:
-
+- The best possible estimator is g, yielding the #highlight(fill:c_bayes)[Bayes error], the unavoidable error:
   #eq[$cal(E)(g) = EE[(g(x) + e - g(x))^2] = EE[e^2]$]
 ]
 
@@ -278,7 +329,7 @@
 
 - Decomposition of the empirical risk of a fitted model $hat(f)$:
 
-  #eq[$cal(E)(hat(f)) = #rect(fill:red.opacify(-50%))[$cal(E)(g)$] + #rect(fill:purple.opacify(-50%))[$cal(E)(f^(star)) - cal(E)(g)$] + #rect(fill:green.opacify(-50%))[$cal(E)(hat(f)) - cal(E)(f^(star))$]$]
+  #eq[$cal(E)(hat(f)) = #rect(fill:c_bayes)[$cal(E)(g)$] + #rect(fill:c_bias)[$cal(E)(f^(star)) - cal(E)(g)$] + #rect(fill:c_variance)[$cal(E)(hat(f)) - cal(E)(f^(star))$]$]
 
 ]
 
