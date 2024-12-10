@@ -525,11 +525,7 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
     Prediction is limited by noise.
   ]
 )
-
 ]
-
-
-
 ]
 
 
@@ -555,12 +551,175 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 
 #new-section-slide("Lasso for predictive inference")
 
-#slide(title:"Reminder on linear regression")[
+#slide(title:"Linear model reminder: Linear regression")[
 
+  #only(1)[
+
+  $y$ is a linear combination of the features $x in RR^p$
+  
+  ]
+  #eq[$Y_i = X_i^T beta_0 + epsilon_i$]
+
+  #only(1)[ 
+  - $epsilon$ the random variable of the error term.
+
+  - $beta_0 in RR^(p times 1)$ the _true_ coefficients.
+
+  Usually, we assume that the errors are normally distributed and independent of X_i: 
+  
+  $epsilon_i tilde cal(N)(0, sigma^2)$ and $epsilon_i tack.t.double X_i$
+  ]
+  #only(2)[
+    #figure(
+      image("img/ML_1/linear_fit_red.svg", width: 50%),
+    )
+  ]
+  Model are typically fitted by linear algebra methods @hastie2009elements.
 ]
 
-#slide(title:"Transformation of the features")[
+#slide(title:"Linear model reminder: Linear regression")[
+  TODO: Metrics
+]
+
+#slide(title:"Linear regression: Two dimension illustration")[
+  #figure(
+    image("img/ML_1/lin_reg_3D.svg", width: 50%),
+  )
+]
+
+
+#slide(title:"Linear model reminder: classification, logistic regression")[
+  #only(1)[ 
+
+  The logit of the probability of the outcome is a linear combination of the features $X_i in RR^p$:
+
+  #eq[$ln(p(Y_i=1|X_i)/p(Y_i=0|X_i)) = X_i^T beta_0$]
+
+  which is equivalent to:
+  ]
+  #eq[$p(Y_i=1|X_i, beta_0) \u{225D} p(X_i, beta_0) = 1/(1+exp(-X_i^T beta_0))$]
+  #only(1)[ 
+
+  The statistical model is a bernoulli: $B(p(x, beta_0))$
+
+  Models are fitted by maximizing the likelihood by iterative optimization @hastie2009elements #footnote[eg. coordinate descents (liblinear), second order descent (Newton's method), gradient descent (SAG)...].
+  ]
+   #only(2)[
+    #figure(
+      image("img/ML_1/logistic_color.svg", width: 50%),
+    )
+  ]
+]
+
+#slide(title:"Linear model reminder: classification, logistic regression")[
+  TODO: Metrics
+]
+
+#slide(title:"Logistic regression: Two dimension illustration")[
+ #figure(
+    image("img/ML_1/logistic_2D.svg", width: 50%),
+  )
+]
+
+#slide(title: "Linear models are not suited to all data")[
+  #set align(center)
+
+  #side-by-side(
+    [
+      #image("img/ML_1/lin_separable.svg", width: 80%)
+      Almost linearly separable data.
+    ],
+
+    [
+      #image("img/ML_1/lin_not_separable.svg", width: 80%)
+      Data not linearly separable.
+      ],
+  )
+]
+
+#slide(title: "Linear model pros and cons")[
+
+#only(1)[
+  == Pros
+
+  - Converge quickly
+
+  - Hard to beat when n_features is large but we still have n_samples >> n_features
+
+  - Linear models work well if
   
+    - the classes are (almost) linearly separable
+    - or the outcome is (almost) linearly related to the features.
+] 
+#only((2,3))[
+  == Cons
+
+  Sometimes
+
+    - the best decision boundary to separate classes is not well approximated by a straight line.
+
+    - there are important non-linear relationships between the features and the outcome.
+]
+
+#only(3)[
+  #emoji.lightbulb Either use non-linear models, or perform transformations on the data, to engineer new features.
+]
+]
+
+#slide(title:"Transformation of the features: Example")[
+
+#only(1)[
+#side-by-side(
+  [
+    #figure(
+      image("img/pyfigures/2_linear_regression_non_linear_link.svg", width: 80%),
+  )
+  ],
+  [
+    Non-linear relationship between the features and the outcome:
+
+    $Y = X^3 - 0.5 times X^2 + epsilon$
+  ]
+)
+]
+
+
+#only(2)[
+#side-by-side(
+  [
+    #figure(
+      image("img/pyfigures/2_linear_regression_non_linear_link_linear.svg", width: 100%),
+  )
+  ],
+  [
+  
+    Vanilla Linear regression fails to capture the relationship.
+
+  ]
+)
+]
+
+#only(3)[
+#side-by-side(
+  [
+    #figure(
+      image("img/pyfigures/2_linear_regression_non_linear_link_polynomial.svg", width: 100%),
+  )
+  ],
+  [
+  
+  Solution: 
+  
+   - Expand the feature space with polynoms of the features:
+    
+    $X = [X, X^2, X^3]$
+  
+  - Run a linear regression on the new feature space.
+
+  $Y = [X, X^2, X^3]^T hat(beta)$
+  ]
+)
+]
 ]
 
 
@@ -568,11 +727,11 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 
 ]
 
-#slide(title:"Lasso: the idea")[
+#slide(title:"Lasso: intuition")[
 
 ]
 
-#slide(title:"Post-Lasso: the idea")[
+#slide(title:"Post-Lasso: intuition")[
 
 ]
 
