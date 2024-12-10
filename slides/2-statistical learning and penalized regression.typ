@@ -800,16 +800,6 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 #new-section-slide("Practical session")
 
 
-#slide[
-
-  = Resources
-
-  - https://web.stanford.edu/~swager/stats361.pdf
-  - https://www.mixtapesessions.io/
-  - https://alejandroschuler.github.io/mci/
-  - https://theeffectbook.net/index.html
-]
-
 #let bibliography = bibliography("biblio.bib", style: "apa")
 
 #set align(left)

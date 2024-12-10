@@ -1270,15 +1270,7 @@ Here, two causal paths from A:
   - 
   ]
 ]
-#slide[
 
-  = Resources
-
-  - https://web.stanford.edu/~swager/stats361.pdf
-  - https://www.mixtapesessions.io/
-  - https://alejandroschuler.github.io/mci/
-  - https://theeffectbook.net/index.html
-]
 
 #let bibliography = bibliography("biblio.bib", style: "apa")
 
