@@ -565,20 +565,30 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 
   - $beta_0 in RR^(p times 1)$ the _true_ coefficients.
 
-  Usually, we assume that the errors are normally distributed and independent of X_i: 
+  Usually, we assume that the errors are normally distributed and independent of $X_i$ : 
   
   $epsilon_i tilde cal(N)(0, sigma^2)$ and $epsilon_i tack.t.double X_i$
+  
+  Model are typically fitted by linear algebra methods @hastie2009elements.
   ]
   #only(2)[
     #figure(
       image("img/ML_1/linear_fit_red.svg", width: 50%),
     )
   ]
-  Model are typically fitted by linear algebra methods @hastie2009elements.
+
 ]
 
 #slide(title:"Linear model reminder: Linear regression")[
-  TODO: Metrics
+  == Common metrics 
+
+  - Mean Squared Error: $text("MSE") = 1/n sum_(i=1)^n (Y_i - hat(Y_i))^2$
+  
+  - R-squared, : $R^2 = 1 - (sum_(i=1)^(n)(Y_i - hat(Y_i))^2) / (sum_(i=1)^(n)(Y_i - dash(Y))^2)$ where $dash(Y) = 1/n sum_(i=1)^(n) Y_i$
+
+  The proportion of variance explained by the model (perfect fit: $R^2=1$)
+
+  - Mean absolute error: $text("MAE") = 1/n sum_(i=1)^n |Y_i - hat(Y_i)|$
 ]
 
 #slide(title:"Linear regression: Two dimension illustration")[
@@ -589,36 +599,51 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 
 
 #slide(title:"Linear model reminder: classification, logistic regression")[
-  #only(1)[ 
-
   The logit of the probability of the outcome is a linear combination of the features $X_i in RR^p$:
 
   #eq[$ln(p(Y_i=1|X_i)/p(Y_i=0|X_i)) = X_i^T beta_0$]
 
   which is equivalent to:
-  ]
   #eq[$p(Y_i=1|X_i, beta_0) \u{225D} p(X_i, beta_0) = 1/(1+exp(-X_i^T beta_0))$]
-  #only(1)[ 
-
+  
   The statistical model is a bernoulli: $B(p(x, beta_0))$
 
   Models are fitted by maximizing the likelihood by iterative optimization @hastie2009elements #footnote[eg. coordinate descents (liblinear), second order descent (Newton's method), gradient descent (SAG)...].
-  ]
-   #only(2)[
-    #figure(
-      image("img/ML_1/logistic_color.svg", width: 50%),
-    )
-  ]
 ]
 
 #slide(title:"Linear model reminder: classification, logistic regression")[
-  TODO: Metrics
+  #side-by-side(columns: (2fr, 1fr),
+    [
+      == Common metrics 
+
+      - $text("Accuracy") = 1/n sum_(i=1)^n bb(1)(Y_i = hat(Y_i))$
+
+    - Precision: $text("Precision") = text("TP") / (text("TP") + text("FP"))$
+    
+    - Recall: $text("Recall") = text("TP") / (text("TP") + text("FN"))$
+
+    - Brier score loss: $text("BSL") = 1/n sum_(i=1)^n (Y_i - p_i)^2$
+    ],
+    [
+      #image("img/ML_1/Precisionrecall.svg.png", width: 80%)
+    ]
+  )
+
+
 ]
 
-#slide(title:"Logistic regression: Two dimension illustration")[
- #figure(
-    image("img/ML_1/logistic_2D.svg", width: 50%),
-  )
+#slide(title:"Logistic regression: Illustrations")[
+ 
+ #side-by-side(
+  [
+    #image("img/ML_1/logistic_color.svg", width: 80%)
+    Logistic regression in one dimension.
+  ],
+  [
+    #image("img/ML_1/logistic_2D.svg", width: 80%)
+    Logistic regression in two dimensions.
+  ]
+)
 ]
 
 #slide(title: "Linear models are not suited to all data")[
@@ -740,42 +765,15 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 ]
 
 
+#new-section-slide("Python : Common pitfalls in the interpretation of coefficients of linear models")
+
+
 #slide(title:"Ridge regression")[
 
 ]
 
 #slide(title:"Elastic net")[
 
-]
-
-#new-section-slide("A word on deep learning")
-
-#slide(title: "Why not use deep learning everywhere?")[
-
-- Success of deep learning in image, speech recognition and text
-
-- Why not so used in economics?
-]
-
-
-#slide(title: "Limited data settings")[
-  - Typically #only(1)[in economics] #only(1)[everywhere], we have a limited number of observations
-
-  #figure(
-    image("img/ML_1/2020_kdd_dataset_sizes.png", width: 65%),
-    caption: [Typical dataset are mid-sized. This does not change with time. #footnote("https://www.kdnuggets.com/2020/07/poll-largest-dataset-analyzed-results.html")],
-  )
-
-]
-
-#slide(title: "Deep learning underperforms on data tables")[
-
- == Tree-based methods outperform tailored deep learning architectures @grinsztajn2022tree
-
- #figure(
-    image("img/ML_1/tree_outperforms_dl.png", width: 83%),
-    caption: "DAG for a RCT: the treatment is independent of the confounders",
-  )
 ]
 
 
