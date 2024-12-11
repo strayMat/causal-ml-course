@@ -98,16 +98,11 @@
 #new-section-slide("Recall from the previous session")
 
 
-
 #new-section-slide("Random Forests for predictive inference")
-// example with a simple linear model
+
 
 #new-section-slide("Ensemble models")
 
-#new-section-slide("")
-
-#new-section-slide("Python : Common pitfalls in the interpretation of coefficients of linear models")
-
 
 #slide(title: "")[
 
@@ -117,6 +112,37 @@
 #slide(title: "")[
 
 ]
+
+#new-section-slide("A word on deep learning")
+
+#slide(title: "Why not use deep learning everywhere?")[
+
+- Success of deep learning in image, speech recognition and text
+
+- Why not so used in economics?
+]
+
+
+#slide(title: "Limited data settings")[
+  - Typically #only(1)[in economics] #only(1)[everywhere], we have a limited number of observations
+
+  #figure(
+    image("img/ML_1/2020_kdd_dataset_sizes.png", width: 65%),
+    caption: [Typical dataset are mid-sized. This does not change with time. #footnote("https://www.kdnuggets.com/2020/07/poll-largest-dataset-analyzed-results.html")],
+  )
+
+]
+
+#slide(title: "Deep learning underperforms on data tables")[
+
+ == Tree-based methods outperform tailored deep learning architectures @grinsztajn2022tree
+
+ #figure(
+    image("img/ML_1/tree_outperforms_dl.png", width: 83%),
+    caption: "DAG for a RCT: the treatment is independent of the confounders",
+  )
+]
+
 
 #let bibliography = bibliography("biblio.bib", style: "apa")
 
