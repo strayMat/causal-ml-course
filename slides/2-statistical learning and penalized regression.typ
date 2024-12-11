@@ -4,6 +4,8 @@
 
 #import "@preview/polylux:0.3.1": *
 #import "@preview/embiggen:0.0.1": *
+#import "@preview/showybox:2.0.1": showybox
+
 #import themes.metropolis: *
 
 #show: metropolis-theme//.with(footer: [ENSAE, Introduction course])
@@ -31,6 +33,42 @@
   set align(center)
   set text(size: size)
   body
+}
+
+// assumption box 
+// 
+// 
+#let my_box(title, color, body) = {
+
+  showybox(
+    title-style: (
+      color: black,
+      weight: "regular",
+      boxed-style: (
+        anchor: (
+          x: left,
+          y: horizon
+        ),
+        radius: 10pt,
+      )
+    ),
+    frame: (
+      border-color: color.darken(50%),
+      title-color: color.lighten(60%),
+      body-color: color.lighten(80%)
+    ),
+    title:title,
+    align(center, body)
+  )
+}
+
+#let hyp_box(title: "Assumption", body) = {
+  my_box(title, rgb("#d39e57"), body)
+}
+
+
+#let def_box(title: "Definition", body) = {
+  my_box(title, rgb("#57b4d3"), body)
 }
 
 //colors for the bias-variance trade-off
@@ -201,42 +239,57 @@
   - Non-linearities, many interactions between features
 ]
 
-#slide(title: "Do we need more than linear models?")[
-  
-  == When do we have "high-dimension"?
+#slide(title: "What high-dimension means: Is p >> n common in economics?")[
 
-  - Is $p >> n$ a common setting in economics?
-  - Consider the wage dataset:
-    - $n = 5150$ individuals
-    - $d=18$ variables
-    
-    #uncover(2)[
-    - But, categorical variables, non-linearities and interactions increase the real number of features: 
-      - non-linearities: add polynomials of degree 2: $p=2 times 18=36$
-      - interactions: 
-        - Of degree 2: $binom(d, 2)=binom(18, 2)=153$
-        - All interactions: $2^(d)=2^(18)-18-1=262 125$
-    ]
+  == Characteristics of the dataset that can lead to high-dimensionality
+
+  - Categorical variables with high cardinality, eg. job title, diagnoses...
+  
+  - Text data: eg. job description, medical reports...
+
+  - Technical regressors to handle non-linearities, eg. polynomials, splines, log, ...
 ]
 
-#slide(title: "Is this common?")[
-  == Yes
+#slide(title: "What high-dimension means, concrete example")[
 
-  - Categorical or text data are increasingly common
-
-  - Image data is high-dimensional by nature
-
-  - Automation of data collection and storage leads to more collections of variables
+  - #link("https://ssphub.netlify.app/post/parquetrp/", "Population referencement dataset"), individual file (INSEE): n=19 735 576; p=88 #emoji.fingers
   
-  == Some examples:
+  - But many variables with cardinality: more than 555 pairs of (variable, category).
+
+  - Adding interaction of degree 2: $binom(p, 2)=binom(555, 2) = (555 * 554) / 2 = 153 735$ features #emoji.face.sweat
+    
+  - Adding interactions of any degree: $2^(p) - p - 1 = 2^(555) - 554$ #emoji.face.explode
+]
+
+
+#slide(title: "Is this common? Yes")[
+
+  - Categorical with high cardinality or text data are increasingly common.
+
+  - Image data is high-dimensional by nature.
+
+  - Automation of data collection and storage leads to more datasets and more variables.
+
+]
+
+#slide(title: "Some examples from area with high dimensional data")[
+
+ == Some examples
 
   - The #link("https://www.census.gov/data/datasets/time-series/demo/cps/cps-basic.html", "Current Population Survey (CPS)") dataset has hundreds of variables, many of which are categorical
   
-  - The #link("https://health-data-hub.shinyapps.io/dico-snds/", "Système National des Données de Santé (SNDS)") in France collects all reimbursments : many hundreds of variables, many of which are categorical
+  - The #link("https://health-data-hub.shinyapps.io/dico-snds/", "Système National des Données de Santé (SNDS)") in France = healthcare claims : many hundreds of variables, many of which are categorical.
+  
+  #uncover(2)[
+    == Other area 
 
-  - The #link("https://ssphub.netlify.app/post/parquetrp/", "population referencement dataset") from INSEE lists 800 pairs of (variables, categories).
+    - Country characteristics in cross-country wealth analysis,
+
+    - Housing characteristics in house pricing/appraisal analysis,
+
+    - Product characteristics at the point of purchase in demand analysis.
+  ]
 ]
-
 
 #new-section-slide("Statistical learning theory and intutions")
 
@@ -747,20 +800,38 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 ]
 ]
 
+#slide(title:"A first model handling high-dimension: Lasso")[
+  
+  #hyp_box(title: [Assumption 1: Linear model with high dimension])[
 
-#slide(title:"Sparsity")[
+    $Y = X beta + epsilon$, #h(1em) $epsilon tack.t.double X$ and $X in RR^(n times p)$ with $n << p$
+
+  ]
+  
+  #hyp_box(title: [Assumption 2: (approximate) sparsity])[
+
+    - The true $beta$ is sparse: ie. many coefficients are zero or very close to zero.
+  ]
+]
+
+
+#slide(title:"Approximate sparsity: theoretical considerations")[
+
+    #def_box(title: [Definition: Approximate sparsity])[
+    The sorted absolute values of the coefficients decay quickly. 
+
+    $|beta|_((j)) < A j^(-a)$ #h(1em) $a> 1/2$
+
+    for each j, where the constants a and A do not depend on the sample size n.
+  ]
+]
+
+#slide(title:"Ridge regression")[
 
 ]
 
-#slide(title:"Lasso: intuition")[
 
-]
-
-#slide(title:"Post-Lasso: intuition")[
-
-]
-
-#slide(title:"Pitfalls on using Lasso for variable selections")[
+#slide(title:"Elastic net")[
 
 ]
 
@@ -768,13 +839,10 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 #new-section-slide("Python : Common pitfalls in the interpretation of coefficients of linear models")
 
 
-#slide(title:"Ridge regression")[
+#slide(title:"Pitfalls on using Lasso for variable selections")[
 
 ]
 
-#slide(title:"Elastic net")[
-
-]
 
 
 #slide(title: "Take home messages: Bias-variance trade-off")[
@@ -793,6 +861,17 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 
 #slide(title: "Take home messages: Lasso and Ridge")[
 
+  == Lasso
+
+  - L1 penalty: sparsity
+  - Feature selection
+  - Unstable for correlated features
+
+  == Ridge
+
+  - L2 penalty: shrinkage
+  - No feature selection
+  - Stable for correlated features
 ]
 
 #new-section-slide("Practical session")
