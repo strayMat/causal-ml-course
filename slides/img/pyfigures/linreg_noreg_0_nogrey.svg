@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="288pt" height="216pt" viewBox="0 0 288 216" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2024-12-14T18:15:36.034809</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.9.3, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 216 
+L 288 216 
+L 288 0 
+L 0 0 
+L 0 216 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 28.8 194.4 
+L 288 194.4 
+L 288 0 
+L 28.8 0 
+L 28.8 194.4 
+z
+" style="fill: none"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="text_1">
+     <!-- x -->
+     <g transform="translate(151.305 215.116562) scale(0.22 -0.22)">
+      <defs>
+       <path id="DejaVuSans-Bold-78" d="M 1422 1791 
+L 159 3500 
+L 1344 3500 
+L 2059 2463 
+L 2784 3500 
+L 3969 3500 
+L 2706 1797 
+L 4031 0 
+L 2847 0 
+L 2059 1106 
+L 1281 0 
+L 97 0 
+L 1422 1791 
+z
+" transform="scale(0.015625)"/>
+      </defs>
+      <use xlink:href="#DejaVuSans-Bold-78"/>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="text_2">
+     <!-- y -->
+     <g transform="translate(20.052813 104.370625) rotate(-90) scale(0.22 -0.22)">
+      <defs>
+       <path id="DejaVuSans-Bold-79" d="M 78 3500 
+L 1197 3500 
+L 2138 1125 
+L 2938 3500 
+L 4056 3500 
+L 2584 -331 
+Q 2363 -916 2067 -1148 
+Q 1772 -1381 1288 -1381 
+L 641 -1381 
+L 641 -647 
+L 991 -647 
+Q 1275 -647 1404 -556 
+Q 1534 -466 1606 -231 
+L 1638 -134 
+L 78 3500 
+z
+" transform="scale(0.015625)"/>
+      </defs>
+      <use xlink:href="#DejaVuSans-Bold-79"/>
+     </g>
+    </g>
+   </g>
+   <g id="line2d_1">
+    <defs>
+     <path id="ma68bf32aab" d="M 0 7.5 
+C 1.989023 7.5 3.896849 6.709753 5.303301 5.303301 
+C 6.709753 3.896849 7.5 1.989023 7.5 0 
+C 7.5 -1.989023 6.709753 -3.896849 5.303301 -5.303301 
+C 3.896849 -6.709753 1.989023 -7.5 0 -7.5 
+C -1.989023 -7.5 -3.896849 -6.709753 -5.303301 -5.303301 
+C -6.709753 -3.896849 -7.5 -1.989023 -7.5 0 
+C -7.5 1.989023 -6.709753 3.896849 -5.303301 5.303301 
+C -3.896849 6.709753 -1.989023 7.5 0 7.5 
+z
+" style="stroke: #1f77b4"/>
+    </defs>
+    <g clip-path="url(#p30045e337e)">
+     <use xlink:href="#ma68bf32aab" x="97.366332" y="155.05309" style="fill: #1f77b4; stroke: #1f77b4"/>
+     <use xlink:href="#ma68bf32aab" x="108.058248" y="126.560061" style="fill: #1f77b4; stroke: #1f77b4"/>
+     <use xlink:href="#ma68bf32aab" x="162.072997" y="76.303176" style="fill: #1f77b4; stroke: #1f77b4"/>
+     <use xlink:href="#ma68bf32aab" x="99.48753" y="174.433665" style="fill: #1f77b4; stroke: #1f77b4"/>
+     <use xlink:href="#ma68bf32aab" x="147.657914" y="109.499661" style="fill: #1f77b4; stroke: #1f77b4"/>
+    </g>
+   </g>
+   <g id="line2d_2">
+    <path d="M 48.343537 217 
+L 48.685847 216.593229 
+L 50.947995 213.9051 
+L 53.210142 211.216971 
+L 55.47229 208.528842 
+L 57.734437 205.840713 
+L 59.996585 203.152584 
+L 62.258732 200.464455 
+L 64.52088 197.776326 
+L 66.783027 195.088197 
+L 69.045175 192.400068 
+L 71.307322 189.711939 
+L 73.569469 187.02381 
+L 75.831617 184.335681 
+L 78.093764 181.647552 
+L 80.355912 178.959422 
+L 82.618059 176.271293 
+L 84.880207 173.583164 
+L 87.142354 170.895035 
+L 89.404502 168.206906 
+L 91.666649 165.518777 
+L 93.928797 162.830648 
+L 96.190944 160.142519 
+L 98.453092 157.45439 
+L 100.715239 154.766261 
+L 102.977387 152.078132 
+L 105.239534 149.390003 
+L 107.501682 146.701874 
+L 109.763829 144.013745 
+L 112.025977 141.325615 
+L 114.288124 138.637486 
+L 116.550272 135.949357 
+L 118.812419 133.261228 
+L 121.074567 130.573099 
+L 123.336714 127.88497 
+L 125.598862 125.196841 
+L 127.861009 122.508712 
+L 130.123156 119.820583 
+L 132.385304 117.132454 
+L 134.647451 114.444325 
+L 136.909599 111.756196 
+L 139.171746 109.068067 
+L 141.433894 106.379938 
+L 143.696041 103.691808 
+L 145.958189 101.003679 
+L 148.220336 98.31555 
+L 150.482484 95.627421 
+L 152.744631 92.939292 
+L 155.006779 90.251163 
+L 157.268926 87.563034 
+L 159.531074 84.874905 
+L 161.793221 82.186776 
+L 164.055369 79.498647 
+L 166.317516 76.810518 
+L 168.579664 74.122389 
+L 170.841811 71.43426 
+L 173.103959 68.746131 
+L 175.366106 66.058002 
+L 177.628254 63.369872 
+L 179.890401 60.681743 
+L 182.152549 57.993614 
+L 184.414696 55.305485 
+L 186.676844 52.617356 
+L 188.938991 49.929227 
+L 191.201138 47.241098 
+L 193.463286 44.552969 
+L 195.725433 41.86484 
+L 197.987581 39.176711 
+L 200.249728 36.488582 
+L 202.511876 33.800453 
+L 204.774023 31.112324 
+L 207.036171 28.424195 
+L 209.298318 25.736065 
+L 211.560466 23.047936 
+L 213.822613 20.359807 
+L 216.084761 17.671678 
+L 218.346908 14.983549 
+L 220.609056 12.29542 
+L 222.871203 9.607291 
+L 225.133351 6.919162 
+L 227.395498 4.231033 
+L 229.657646 1.542904 
+L 231.797581 -1 
+" clip-path="url(#p30045e337e)" style="fill: none; stroke: #1f77b4; stroke-width: 1.5; stroke-linecap: square"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 28.8 194.4 
+L 28.8 0 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 28.8 194.4 
+L 288 194.4 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p30045e337e">
+   <rect x="28.8" y="0" width="259.2" height="194.4"/>
+  </clipPath>
+ </defs>
+</svg>
