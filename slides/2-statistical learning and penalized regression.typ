@@ -972,9 +972,8 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 
 #new-section-slide("Python hands-on: Common pitfalls in the interpretation of coefficients of linear models")
 
-
 #slide(title:[To your notebooks 🧑‍💻!])[
-  - 
+  - url: https://github.com/strayMat/causal-ml-course/tree/main/notebooks
 ]
 
 
