@@ -760,7 +760,7 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
   ]
 )
 ]
-
+]
 
 #only(2)[
 #side-by-side(
@@ -800,19 +800,153 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 ]
 ]
 
-#slide(title:"A first model handling high-dimension: Lasso")[
+
+#slide(title: "Takeaway on feature expansion")[
+
+- Linear model can underfeat : when n_features small or the problem is not linearly separable.
+
+- Feature expansion is an easy way to capture non-linear relationships.
+
+#uncover(2)[
+  But...
+  - Linear models can also overfit ! 
   
+  When?
+  - n_features is large
+  - Many uninformative features
+]
+]
+
+
+#slide(title:"A first model for high-dimension: Lasso")[
+  
+  = Many features, few observations
+
   #hyp_box(title: [Assumption 1: Linear model with high dimension])[
 
-    $Y = X beta + epsilon$, #h(1em) $epsilon tack.t.double X$ and $X in RR^(n times p)$ with $n << p$
+    $Y = X beta_0 + epsilon$, #h(1em) $epsilon tack.t.double X$ and $X in RR^(n times p)$ with $n << p$
 
   ]
   
   #hyp_box(title: [Assumption 2: (approximate) sparsity])[
 
-    - The true $beta$ is sparse: ie. many coefficients are zero or very close to zero.
+    - The true $beta_0$ is sparse: ie. many coefficients are zero or very close to zero.
   ]
 ]
+
+#slide(title: "Many features, few observations: illustration in 1D")[
+  #side-by-side(
+    [
+      #only(1)[
+        #figure(
+          image("img/pyfigures/linreg_noreg_0_nogrey.svg", width: 80%),
+        )
+      ]
+      #only(2)[
+        #figure(
+          image("img/pyfigures/linreg_noreg_0.svg", width: 80%),
+        )
+      ]
+    ],
+    [
+      - Few observations with respect to the number of features.
+      - Fit a linear model without regularization.
+      #uncover(2)[- Linear model can overfit if data is noisy.]
+    ]
+  )
+]
+
+#slide(title: "Many features, few observations: illustration in 1D")[
+  = Sampling different training sets
+  #grid(
+    columns: (auto, auto, auto),
+    gutter: 3pt,
+    image("img/pyfigures/linreg_noreg_0.svg", width: 80%),
+    image("img/pyfigures/linreg_noreg_1.svg", width: 80%),
+    image("img/pyfigures/linreg_noreg_2.svg", width: 80%),
+    image("img/pyfigures/linreg_noreg_3.svg", width: 80%),
+    image("img/pyfigures/linreg_noreg_4.svg", width: 80%),
+    image("img/pyfigures/linreg_noreg_5.svg", width: 80%),
+  )
+]
+
+#slide(title: "Bias variance trade-off with Lasso")[
+  #side-by-side(
+    [
+      #figure(
+        image("img/pyfigures/linreg_noreg_0.svg", width: 80%),
+      )
+      Linear regression (no regularization)
+
+      High variance, no bias.
+    ],
+    [ 
+      #figure(
+        image("img/pyfigures/lasso_0_withreg.svg", width: 80%),
+      )
+     Lasso (regularization)
+     
+     Lower variance, but bias.
+    ]
+  )
+]
+
+#slide(title: "Bias variance trade-off with Lasso")[
+  #grid(
+    columns: (auto, auto, auto),
+    gutter: 3pt,
+    [
+      #image("img/pyfigures/lasso_alpha_0.svg", width: 80%)
+      Too much variance
+
+      Not enough regularization
+    ],
+    [
+      #image("img/pyfigures/lasso_alpha_10.svg", width: 80%)
+      Best trade-off
+
+    ],
+    [
+      #image("img/pyfigures/lasso_alpha_50.svg", width: 80%)
+      Too much bias
+
+      Too much regularization
+    ],
+    
+  )
+]
+
+#slide(title: "Objective function of the Lasso")[
+     The lasso puts a constrainst of amplitude $t$ on the $L_1$ norm of the coefficients:
+     #eq(
+       $min_(beta)  sum_i^(n)((y_i - beta^T x_i)^2) text("st.") sum_1^(p)|beta_j| <= t$
+     )
+
+     #uncover(2)[
+      This is equivalent to the following optimization problem (using lagrangian multiplier):
+        #eq(
+      $min_(beta)  sum((y_i - beta^T x_i)^2) + alpha sum(|beta_j|)$
+    )
+    ]
+    #uncover(3)[
+    This penalty discourages large weights and can shrink certain weights to exactly _zero_ (not clear yet why).
+     ]
+]
+
+#slide(title:"Intutition for the Lasso (and generally regularization)")[
+
+]
+    
+
+#slide(title:"Another")[
+
+]
+
+
+#slide(title:"How to choose lambda?")[
+
+]
+
 
 
 #slide(title:"Approximate sparsity: theoretical considerations")[
@@ -836,11 +970,11 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 ]
 
 
-#new-section-slide("Python : Common pitfalls in the interpretation of coefficients of linear models")
+#new-section-slide("Python hands-on: Common pitfalls in the interpretation of coefficients of linear models")
 
 
-#slide(title:"Pitfalls on using Lasso for variable selections")[
-
+#slide(title:[To your notebooks 🧑‍💻!])[
+  - 
 ]
 
 
@@ -872,6 +1006,7 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
   - L2 penalty: shrinkage
   - No feature selection
   - Stable for correlated features
+
 ]
 
 #new-section-slide("Practical session")
