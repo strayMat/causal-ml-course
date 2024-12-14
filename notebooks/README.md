@@ -2,9 +2,11 @@
 
 ## Statistical learning and regularized regression
 
-- [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/strayMat/causal-ml-course/blob/main/notebooks/ML_1_plot_linear_model_coefficient_interpretation.py)
+- Common pitfalls in the interpretation of coefficients of linear models: [![Open practical session in colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/strayMat/causal-ml-course/blob/main/notebooks/ML_1_plot_linear_model_coefficient_interpretation.ipynb)
 
-## JupyTEXT Plugin (local users)
+## 
+
+# JupyTEXT Plugin (local users)
 
 We use the [JupyTEXT](https://github.com/mwouts/jupytext) plugin to version the notebooks.
 
