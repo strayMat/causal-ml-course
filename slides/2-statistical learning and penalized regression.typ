@@ -127,7 +127,7 @@
 #title-slide(
   author: [Matthieu Doutreligne],
   title: "Machine Learning for econometrics",
-  subtitle: "Statistical learning and penalized regression",
+  subtitle: "Statistical learning and regularized linear models",
   extra: [A lot of today's content is taken from the excellent #link("https://inria.github.io/scikit-learn-mooc/toc.html", "sklearn mooc") @loic_esteve_2022_7220307],
   date: "January 10, 2025",
 )
@@ -138,7 +138,7 @@
 - Last session: importance of causal variable status
 - Today: #alert[predictive inference] in high dimensions
   - Statistical learning basics
-  - Penalized linear regression for predictive inference
+  - Regularized linear models for predictive inference
   - Hands-on with scikit-learn
 
 #uncover(2)[
@@ -566,8 +566,8 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 #set align(left)
 
 #only(5)[
-#side-by-side(
-  image("img/ML_1/polynomial_overfit_ntrain_6766.svg", width: 80%),
+#side-by-side(columns: (1fr, 1.7fr), 
+  image("img/ML_1/polynomial_overfit_ntrain_6766.svg", width: 100%),
   [
     The error of the best model trained on unlimited data. 
 
@@ -575,7 +575,7 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 
     We cannot do better.
 
-    Prediction is limited by noise.
+    Prediction is limited by noise: #highlight(fill:c_bayes)[Bayes error].
   ]
 )
 ]
@@ -585,26 +585,26 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 
 #slide(title: "Remaining of this session (and the next)")[
 
-  = Explore common families of models suited to tables data
+  = Common model families suited to tabular data
 
   == Today
 
-  - Penalized linear regression: Lasso and Ridge
+  - Regularized linear models: Lasso and Ridge
 
   - Hands-on with scikit-learn
 
   == Next session
 
-  - Flexible models: Trees, Random Forests, Gradient Boosting
-
   - Practical model selection: Cross-validation
+  
+  - Flexible models: Trees, Random Forests, Gradient Boosting
 
   - Practical scikit-learn
 ]
 
-#new-section-slide("Lasso for predictive inference")
+#new-section-slide("Regularized linear models for predictive inference")
 
-#slide(title:"Linear model reminder: Linear regression")[
+#slide(title:"Reminder: Linear regression")[
 
   #only(1)[
 
@@ -632,7 +632,7 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 
 ]
 
-#slide(title:"Linear model reminder: Linear regression")[
+#slide(title:"Reminder: Linear regression")[
   == Common metrics 
 
   - Mean Squared Error: $text("MSE") = 1/n sum_(i=1)^n (Y_i - hat(Y_i))^2$
@@ -644,27 +644,31 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
   - Mean absolute error: $text("MAE") = 1/n sum_(i=1)^n |Y_i - hat(Y_i)|$
 ]
 
-#slide(title:"Linear regression: Two dimension illustration")[
+#slide(title:"Linear regression: Illustration in two dimensions")[
   #figure(
     image("img/ML_1/lin_reg_3D.svg", width: 50%),
   )
 ]
 
 
-#slide(title:"Linear model reminder: classification, logistic regression")[
+#slide(title:"Reminder: logistic regression for classification")[
   The logit of the probability of the outcome is a linear combination of the features $X_i in RR^p$:
 
   #eq[$ln(p(Y_i=1|X_i)/p(Y_i=0|X_i)) = X_i^T beta_0$]
 
-  which is equivalent to:
-  #eq[$p(Y_i=1|X_i, beta_0) \u{225D} p(X_i, beta_0) = 1/(1+exp(-X_i^T beta_0))$]
-  
-  The statistical model is a bernoulli: $B(p(x, beta_0))$
+  #uncover((2,3))[
+    Taking exponential of both sides, we get:
+    #eq[$p(Y_i=1|X_i, beta_0) \u{225D} p(X_i, beta_0) = 1/(1+exp(-X_i^T beta_0))$]
+    
+    The statistical model is a Bernoulli 🪙: $B(p(x, beta_0))$
+  ]
 
-  Models are fitted by maximizing the likelihood by iterative optimization @hastie2009elements #footnote[eg. coordinate descents (liblinear), second order descent (Newton's method), gradient descent (SAG)...].
+  #uncover(3)[
+    Model fitted by maximum likelihood with iterative optimization @hastie2009elements: eg. coordinate descents (liblinear), second order descent (Newton's method), gradient descent (SAG)...
+  ]
 ]
 
-#slide(title:"Linear model reminder: classification, logistic regression")[
+#slide(title:"Reminder: classification, logistic regression")[
   #side-by-side(columns: (2fr, 1fr),
     [
       == Common metrics 
@@ -760,7 +764,6 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
   ]
 )
 ]
-]
 
 #only(2)[
 #side-by-side(
@@ -817,23 +820,6 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 ]
 ]
 
-
-#slide(title:"A first model for high-dimension: Lasso")[
-  
-  = Many features, few observations
-
-  #hyp_box(title: [Assumption 1: Linear model with high dimension])[
-
-    $Y = X beta_0 + epsilon$, #h(1em) $epsilon tack.t.double X$ and $X in RR^(n times p)$ with $n << p$
-
-  ]
-  
-  #hyp_box(title: [Assumption 2: (approximate) sparsity])[
-
-    - The true $beta_0$ is sparse: ie. many coefficients are zero or very close to zero.
-  ]
-]
-
 #slide(title: "Many features, few observations: illustration in 1D")[
   #side-by-side(
     [
@@ -884,7 +870,7 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
       #figure(
         image("img/pyfigures/lasso_0_withreg.svg", width: 80%),
       )
-     Lasso (regularization)
+     Lasso (regularization): Shrink some coefficients of $beta$.
      
      Lower variance, but bias.
     ]
@@ -933,24 +919,98 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
      ]
 ]
 
-#slide(title:"Intutition for the Lasso (and generally regularization)")[
-
+#slide(title: "Why does Lasso shrink some coefficients to zero?")[
+  #set align(center)
+  #side-by-side(
+    [
+      #only(1)[
+        #figure(
+        image("img/pyfigures/lasso_intuition_inner.svg", width: 150%),
+      )
+      ]
+      #only(2)[
+        #figure(
+        image("img/pyfigures/lasso_intuition_middle.svg", width: 150%),
+      )
+      ]
+      #only(3)[
+        #figure(
+        image("img/pyfigures/lasso_intuition_outer.svg", width: 150%),
+      )
+      ]
+      #only(4)[
+        #figure(
+        image("img/pyfigures/lasso_intuition_penalty.svg", width: 150%),
+      )
+      ]
+    ],
+    [
+      #set align(left)
+      - Plot the MSE of the model as a function of the coefficients.
+    #uncover(2)[
+      - The MSE surface is an ellispoid in $beta$.
+    ]  
+    #uncover(4)[
+      - The lasso objective function is a diamond.
+    ]
+    ]
+  )
 ]
-    
 
-#slide(title:"Another")[
+#slide(title: "Another regularized linear model: Ridge")[
 
+    Ridge  puts a constrainst of amplitude $t$ on the $L_2$ norm of the coefficients:
+     #eq(
+       $min_(beta)  sum_i^(n)((y_i - beta^T x_i)^2) text("st.") sum_1^(p)beta_j^2 <= t$
+     )
+
+     #uncover((2, 3))[
+      This is equivalent to the following optimization problem (using lagrangian multiplier):
+        #eq(
+      $min_(beta)  sum((y_i - beta^T x_i)^2) + alpha sum(beta_j^2)$
+    )
+    ]
+    #uncover(3)[
+    This penalty shrinks the coefficients towards zero and each other.
+     ]
 ]
 
+#slide(title: "Importance of rescaling")[
+  == Why rescale?
 
-#slide(title:"How to choose lambda?")[
+  - The penalty term in the Lasso and Ridge is sensitive to the scale of the features.
 
+  - If the features are not on the same scale, the regularization will not be applied uniformly.
+
+  - The coefficients of the model will be biased towards the features with the largest scale.
+
+  == How to rescale?
+
+  - Gaussian hypothesis? Standard scaling: $X = (X - text("mean")(X)) / (text("std")(X))$
+
+  - Non Gaussian? MinMax scaling: $X = (X - min(X)) / (max(X) - min(X))$
 ]
 
+#slide(title: "Importance of rescaling: illustration")[
+]
 
+#slide(title:"Statistical model behind the Lasso")[
+  
+  = Many features, few observations
+
+  #hyp_box(title: [Assumption 1: Linear model with high dimension])[
+
+    $Y = X beta_0 + epsilon$, #h(1em) $epsilon tack.t.double X$ and $X in RR^(n times p)$ with $n << p$
+
+  ]
+  
+  #hyp_box(title: [Assumption 2: (approximate) sparsity])[
+
+    - The true $beta_0$ is sparse: ie. many coefficients are zero or very close to zero.
+  ]
+]
 
 #slide(title:"Approximate sparsity: theoretical considerations")[
-
     #def_box(title: [Definition: Approximate sparsity])[
     The sorted absolute values of the coefficients decay quickly. 
 
@@ -960,22 +1020,32 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
   ]
 ]
 
-#slide(title:"Ridge regression")[
-
+#slide(title:"Regularized models for classification")[
+  TODO:
 ]
 
 
-#slide(title:"Elastic net")[
+#slide(title:"How to choose lambda?")[
+  == Theoretical garuantees 
 
+  - ⚠️ Assumptions are hard to verify.
+
+  == In practice 
+
+  - Cross-validation: split the data in train and test sets, fit the model on the train set and evaluate on the test set.
+
+  - We will look into that in more details in the next session.
 ]
 
+#slide(title:[Short introduction to scikit-learn])[
+  - url: https://github.com/strayMat/causal-ml-course/tree/main/notebooks
+]
 
 #new-section-slide("Python hands-on: Common pitfalls in the interpretation of coefficients of linear models")
 
 #slide(title:[To your notebooks 🧑‍💻!])[
   - url: https://github.com/strayMat/causal-ml-course/tree/main/notebooks
 ]
-
 
 
 #slide(title: "Take home messages: Bias-variance trade-off")[
@@ -1007,9 +1077,6 @@ $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
   - Stable for correlated features
 
 ]
-
-#new-section-slide("Practical session")
-
 
 #let bibliography = bibliography("biblio.bib", style: "apa")
 

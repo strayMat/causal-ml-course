@@ -39,7 +39,7 @@ def fit_score_plot_regression(model, title=None):
     ax = sns.scatterplot(data=full_data, x="X", y="Y", color="black", alpha=0.5)
     ax.plot(data, target_predicted)
     if title is not None:
-        _ = ax.set_title(title + f" (MSE = {mse:.2f}, R2 = {r2:.2f})")
+        _ = ax.set_title(title + f"\n(MSE = {mse:.2f}, R2 = {r2:.2f})")
     else:
         _ = ax.set_title(f"Mean squared error = {mse:.2f}")
 
