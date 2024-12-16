@@ -64,7 +64,7 @@
   )
 
   let content = {
-    show: align.with(horizon)
+    show: align.with(top)
     show: pad.with(left: 1em, top: 0em, right: 1em, bottom: 1em) // super important to have a proper padding (not 1/3 of the slide blank...)
     set text(fill: m-dark-teal)
     body
@@ -173,10 +173,9 @@
     learning, causal discovery, causal inference for LLM, causal representations... //#footnote[Eg. #link("https://nips.cc/virtual/2024/events/workshop")[neurips 2024 workshops]]
   ]
   #only(3)[
-    #alert[This course:]
-    - Basis of causal inference using ML approaches (semi-parametric),
-    - Inspiration from epidemiology,
-    - Application in econometrics.
+    #alert[This session:]
+    - Reminder on causal inference
+    - Importance of Directed Acyclic Graphs and causal status of covariates 
   ]
 ]
 
@@ -186,49 +185,60 @@
 
   - Economics: How does supply and demand (causally) depend on price?
 
+  #uncover((2, 3, 4, 5, 6))[
   - Policy: Are job training programmes actually effective?
-
-  - Epidemiology: How does this threatment affect the patient's health?
-
+  ]
+  #uncover((3, 4, 5, 6))[
+    - Epidemiology: How does this threatment affect the patient's health?
+  ]
+  #uncover((4, 5, 6))[
   - Public health : Is this prevention campaign effective?
-
+  ]
+  #uncover((5, 6))[
   - Psychology: What is the effect of family structure on children's outcome?
-
+  ]
+  #uncover((6))[
   - Sociology: What is the effect of social media on political opinions?
+  ]
 ]
 
-#slide(title: "This is different from a predictive question")[
+#slide(title: "This is different from predictive questions")[
+  
+   == Prediction (ML): What usually happens in a given situation?
 
-  - What will be the weather tomorrow?
-
-  - What will be the outcome of the next election?
-
-  - How many people will get infected by flue next season?
-
-  - What is the cardio-vacular risk of this patient?
-
-  - How much will the price of a stock be tomorrow?
-]
-
-#slide(
-  title: "Why is prediction different from causation? (1/2)",
-)[
-  === Prediction (most part of ML): What usually happens in a given situation?
+  
+    #uncover((1, 2, 3, 4, 5, 6, 7))[
+    - What will be the weather tomorrow?
+    ]
+    #uncover((2, 3, 4, 5, 6, 7))[
+    - What will be the outcome of the next election?
+    ]
+    #uncover((3, 4, 5, 6, 7))[
+    - How many people will get infected by flue next season?
+    ]
+    #uncover((4, 5, 6, 7))[
+    - What is the cardio-vacular risk of this patient?
+    ]
+    #uncover((5, 6, 7))[
+    - How much will the price of a stock be tomorrow?
+    ] 
+  #h(4em)
   #uncover(
-    2,
+    (6, 7)
   )[
-    #alert([Assumption]) Train and test data are drawn from the same distribution.
-
     #side-by-side(gutter: 3mm, columns: (1fr, 1fr))[
       #figure(image("img/intro/dag_x_to_y.svg", width: 40%))
     ][
       Prediction models $(X, Y)$
     ]
   ]
+  #uncover(7)[
+    #alert([Assumption]) Train and test data are drawn from the same distribution.
+  ]
 ]
 
 #slide(
-  title: "Machine learning is (basically) pattern matching",
+  title: "Machine learning is pattern matching",
 )[
   Find an estimator $f : x arrow y$ that approximates the true value of y so that $f(x) approx y$
   #figure(
@@ -251,16 +261,19 @@
 
 
 #slide(
-  title: "Machine learning is great for prediction",
+  title: "Machine learning is great for prediction on complex data",
 )[
-  == Leverages complex data structures
+
+  #side-by-side(
+    [
   #uncover(
-    1,
-  )[
-    - Images: Image classification with deep convolutional neural networks @krizhevsky2012imagenet
-  ]
+      (1, 2, 3)
+    )[
+      - Images: Image classification with deep convolutional neural networks @krizhevsky2012imagenet
+    ]
+
   #uncover(
-    2,
+    (2, 3)
   )[
     - Speech-to-text: Towards end-to-end speech recognition with recurrent neural networks @graves2014towards
   ]
@@ -270,6 +283,23 @@
   )[
     - Text: Attention is all you need @vaswani2017attention
   ]
+    ],
+    [
+      #set align(center)
+    #only(1)[
+      #figure(
+        image("img/intro/image_classification.png", width: 100%),
+      caption: "ImageNet 1K: 1.5 million images, 1000 classes",
+      )
+    ]
+    #only(3)[
+      #figure(
+      image("img/intro/ner_edsnlp.png", width: 100%),
+      caption: "Named entity recognition",
+      )
+    ]
+    ]
+  )
 ]
 
 #slide(
@@ -279,11 +309,11 @@
   
   - For example people that go to the hospital die more than people who do not #footnote[Example from #link("sklearn mooc")[https://inria.github.io/scikit-learn-mooc/concluding_remarks.html?highlight=causality]]:
 
-    - Naive data analysis might conclude that hospitals are bad for health.
+  - Naive data analysis might conclude that hospitals are bad for health.
 
-    The fallacy is that we are comparing different populations: people who go to the hospital typically have a worse baseline health than people who do not.
+  - The fallacy is that we are comparing different populations: people who go to the hospital typically have a worse baseline health than people who do not.
 
-  This is a confounding factor: a variable that influences both the treatment and the outcome.
+  This is a *confounding factor*: a variable that influences both the treatment and the outcome.
 ]
 
 #slide(
@@ -296,7 +326,19 @@
     #alert([Assumption]): No unmeasured variables influencing both treatment and
     outcome $arrow$ confounders.
     #side-by-side(gutter: 3mm, columns: (1fr, 2fr))[
-      #figure(image("img/intro/confounder.svg", width: 60%))
+       #diagram(
+        cell-size: 10mm,
+        node-stroke: 0.6pt,
+        spacing: 1.5em,
+        let (X, A, Y) = ((0,0), (-1,1), (1,1)),
+        node(A, "A"),
+        node(Y, "Y"),
+        node(X, "X"),
+        edge(X, Y, "->"),
+        edge(X, A, "->"),
+        edge(A, Y, "->"),
+      )
+        
     ][
       Causal inference models #linebreak()
       $(X, A, Y(A=1), Y(A=0))$ #linebreak()
@@ -307,12 +349,19 @@
 
 
 #slide(title: [Illustration of the fundamental problem of causal inference])[
-  Consider an example from epidemiology:
+  == Example from epidemiology
+
   - Population: patients experiencing a stroke 
-  - #c_treated[Intervention $A = 1$: patients had access to a MRI scan  #text(weight: "extrabold")[in less than 3 hours] after the first symptoms]
-  - #c_control[Comparator $A = 0$: patients had access to a MRI scan #text(weight: "extrabold")[in more than 3 hours] after the first symptoms]
+  #uncover((2, 3, 4))[
+    - #c_treated[Intervention $A = 1$: patients had access to a MRI scan  #text(weight: "extrabold")[in less than 3 hours] after the first symptoms]
+    - #c_control[Comparator $A = 0$: patients had access to a MRI scan #text(weight: "extrabold")[in more than 3 hours] after the first symptoms]
+  ]
+  #uncover((3, 4))[
   - $Y = PP[text("Mortality")]$: the mortality at 7 days 
+  ]
+  #uncover(4)[
   - $X = PP[text("Charlson score")]$: a comorbidity index summarizing the overall health state of the patient. Higher is bad for the patient.
+  ]
 ]
 
 
@@ -327,7 +376,7 @@
 #slide(title: [Illustration: observational data])[
   == Draw a population sample with treatment status
   #figure(
-    image("img/intro/sample.svg", width: 83%),
+    image("img/intro/sample.svg", width: 75%),
     //caption: "DAG for a RCT: the treatment is independent of the confounders",
   )
 ]
@@ -339,7 +388,7 @@
 
   #uncover(2)[
   #figure(
-    image("img/intro/sample_mean_difference.png", width: 83%),
+    image("img/intro/sample_mean_difference.png", width: 75%),
     //caption: "DAG for a RCT: the treatment is independent of the confounders",
   )
   ]
@@ -349,23 +398,43 @@
  
  #side-by-side(gutter: 10mm, columns: (1fr, 1fr))[
       #set align(center)
+      #uncover((1, 2))[
       = Observational data  
-      #figure(
-        image("img/intro/confounder.svg", width: 50%),
-        )
+      
+      #diagram(
+        cell-size: 10mm,
+        node-stroke: 0.6pt,
+        spacing: 1.5em,
+        let (X, A, Y) = ((0,0), (-1,1), (1,1)),
+        node(A, "A"),
+        node(Y, "Y"),
+        node(X, "X"),
+        edge(X, Y, "->"),
+        edge(X, A, "->"),
+        edge(A, Y, "->"),
+      )
         
         = $Y(1), Y(0) #rotate(-90deg)[$tack.r.double.not$] A$
 
         == Intervention is not random 
         (with respect to the confounders)
-        
+      ]
     ][
       #set align(center)
       #uncover(2)[
         = RCT data 
-        #figure(
-       image("img/intro/rct_dag.excalidraw.svg", width: 58%),
+         #diagram(
+        cell-size: 10mm,
+        node-stroke: 0.6pt,
+        spacing: 1.5em,
+        let (X, A, Y) = ((0,0), (-1,1), (1,1)),
+        node(A, "A"),
+        node(Y, "Y"),
+        node(X, "X"),
+        edge(X, Y, "->"),
+        edge(A, Y, "->"),
       )
+        
       = $Y(1), Y(0) tack.t.double A$
       
       == Force random assignment of the intervention
@@ -385,23 +454,18 @@
   == Compute the difference in mean (DM):  $tau_(text("DM"))=$ $$#c_treated[$EE[Y(1)]$] - #c_control($EE[Y(0)]$)
 
   #figure(
-    image("img/intro/sample_rct_mean_difference.png", width: 83%),
+    image("img/intro/sample_rct_mean_difference.png", width: 75%),
   )
 ]
 
-
-#new-section-slide(
-  "Four steps of causal inference : Framing, identification, statistical inference, vibration analysis",
-)
-
-#slide(title: "Complete inference flow")[
+#slide(title: "Four steps of causal inference")[
   #set align(center)
   #image("img/intro/complete_inference_flow.png", width: 95%)
 
-  == Today: Framing and identification
+  #uncover(2)[
+  == Today: Framing and identification with DAGs
+  ]
 ]
-
-
 
 #new-section-slide("Framing: How to ask a sound causal question")
 //lalonde example from the book (I am less fan of no intervention examples).
@@ -532,7 +596,7 @@
 
   #uncover(2)[
    #figure(
-    image("img/intro/sample_po.png", width: 70%),
+    image("img/intro/sample_po.png", width: 60%),
   )
   ]
 ]
@@ -621,7 +685,7 @@
 #eq[
 ${Y(1), Y(0)} tack.t.double A | X$
 ]
-- Equivalent to the conditional independence on the propensity score $e(X) hat(=) PP(A=1|X)$ @rosenbaum1983central:
+- Equivalent to conditional independence on the propensity score: #linebreak() $e(X) \u{225D} PP(A=1|X)$ @rosenbaum1983central:
 
 #eq[${Y(1), Y(0)} A | e(X)$]
 
@@ -636,14 +700,14 @@ ${Y(1), Y(0)} tack.t.double A | X$
 
 #slide(title: "Assumption 2: Overlap, also known as positivity")[
 
-== The treatment is not deterministic given $X$
+=== The treatment is not deterministic given $X$
 
-#align(center)[#text(size:1.4em)[$eta < e(x) < 1 - eta$] with $e(X) hat(=) PP(A=1|X)$] 
+#align(center)[#text(size:1.4em)[$eta < e(x) < 1 - eta$] with $e(X) \u{225D} PP(A=1|X)$] 
 
 #figure(
   image("img/intro/overlap.png", width: 60%),
 )
-- NB: The choices of covariates X can be viewed as a trade-off between ignorability and overlap @d2021overlap
+- Choice of covariates X: trade-off between ignorability and overlap @d2021overlap
 ]
 
 #slide(title: "Assumption 3 and 4: Consistency and generalization")[
@@ -663,6 +727,8 @@ ${Y(1), Y(0)} tack.t.double A | X$
 ]
 ]
 
+#new-section-slide("Directed acyclic graphs (DAGs)")
+
 #slide(title: "Directed acyclic graphs (DAG), a tool to reason about causality")[
   == DAGs encode the causal structure of the data generating process
   
@@ -675,22 +741,57 @@ ${Y(1), Y(0)} tack.t.double A | X$
 ]
 
 #slide(title: "Directed acyclic graphs (DAG), definitions")[
-  
-  #figure(
-      image("img/intro/confounder.svg", width: 20%),
-    )
-
+   #align(center)[
+   #diagram(
+        cell-size: 10mm,
+        node-stroke: 0.6pt,
+        spacing: 1.5em,
+        let (X, A, Y) = ((0,0), (-1,1), (1,1)),
+        node(A, "A"),
+        node(Y, "Y"),
+        node(X, "X"),
+        edge(X, Y, "->"),
+        edge(X, A, "->"),
+      )
+   ]
   - #alert[Graph:] A set of relations between nodes described by edges between those nodes
-  - #alert[Directed:] Edges between nodes have direction (the direction of the arrow
-represents a cause-effect relationsh
+  - #alert[Directed:] Edges between nodes have direction. The direction of the arrow represents a cause-effect relationship.
   - #alert[Acyclic:] : There are no cycles or loops in the causal structure. A variable can’t be a cause of itself.
 ]
 
+#slide(title: "A cyclic graph")[
+    #align((center))[
+    == This is not a DAG 
+    #v(4em)
+    #diagram(
+          cell-size: 30mm,
+          node-stroke: 2pt,
+          spacing: 2em,
+          let (X, A, Y) = ((0,0), (-1,1), (1,1)),
+          node(A, "A"),
+          node(Y, "Y"),
+          node(X, "X"),
+          edge(X, Y, "->"),
+          edge(Y, A, "->"),
+          edge(A, X, "->"),
+        )
+    ]
+]
+
 #slide(title: "DAGs: nodes")[
-  
-  #figure(
-      image("img/intro/confounder.svg", width: 12%),
-  )
+   #align(center)[
+   #diagram(
+        cell-size: 10mm,
+        node-stroke: 0.6pt,
+        spacing: 1.5em,
+        let (X, A, Y) = ((0,0), (-1,1), (1,1)),
+        node(A, "A"),
+        node(Y, "Y"),
+        node(X, "X"),
+        edge(X, Y, "->"),
+        edge(X, A, "->"),
+      )
+   ]
 
   - #alert[Nodes] represent random variables.
   - #alert[Edges] between nodes denote the presence of causal effects (i.e. difference in potential outcomes). Here, $Y_(i)(a) != Y_(i) (a')$ for two different levels of $A_(i)$ because there is an arrow from A to Y.
@@ -771,7 +872,7 @@ following non-intersecting edges.
     ],
     [
       $A arrow Y$ is #alert[causal] #linebreak()
-      $A arrow Y$ is #alert[non-causal]
+      $Y arrow A$ is #alert[non-causal]
     ]
   )
 ]
@@ -799,6 +900,12 @@ following non-intersecting edges.
   )
 
   Paths between $X_1$ and $X_4$? Which of them are causal?   
+
+  #uncover(2)[
+  - $X_1 arrow X_2 arrow X_4$
+  - $X_5 arrow X_4$
+  - $X_1 arrow.l X_5 arrow X_4$ : non causal
+  ]
 ]
 
 #slide(title: "Three types of directed edges: path")[
@@ -1194,18 +1301,8 @@ dependencies between treatment and outcome?
 ]
 
 
-
-
-
-#new-section-slide("Session summary")
-
-
-
-#new-section-slide("Going further")
-
 #slide(title: "A word on structural equation models")[
 ]
-
 
 
 #slide(title: "Special types of variable: instrumental variables")[
