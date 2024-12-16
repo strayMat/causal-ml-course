@@ -1,6 +1,14 @@
 # Jupyter notebooks for practical sessions
 
-## Statistical learning and regularized regression
+## 1 - Introduction to Directed Acyclic Graphs (DAGs)
+
+- Introduction to Directed Acyclic Graphs (DAGs): [![Open practical session in colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/strayMat/causal-ml-course/blob/main/notebooks/1_dag_introduction.ipynb)
+
+## 2a) - Introduction to scikit-learn 
+
+- Introduction to scikit-learn: [![Open practical session in colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/strayMat/causal-ml-course/blob/main/notebooks/ML_1_sklearn_intro.ipynb)
+
+## 2b) - Statistical learning and regularized linear models
 
 - Common pitfalls in the interpretation of coefficients of linear models: [![Open practical session in colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/strayMat/causal-ml-course/blob/main/notebooks/ML_1_plot_linear_model_coefficient_interpretation.ipynb)
 

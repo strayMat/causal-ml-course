@@ -44,18 +44,15 @@ dseps = G.get_independencies()
 for dsep in dseps.get_assertions():
     if len(dsep.get_assertion()[1]) == 1:
         print(dsep)
+# %% [markdown]
+# # Simulation study
 
 # %% [markdown]
-
 # # Drawing a DAG for the wage dataset
-
+# We consider the same subsample of the U.S. Current Population Survey (2015). Let us load the data set.
 # %%
 file = (
     "https://raw.githubusercontent.com/CausalAIBook/"
     "MetricsMLNotebooks/main/data/wage2015_subsample_inference.csv"
 )
 df = pd.read_csv(file)
-# %%
-import wooldridge
-
-wooldridge.data("wageprc", description=True)

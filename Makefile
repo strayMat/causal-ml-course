@@ -121,39 +121,16 @@ else
 	poetry install --with documentation --sync
 endif
 
-.PHONY: install-pre-commit-hooks
-## Install git pre-commit hooks locally
-install-pre-commit-hooks:
-	poetry run pre-commit install
-
-.PHONY: get-project-version-number
-## Echo project's canonical version number
-get-project-version-number:
-	@poetry version --short
-
-
-
-
 .PHONY: jupyter-notebook
 ## Launches the jupyter notebook server with the correct config
 jupyter-notebook:
 	cd notebooks
-	poetry run jupyter notebook --config=config.py --notebook-dir=notebooks
+	poetry run jupyter notebook --notebook-dir=notebooks
 
-## Tests/linting/docs
-
-.PHONY: test
-## Test via tox in poetry env
-test: clean
-	poetry run pytest
-
-.PHONY: coverage
-## Test via tox in poetry env
-coverage: clean
-	poetry run pytest --cov=mleco tests/
-
-
-
+.PHONY: jupyter-ipynb
+## Convert all notebooks to ipynb format
+jupyter-ipynb:
+	poetry run jupytext notebooks/*.py --to ipynb 
 
 .PHONY: docs-%
 ## Build documentation in the format specified after `-`
@@ -169,6 +146,8 @@ docs-%:
 test-docs:
 	poetry run sphinx-build -n -T -W -b html -d tmpdir/doctrees docs/source docs/_build/html
 	poetry run sphinx-build -n -T -W -b doctest -d tmpdir/doctrees docs/source docs/_build/html
+
+
 #################################################################################
 # Self Documenting Commands                                                     #
 #################################################################################

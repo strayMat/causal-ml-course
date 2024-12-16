@@ -902,9 +902,10 @@ following non-intersecting edges.
   Paths between $X_1$ and $X_4$? Which of them are causal?   
 
   #uncover(2)[
-  - $X_1 arrow X_2 arrow X_4$
+  - $X_5 arrow X_1 arrow X_2 arrow X_4$
   - $X_5 arrow X_4$
   - $X_1 arrow.l X_5 arrow X_4$ : non causal
+  - $X_3 arrow.l X_1 arrow X_2 arrow X_4$ : non causal
   ]
 ]
 
@@ -966,7 +967,7 @@ following non-intersecting edges.
   - #alert[Not conditionning on X] introduces bias.
   
   #ex_block(title:"")[
-  - a rise in temperature (B) causes both the thermometer (A) to change, and ice to melt (C), but the thermometer changing does not cause ice to melt.
+  - Rise in temperature (B) causes both the thermometer (A) to change, and ice to melt (C), but the thermometer changing does not cause ice to melt.
   - A is prostate cancer; B is age; and C is Alzheimer’s disease. 
   ]
 ]
@@ -1052,10 +1053,16 @@ We can open or block paths between variables by conditionning on them:
   edge(X_5, X_4, "->"),
   )
 
-  Paths from $X_5$ to $X_2$? Which of them are blocked/open?
+  Paths from $X_5$ to $X_2$? Which of them are opened/blocked?
   
-  Same condition after condition on $X_1$   
+  #uncover(2)[
+    $X_5 arrow X_1 arrow X_2$ (blocked by conditionning on $X_1$)
+
+    $X_5 arrow X_1 arrow X_2 arrow X_4$ (opened by conditionning $X_4$)
+  ]
 ]
+
+
 
 #slide(title: "Backdoor paths: a special type of paths")[
 
@@ -1127,7 +1134,14 @@ We can open or block paths between variables by conditionning on them:
   edge(X_5, X_4, "->"),
   )
 
-  What are the backdoor paths from $X_1$ to $X_4$? from $X_2$ tot $X_4$?.
+  What are the backdoor paths from $X_1$ to $X_4$? from $X_2$ tot $X_4$?
+  
+  #uncover(2)[
+    $X_1 arrow.l X_5 arrow X_4$
+
+    $X_2 arrow.l arrow.l X_5 arrow X_4$
+  ]
+
 ]
 
 
@@ -1156,7 +1170,7 @@ In other words, how can we make it so that there are no non-causal
 dependencies between treatment and outcome? 
 
 #imp_block(title: [Graphical identification @pearl2000models])[
-  The effect of T on Y is identified if all backdoor paths from A to B are blocked, and no descendant of T is conditioned on.
+  The effect of A on Y is identified if all backdoor paths from A to B are blocked, and no descendant of A is conditioned on.
 ]
 ]
 
@@ -1166,28 +1180,30 @@ dependencies between treatment and outcome?
   - Condition on variables that block non-causal backdoor paths
   - Don’t condition on colliders! Eg. don't condition on post-treatment variables.
 
+  #uncover(2)[
   In the following example, to estimate the effect of T on Y, we should:
   - Condition on X
   - NOT condition on M because it is a descendant of T
-  
-#align(center)[
- #diagram(
-        cell-size: 5mm,
-        node-stroke: 0.6pt,
-        spacing: 1em,
-        node-shape: circle,
-  let (A, X, Y, C) = ((-1,1), (0,0), (1,1), (0, 2)),
-  node(A, $A$),
-  node(X, $X$),
-  node(Y, $Y$),
-  node(C, $C$),
-  edge(X, A, "->"),
-  edge(X, Y, "->"),
-  edge(A, Y, "->"),
-  edge(A, C, "->"),
-  edge(Y, C, "->")
-)  
-]
+
+  #align(center)[
+  #diagram(
+          cell-size: 5mm,
+          node-stroke: 0.6pt,
+          spacing: 1em,
+          node-shape: circle,
+    let (A, X, Y, C) = ((-1,1), (0,0), (1,1), (0, 2)),
+    node(A, $A$),
+    node(X, $X$),
+    node(Y, $Y$),
+    node(C, $C$),
+    edge(X, A, "->"),
+    edge(X, Y, "->"),
+    edge(A, Y, "->"),
+    edge(A, C, "->"),
+    edge(Y, C, "->")
+  )  
+  ]
+  ]
 ]
 
 
@@ -1211,7 +1227,7 @@ dependencies between treatment and outcome?
     image("img/intro/instrumental_variable.svg", width: 20%),
   )
 
-   #ex_block(title: [Effect of education on earnings, @angrist1991does])[ 
+   #ex_block(title: [Effect of education on earnings @angrist1991does])[ 
   Quarter of birth are randomly assigned but influence the lengths of schooling due to school entry laws.
   ]
 ]
@@ -1300,46 +1316,31 @@ dependencies between treatment and outcome?
     ) */
 ]
 
-
-#slide(title: "A word on structural equation models")[
-]
-
-
-#slide(title: "Special types of variable: instrumental variables")[
-  === An instrumental variable (IV) influences only the treatment.
-
-  #figure(
-    image("img/intro/instrumental_variable.svg", width: 20%),
-  )
-
-   #ex_block(title: [Effect of education on earnings, @angrist1991does])[ 
-  Quarter of birth are randomly assigned but influence the lengths of schooling due to school entry laws.
-  ]
-]
-
 #slide(title: "Special types of variables: mediators")[
-  === A #alert[mediator] block the path from the treatment to the outcome.
-
-
-#align(center)[
-  #diagram(
-        cell-size: 5mm,
-        node-stroke: 0.6pt,
-        spacing: 1em,
-        node-shape: circle,
-  let (A, M, Y) = ((-1,1), (0,0), (1,1)),
-  node(A, $A$),
-  node(M, $M$),
-  node(Y, $Y$),
-  edge(A, M, "->"),
-  edge(M, Y, "->"),
-  edge(A, Y, "->")
-  )
+  A #alert[mediator] block the path from the treatment to the outcome.
+#side-by-side([
+  #align(center)[
+    #diagram(
+          cell-size: 5mm,
+          node-stroke: 0.6pt,
+          spacing: 1em,
+          node-shape: circle,
+    let (A, M, Y) = ((-1,1), (0,0), (1,1)),
+    node(A, $A$),
+    node(M, $M$),
+    node(Y, $Y$),
+    edge(A, M, "->"),
+    edge(M, Y, "->"),
+    edge(A, Y, "->")
+    )
+  ]
+],
+[
+  Here, two causal paths from A:
+    - $A arrow Y$ - a “direct effect"
+    - $A arrow M arrow Y$ - an “indirect effect" through M
 ]
-Here, two causal paths from A:
-  - $A arrow Y$ - a “direct effect"
-  - $A arrow M arrow Y$ - an “indirect effect" through M
-  
+)  
 #only(2)[
   - All causal paths from a treatment capture its overall treatment effect. 
 
@@ -1368,6 +1369,15 @@ Here, two causal paths from A:
   ]
 ]
 
+#slide(title: "A word on structural equation models")[
+]
+
+
+#new-section-slide("Practical session")
+
+#slide(title: "To your notebooks! 👩‍💻")[
+  - url: 
+]
 
 #let bibliography = bibliography("biblio.bib", style: "apa")
 
