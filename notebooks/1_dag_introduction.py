@@ -184,28 +184,44 @@ plt.show()
 # ### Simulate the data for celebrities at Hollywood
 # %%
 np.random.seed(123)
-num_samples = 1000000
+num_samples = 10000
 talent = np.random.normal(size=num_samples)
 beauty = np.random.normal(size=num_samples)
 congeniality = talent + beauty + np.random.normal(size=num_samples)  # congeniality
-cond_talent = talent[congeniality > 0]
-cond_beauty = beauty[congeniality > 0]
-data = {
-    "talent": talent,
-    "beauty": beauty,
-    "congeniality": congeniality,
-    "cond_talent": cond_talent,
-    "cond_beauty": cond_beauty,
-}
+hollywood_data = pd.DataFrame(
+    {
+        "talent": talent,
+        "beauty": beauty,
+        "congeniality": congeniality,
+    }
+)
+# Create the conditional variables
+hollywood_data["celebrity"] = hollywood_data["congeniality"] > 2
 # %% [markdown]
 # ### Visualize the relationships for celebrities at Hollywood
-# - TODO: Visualize the scatter plot matrix for the data.
+# - TODO: Visualize the pairplot :
+#  - for the whole data.
+#  - only for the celebrities.
 # %%
+sns.pairplot(
+    hollywood_data[["talent", "beauty", "celebrity"]],
+    hue="celebrity",
+)
+plt.suptitle("Pair plot: Talent, Beauty, and Celebrity", y=1.02)
+plt.show()
+
+celebrity_data = hollywood_data.loc[hollywood_data["celebrity"] == 1]
+sns.pairplot(celebrity_data[["talent", "beauty"]])
+plt.suptitle("Pair plot (celebrities only) : Talent, Beauty", y=1.02)
+plt.show()
 
 # %% [markdown]
-# ### Regression analysis
+# We see that for the whole data, there is no correlation between talent and beauty. However, when we condition on the set of celebrities, we see a negative correlation between talent and beauty. This is an example of collider bias.
 
+# ### Regression analysis for celebrities at Hollywood
+# Recover what we have seen in the pairplot, that is, the negative correlation between talent and beauty for celebrities.
 # - TODO: Perform regression analysis to show the collider bias.
-print(smf.ols("talent ~ beauty", data).fit().summary())
-print(smf.ols("talent ~ beauty + congeniality", data).fit().summary())
-print(smf.ols("cond_talent ~ cond_beauty", data).fit().summary())
+print(smf.ols("talent ~ beauty", hollywood_data).fit().summary())
+print(smf.ols("talent ~ beauty + congeniality", hollywood_data).fit().summary())
+# %%
+print(smf.ols("talent ~ beauty", celebrity_data).fit().summary())
