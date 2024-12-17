@@ -3,7 +3,7 @@
 // documentation link : https://typst.app/universe/package/polylux
 
 #import "@preview/polylux:0.3.1": *
-#import "@preview/embiggen:0.0.1": *
+#import "@preview/embiggen:0.0.1": * // LaTeX-like delimiter sizing for Typst
 #import themes.metropolis: *
 
 #show: metropolis-theme//.with(footer: [ENSAE, Introduction course])
@@ -86,34 +86,43 @@
 #title-slide(
   author: [Matthieu Doutreligne],
   title: "Machine Learning for econometrics",
-  subtitle: "Flexible models",
-  date: "January 10, 2025",
+  subtitle: "Flexible models for tabular data",
+  date: "February 18th, 2025",
   //extra: "Extra"
 )
+
+#slide(title: "Reminder from previous session")[
+
+- Statistical learning 101: bias-variance trade-off
+
+- Regularization for linear models: Lasso, Ridge, Elastic Net
+
+- Transformation of variables: polynomial regression
+
+#uncover(2)[- 🤔 But... How to select the best model? the best hyperparameters?]
+]
+
 
 #slide(title: "Table of contents")[
   #metropolis-outline
 ]
 
-#new-section-slide("Recall from the previous session")
+]
+#new-section-slide("Model selection: Cross-validation")
 
+#new-section-slide("Tree, random forests and boosting")
 
-#new-section-slide("Random Forests for predictive inference")
-
-
-#new-section-slide("Ensemble models")
-
-
-#slide(title: "")[
+#slide(title:"Random Forests for predictive inference")[
 
 ]
 
-
-#slide(title: "")[
+#slide(title:"Boosting")[
 
 ]
 
-#new-section-slide("A word on deep learning")
+#slide(title:"Ensemble models")[]
+
+#new-section-slide("A word on other families of models")
 
 #slide(title: "Why not use deep learning everywhere?")[
 
@@ -142,6 +151,18 @@
     caption: "DAG for a RCT: the treatment is independent of the confounders",
   )
 ]
+
+
+#slide(title: "Other well known families of models")[
+
+  - Generalized linear models: 
+
+  - Support vector machines:
+
+  - Gaussian processes: 
+  
+]
+
 
 
 #let bibliography = bibliography("biblio.bib", style: "apa")
