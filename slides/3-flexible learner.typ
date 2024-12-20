@@ -108,7 +108,14 @@
 ]
 
 ]
-#new-section-slide("Model selection: Cross-validation")
+#new-section-slide("Model evaluation and selection with cross-validation")
+
+#slide(title: "Model evaluation: example")[
+
+  - We saw the importance to split the data into training and testing sets. 
+
+
+]
 
 #new-section-slide("Tree, random forests and boosting")
 
