@@ -1,4 +1,4 @@
-# %%
+w  # %%
 import numpy as np
 from scipy.datasets import face
 from sklearn.model_selection import train_test_split
