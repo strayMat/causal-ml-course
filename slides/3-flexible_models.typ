@@ -39,10 +39,7 @@
   body
 }
 
-
-
 #let slide(title: none, body) = {
-  
   let header = {
     set align(top)
     if title != none {
@@ -71,7 +68,12 @@
 
   let content = {
     show: align.with(horizon)
-    show: pad.with(left: 1em, top: 0.5em, right: 1em, bottom: 0em) // super important to have a proper padding (not 1/3 of the slide blank...)
+    show: pad.with(
+      left: 1em,
+      top: 0.5em,
+      right: 1em,
+      bottom: 0em,
+    ) // super important to have a proper padding (not 1/3 of the slide blank...)
     set text(fill: m-dark-teal)
     body
   }
@@ -90,13 +92,13 @@
 
 #slide(title: "Reminder from previous session")[
 
-- Statistical learning 101: bias-variance trade-off
+  - Statistical learning 101: bias-variance trade-off
 
-- Regularization for linear models: Lasso, Ridge, Elastic Net
+  - Regularization for linear models: Lasso, Ridge, Elastic Net
 
-- Transformation of variables: polynomial regression
+  - Transformation of variables: polynomial regression
 
-#uncover(2)[- 🤔 But... How to select the best model? the best hyper-parameters?]
+  #uncover(2)[- 🤔 But... How to select the best model? the best hyper-parameters?]
 ]
 
 
@@ -112,75 +114,79 @@
   - Raw dataset: (N=534, p=11)
 
   #only(1)[
-      #figure(image(
-      "img/3-flexible_models/wage_head.png"
-    ))
-    ]
+    #figure(image("img/3-flexible_models/wage_head.png"))
+  ]
 
-  #uncover((2,3))[
+  #uncover((2, 3))[
     - Transformation: encoding categorical data, scaling numerical data: (N=534, p=23)
   ]
 
   #only(2)[
-    #figure(image(
-      "img/3-flexible_models/wage_transformed_head.png"
-    ))
+    #figure(image("img/3-flexible_models/wage_transformed_head.png"))
   ]
 
   #uncover(3)[
     - Regressor: Lasso with regularization parameter ($alpha=10$)
   ]
   #only(3)[
-    #figure(image(
-      "img/3-flexible_models/wage_pipeline.png", width: 50%
-    ))
+    #figure(
+      image(
+        "img/3-flexible_models/wage_pipeline.png",
+        width: 50%,
+      ),
+    )
   ]
 ]
 
 #slide(title: "Repeated train/test splits")[
   #only(1)[
     == Splitting once: In red, the training set, in blue, the test set
-  
+
     #figure(
       image(
-        "img/pyfigures/train_test_split_visualization_seed_0.png", width: 65%
+        "img/pyfigures/train_test_split_visualization_seed_0.png",
+        width: 65%,
       ),
     )
   ]
   #only(2)[
     == But we could have chosen another split ! Yielding a different MAE
-    
+
     #figure(
       image(
-        "img/pyfigures/train_test_split_visualization_seed_1.png", width: 65%
+        "img/pyfigures/train_test_split_visualization_seed_1.png",
+        width: 65%,
       ),
     )
   ]
 
   #only(3)[
     == And another split...
-    
+
     #figure(
       image(
-        "img/pyfigures/train_test_split_visualization_seed_3.png", width: 65%
+        "img/pyfigures/train_test_split_visualization_seed_3.png",
+        width: 65%,
       ),
     )
   ]
 
   #only(4)[
     == Splitting ten times
-    
+
     #figure(
       image(
-        "img/pyfigures/train_test_split_visualization_seed_9.png", width: 65%
+        "img/pyfigures/train_test_split_visualization_seed_9.png",
+        width: 65%,
       ),
     )
-  == 🎉 Distribution of MAE: $3.71 plus.minus 0.26$ //TODO: find ref for proof (ex. Wager or Causal ML)
+    == 🎉 Distribution of MAE: $3.71 plus.minus 0.26$ //TODO: find ref for proof (ex. Wager or Causal ML)
   ]
 ]
 
 #slide(title: "Repeated train/test splits = Cross-validation")[
 
+  = Cross-validation
   - In sklearn, it can be instantiated with `cross_validate`.
 
   #only(1)[
@@ -195,23 +201,60 @@
     ```
   ]
   #only(2)[
-    - It is a more robust way to evaluate the model's performance.
-    - We get a more robust estimate by taking the mean over the repetitions.
-    - We get a better idea of the variability of the model's performance: similar to bootstrapping (but different).
+    - 🙂 Robustly estimate generalization performance
+    - 🤩 Estimate variability of the performance: similar to bootstrapping (but different).
+    - 🚀 Let's use it to select the best models among several canditates!
+    - Proof that it selects the best model (averaging on the folds): @lecue2012oracle
   ]
 ]
 
-#slide(title: "Cross-validation is not model selection")[
-  
-  = Cross-validation 
-  == 🤩 Robustly estimate one model's  generalization performance
-  
-  #uncover(2)[
-  == But still, how to select the best model among multiple models with different hyper-parameters?s
+#slide(title: [Cross-validation for model selection: choose best $alpha$ for lasso])[
+  - Wage pipeline
+  #only(1)[
+    #figure(
+      image(
+        "img/3-flexible_models/wage_pipeline.png",
+        width: 70%,
+      ),
+    )
+  ]
+  #uncover((2, 3))[
+    - Random search over a distribution of $alpha$ values
+  ]
+
+  #only(2)[
+    #set text(size: 20pt)
+    ```python
+    param_distributions = {"lasso__alpha": loguniform(1e-6, 1e3)}
+    model_random_search = RandomizedSearchCV(
+        pipeline,
+        param_distributions=param_distributions,
+        n_iter=10, # number of hyper-parameters sampled
+        cv=5, # number of folds for the cross-validation
+        scoring="neg_mean_absolute_error", # score to optimize
+    )
+    model_random_search.fit(X, y)
+    ```
+  ]
+  #only(3)[
+    - Identify the best $alpha$ value(s)
+    #figure(
+      image(
+        "img/pyfigures/lasso_random_search_cv.svg",
+        width: 50%,
+      ),
+    )
   ]
 ]
 
-#slide(title: "Naive cross-validation to select the best model")[
+
+#slide(title: "What final model to use for new prediction?")[
+  - Either refit on full data the model with the best hyper-parameters on the full data
+  - Or use the aggregation of outputs from the cross-validation of the best model:
+  $hat(y) = 1/K sum_(k=1)^K hat(y)_k$ where $hat(y)_k$ is the prediction of the model trained on the $k$-th fold
+]
+
+#slide(title: "Naive cross-validation to select AND estimate the best performances")[
 
 ]
 
@@ -219,29 +262,35 @@
 
 ]
 
-#new-section-slide("Tree, random forests and boosting")
+#new-section-slide("Flexible models: Tree, random forests and boosting")
 
-#slide(title:"Random Forests for predictive inference")[
 
-]
-
-#slide(title:"Boosting")[
+#slide(title: "Tree for predictive inference")[
 
 ]
 
-#slide(title:"Ensemble models")[]
+
+#slide(title: "Random Forests for predictive inference")[
+
+]
+
+#slide(title: "Boosting")[
+
+]
+
+#slide(title: "Ensemble models")[]
 
 #new-section-slide("A word on other families of models")
 
 #slide(title: "Why not use deep learning everywhere?")[
 
-- Success of deep learning (aka deep neural networks) in image, speech recognition and text
+  - Success of deep learning (aka deep neural networks) in image, speech recognition and text
 
-- Why not so used in econometrics?
+  - Why not so used in econometrics?
 
- == Deep learning needs a lot of data (typically $N approx 1$ million)
+    == Deep learning needs a lot of data (typically $N approx 1$ million)
 
- - Do we have this much data in econometrics?  
+    - Do we have this much data in econometrics?
 ]
 
 
@@ -257,9 +306,9 @@
 
 #slide(title: "Deep learning underperforms on data tables")[
 
- == Tree-based methods outperform tailored deep learning architectures @grinsztajn2022tree
+  == Tree-based methods outperform tailored deep learning architectures @grinsztajn2022tree
 
- #figure(
+  #figure(
     image("img/ML_1/tree_outperforms_dl.png", width: 83%),
     caption: "DAG for a RCT: the treatment is independent of the confounders",
   )
@@ -268,12 +317,12 @@
 
 #slide(title: "Other well known families of models")[
 
-  = Generalized linear models 
+  = Generalized linear models
 
   = Support vector machines
 
   = Gaussian processes
-  
+
 ]
 
 

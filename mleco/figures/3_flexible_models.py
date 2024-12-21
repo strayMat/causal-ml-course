@@ -116,3 +116,54 @@ for i, rs in enumerate(random_states):
     mae_scatter.remove()
 print(np.mean(saved_mae), np.std(saved_mae))
 # %%w
+# ## GridSearchCV
+from sklearn.model_selection import RandomizedSearchCV
+from scipy.stats import loguniform
+
+param_distributions = {
+    "lasso__alpha": loguniform(1e-6, 1e3),
+}
+
+model_random_search = RandomizedSearchCV(
+    pipeline,
+    param_distributions=param_distributions,
+    n_iter=10,
+    cv=5,
+    verbose=1,
+    scoring="neg_mean_absolute_error",
+)
+model_random_search.fit(X, y)
+# %%
+
+model_random_search.cv_results_.keys()
+# %%
+# Plotting the CV scores
+cv_results = model_random_search.cv_results_
+alphas = cv_results["param_lasso__alpha"]
+
+# We used neg median absolute error as the scoring metric, so we reverse it.
+mean_test_scores = -cv_results["mean_test_score"]
+std_test_scores = cv_results["std_test_score"]
+
+plt.figure(figsize=(6, 3))
+plt.axvspan(1e-5 / 2, 1e-1, color="lightgreen", alpha=0.4, label="sweet spot")
+sc = plt.scatter(alphas, mean_test_scores, edgecolor="k", s=100)
+plt.errorbar(
+    alphas,
+    mean_test_scores,
+    yerr=std_test_scores,
+    fmt="o",
+    color="black",
+    alpha=0.5,
+    capsize=5,
+)
+plt.legend(prop={"size": 16}, loc="lower right")
+plt.xscale("log")
+font_size = 18
+plt.xlabel("Alpha (log scale)", fontsize=font_size)
+plt.ylabel("Median Absolute\nError on test", fontsize=font_size)
+
+plt.grid(True)
+plt.minorticks_off()
+plt.savefig(DIR2FIG / "lasso_random_search_cv.svg", bbox_inches="tight")
+# %%s
