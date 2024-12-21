@@ -42,6 +42,7 @@
 
 
 #let slide(title: none, body) = {
+  
   let header = {
     set align(top)
     if title != none {
@@ -69,8 +70,8 @@
   )
 
   let content = {
-    show: align.with(top)
-    show: pad.with(left: 1em, top: 0em, right: 1em, bottom: 0em) // super important to have a proper padding (not 1/3 of the slide blank...)
+    show: align.with(horizon)
+    show: pad.with(left: 1em, top: 0.5em, right: 1em, bottom: 0em) // super important to have a proper padding (not 1/3 of the slide blank...)
     set text(fill: m-dark-teal)
     body
   }
@@ -78,16 +79,6 @@
   logic.polylux-slide(content)
 }
 
-// Use #polylux-slide to create a slide and style it using your favourite Typst functions
-// #polylux-slide[
-//   #align(horizon + center)[
-//     = Very minimalist slides
-
-//     A lazy author
-
-//     July 23, 2023
-//   ]
-// ]
 
 #title-slide(
   author: [Matthieu Doutreligne],
@@ -105,7 +96,7 @@
 
 - Transformation of variables: polynomial regression
 
-#uncover(2)[- 🤔 But... How to select the best model? the best hyperparameters?]
+#uncover(2)[- 🤔 But... How to select the best model? the best hyper-parameters?]
 ]
 
 
@@ -127,7 +118,7 @@
     ]
 
   #uncover((2,3))[
-    - Transformation: encoding of categorical data and scaling of numerical data
+    - Transformation: encoding categorical data, scaling numerical data: (N=534, p=23)
   ]
 
   #only(2)[
@@ -137,7 +128,7 @@
   ]
 
   #uncover(3)[
-    - Regressor: Lasso with regularization parameter ($alpha=10$), the final pipeline is:
+    - Regressor: Lasso with regularization parameter ($alpha=10$)
   ]
   #only(3)[
     #figure(image(
@@ -184,6 +175,7 @@
         "img/pyfigures/train_test_split_visualization_seed_9.png", width: 65%
       ),
     )
+  == 🎉 Distribution of MAE: $3.71 plus.minus 0.26$ //TODO: find ref for proof (ex. Wager or Causal ML)
   ]
 ]
 
@@ -203,15 +195,30 @@
     ```
   ]
   #only(2)[
-    - It is a more robust way to evaluate the model's performance:
-    - We get a more robust estimate by taking the mean over the repetitions
-    - We get a better idea of the variability of the model's performance: similar to bootstrapping (but different)
+    - It is a more robust way to evaluate the model's performance.
+    - We get a more robust estimate by taking the mean over the repetitions.
+    - We get a better idea of the variability of the model's performance: similar to bootstrapping (but different).
   ]
 ]
 
-#slide(title: "How to select a model?")[
+#slide(title: "Cross-validation is not model selection")[
+  
+  = Cross-validation 
+  == 🤩 Robustly estimate one model's  generalization performance
+  
+  #uncover(2)[
+  == But still, how to select the best model among multiple models with different hyper-parameters?s
+  ]
+]
+
+#slide(title: "Naive cross-validation to select the best model")[
 
 ]
+
+#slide(title: "Nested cross-validation to select the best model")[
+
+]
+
 #new-section-slide("Tree, random forests and boosting")
 
 #slide(title:"Random Forests for predictive inference")[
@@ -261,11 +268,11 @@
 
 #slide(title: "Other well known families of models")[
 
-  - Generalized linear models: 
+  = Generalized linear models 
 
-  - Support vector machines:
+  = Support vector machines
 
-  - Gaussian processes: 
+  = Gaussian processes
   
 ]
 
