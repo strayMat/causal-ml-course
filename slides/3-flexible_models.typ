@@ -267,6 +267,117 @@
 
 #slide(title: "Tree for predictive inference")[
 
+  = - Decision tree: intution
+
+  = - Classification tree
+
+  = - Regression tree
+
+]
+
+#slide(title: "What is a decision tree? An example.")[
+  #figure(image("img/3-flexible_models/tree_example.svg", width: 80%))
+]
+
+#slide(title: "Growing a classification tree")[
+  #side-by-side(
+    [
+      #only(1)[
+        #figure(image("img/3-flexible_models/tree_blue_orange1.svg", width: 90%))
+      ]
+      #only(2)[
+        #figure(image("img/3-flexible_models/tree_blue_orange2.svg", width: 90%))
+      ]
+      #only(3)[
+        #figure(image("img/3-flexible_models/tree_blue_orange3.svg", width: 90%))
+      ]
+    ],
+    [
+      #only(1)[
+        #figure(image("img/3-flexible_models/tree2D_1split.svg", width: 90%))
+      ]
+      #only(2)[
+        #figure(image("img/3-flexible_models/tree2D_2split.svg", width: 90%))
+      ]
+      #only(3)[
+        #figure(image("img/3-flexible_models/tree2D_3split.svg", width: 90%))
+      ]
+    ],
+  )
+]
+
+
+#slide(title: "Growing a regression tree")[
+  #side-by-side(
+    [
+      #only(1)[
+        #figure(image("img/3-flexible_models/tree_regression_structure1.svg", width: 90%))
+      ]
+      #only(2)[
+        #figure(image("img/3-flexible_models/tree_regression_structure2.svg", width: 90%))
+      ]
+      #only(3)[
+        #figure(image("img/3-flexible_models/tree_regression_structure3.svg", width: 90%))
+      ]
+    ],
+    [
+      #only(1)[
+        #figure(image("img/3-flexible_models/tree_regression2.svg", width: 90%))
+      ]
+      #only(2)[
+        #figure(image("img/3-flexible_models/tree_regression3.svg", width: 90%))
+      ]
+      #only(3)[
+        #figure(image("img/3-flexible_models/tree_regression4.svg", width: 90%))
+      ]
+    ],
+  )
+]
+
+
+#slide(title: "How the best split is chosen?")[
+  = Split maximizing a purity criteria G
+
+]
+
+#slide(title: "Tree depth and overfitting")[
+
+  #set align(center + top)
+  #grid(
+    columns: (auto, auto, auto),
+    gutter: 1pt,
+    [
+      #image("img/3-flexible_models/dt_underfit.svg", width: 90%)
+      Underfitting#linebreak()
+      max depth or#linebreak()
+      max_leaf_nodes#linebreak()
+      too small],
+    [
+      #image("img/3-flexible_models/dt_fit.svg", width: 90%)
+      Best trade-off],
+    [
+      #image("img/3-flexible_models/dt_overfit.svg", width: 90%)
+      Overfitting#linebreak()
+      max depth or#linebreak()
+      max_leaf_nodes#linebreak()
+      too large],
+  )
+]
+
+#slide(title: "Pros and cons of trees")[
+
+  = Pros
+
+  - Easy to interpret
+  - Handle mixed types of data: numerical, categorical and missing data
+  - Handle interactions
+  - Fast to fit
+
+  = Cons
+
+  - Prone to overfitting
+  - Unstable: small changes in the data can lead to very different trees
+  - Mostly useful as a building block for ensemble models: random forests and boosting trees
 ]
 
 
