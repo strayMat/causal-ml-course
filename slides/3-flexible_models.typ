@@ -418,17 +418,16 @@
   )
 ]
 
-#slide(title: "Tree depth and overfitting")[
-  = Main hyper-parameters of tree models
+#slide(title: "Main hyper-parameters of tree models")[
   #set text(size: 20pt)
   ```python
   DecisionTreeRegressor(
-      criterion="mse",
-      max_depth=None, # control tree depth (assume symetric trees)
-      min_samples_split=2, # control tree depth (allowing asymetric trees)
-      min_samples_leaf=1, # control tree depth (allowing asymetric trees)
-      max_leaf_nodes=None, # control tree depth (allowing asymetric trees)
-      min_impurity_decrease=0.0, # control tree depth (allowing asymetric trees)
+      criterion="squared error",
+      max_depth=None, # Tree depth (assume symetric trees)
+      min_samples_split=2, # Tree depth (allowing asymetric trees)
+      min_samples_leaf=1, # Tree depth (allowing asymetric trees)
+      max_leaf_nodes=None, # Tree depth (allowing asymetric trees)
+      min_impurity_decrease=0.0, # Tree depth (allowing asymetric trees)
   )
   ```
 ]
@@ -524,12 +523,32 @@
   )
 ]
 
+#slide(title: "Hyper-parameters of random forests")[
+  #set text(size: 18pt)
+  ```python
+  sklearn.ensemble.RandomForestRegressor(
+    n_estimators=100, # Number of trees to fit (sample randomization)
+    criterion='squared_error',
+    max_depth=None,
+    min_samples_split=2,
+    min_samples_leaf=1,
+    min_weight_fraction_leaf=0.0,
+    min_impurity_decrease=0.0,
+    n_jobs=None, # Number of jobs to run in parallel
+    random_state=None, # Seed for randomization
+    max_features=1.0, # Number/ratio of features at each split (feature randomization)
+    max_samples = None # Number of sample to draw (with replacement) for each tree
+   )
+  ```
+]
 //#slide(title: "Therorical advantages of random forests to reduce overfitting")[ ]
 
 #slide(title: "Random Forests are bagged randomized decision trees")[
-  - At each split: a random subset of features are selected
+  = Random forests
+  - For each tree a random subset of samples are selected
+  - At each split a random subset of features are selected (more randomization)
   - The best split is taken among the restricted subset
-  - Extra randomization decorrelates the prediction errors
+  - Feature randomization decorrelates the prediction errors
   - Uncorrelated errors make bagging work better
 
   = Take away
@@ -537,6 +556,11 @@
   - Bagging and random forests fit trees independently
   - Each deep tree overfits individually
   - Averaging the tree predictions reduces overfitting
+]
+
+
+#slide(title: "Boosting")[
+
 ]
 
 #new-section-slide("A word on other families of models")
