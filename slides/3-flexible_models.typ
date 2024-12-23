@@ -264,17 +264,6 @@
 
 #new-section-slide("Flexible models: Tree, random forests and boosting")
 
-
-#slide(title: "Tree for predictive inference")[
-
-  = - Decision tree: intution
-
-  = - Classification tree
-
-  = - Regression tree
-
-]
-
 #slide(title: "What is a decision tree? An example.")[
   #figure(image("img/3-flexible_models/tree_example.svg", width: 80%))
 ]
@@ -336,12 +325,77 @@
 
 
 #slide(title: "How the best split is chosen?")[
-  = Split maximizing a purity criteria G
+  === The best split minimizes an impurity criteria
+  - for the next left and right nodes
+  - over all features
+  - and all possible splits
 
+  === Formally
+
+  Let the data at node $m$ be $Q_m$ with $n_m$ samples. For a candidate split on feature $j$ and threshold $t_m$ $theta=(j, t_m)$, the split yields: #linebreak()
+  $Q_m^("left")(theta)={(x,y)|x_j<=t_m}$ and $Q_m^("right")(theta)=Q_m backslash Q_m^("left")(theta)$
+
+  Then $theta$ is chosen to minimize the impurity criteria averaged over the two children nodes:
+
+  $theta^(*) = "argmin"_(j, t_m) [n_m^"left" / n_m H(Q_m^("left")(theta)) + n_m^"right" / n_m H(Q_m^("right")(theta))]$ with $H$ the impurity criteria.
+]
+
+#slide(title: "Impurity criteria")[
+
+  == For classification
+  === Gini impurity
+
+  $H(Q_m) = sum_k p_(m k) (1 - p_(m k))$ with $p_(m k) = 1 / n_m sum_(y in Q_m) I(y = k)$
+
+  === Cross-entropy
+
+  $H(Q_m) = - sum_(k in K) p_(m k) log(p_(m k))$
+
+  == For regression
+  === Mean squared error
+  $H(Q_m) = 1 / n_m sum_(y in Q_m) (y - dash(y_m))^2$ where $dash(y_m) = 1 / n_m sum_(y in Q_m) y$
+]
+
+#slide(title: "Chose the best split: example")[
+  #only(1)[
+    #side-by-side(
+      columns: (1fr, 2fr),
+      [== Random split],
+      figure(image("img/pyfigures/tree_random_split.svg", width: 110%)),
+    )
+  ]
+  #only(2)[
+    #side-by-side(
+      columns: (1fr, 2fr),
+      [== Moving the split to the right from one point],
+      figure(image("img/pyfigures/tree_split_2.svg", width: 110%)),
+    )
+
+  ]
+  #only(3)[
+    #side-by-side(
+      columns: (1fr, 2fr),
+      [== Moving the split to the right from 10 points],
+      figure(image("img/pyfigures/tree_split_10.svg", width: 110%)),
+    )
+  ]
+  #only(4)[
+    #side-by-side(
+      columns: (1fr, 2fr),
+      [== Moving the split to the right from 20 points],
+      figure(image("img/pyfigures/tree_split_19.svg", width: 110%)),
+    )
+  ]
+  #only(5)[
+    #side-by-side(
+      columns: (1fr, 2fr),
+      [== Best split],
+      figure(image("img/pyfigures/tree_best_split.svg", width: 110%)),
+    )
+  ]
 ]
 
 #slide(title: "Tree depth and overfitting")[
-
   #set align(center + top)
   #grid(
     columns: (auto, auto, auto),
@@ -364,6 +418,21 @@
   )
 ]
 
+#slide(title: "Tree depth and overfitting")[
+  = Main hyper-parameters of tree models
+  #set text(size: 20pt)
+  ```python
+  DecisionTreeRegressor(
+      criterion="mse",
+      max_depth=None, # control tree depth (assume symetric trees)
+      min_samples_split=2, # control tree depth (allowing asymetric trees)
+      min_samples_leaf=1, # control tree depth (allowing asymetric trees)
+      max_leaf_nodes=None, # control tree depth (allowing asymetric trees)
+      min_impurity_decrease=0.0, # control tree depth (allowing asymetric trees)
+  )
+  ```
+]
+
 #slide(title: "Pros and cons of trees")[
 
   = Pros
@@ -382,6 +451,7 @@
 
 
 #slide(title: "Random Forests for predictive inference")[
+  = Ensemble principle: average the predictions of multiple predictors
 
 ]
 
@@ -393,19 +463,32 @@
 
 #new-section-slide("A word on other families of models")
 
+
+#slide(title: "Other well known families of models")[
+
+  = Generalized linear models
+
+  = Kernel methods: Support vector machines, Gaussian processes
+
+  = Deep neural networks
+]
+
+
 #slide(title: "Why not use deep learning everywhere?")[
 
   - Success of deep learning (aka deep neural networks) in image, speech recognition and text
 
-  - Why not so used in econometrics?
+  - 🤔 Why not so used in econometrics?
 
+  #uncover(2)[
     == Deep learning needs a lot of data (typically $N approx 1$ million)
 
-    - Do we have this much data in econometrics?
+    == Do we have this much data in econometrics?
+  ]
 ]
 
 
-#slide(title: "Limited data settings")[
+#slide(title: "Answer 1: Limited data settings")[
   - Typically #only(1)[in economics] (but also everywhere), we have a limited number of observations
 
   #figure(
@@ -415,25 +498,20 @@
 
 ]
 
-#slide(title: "Deep learning underperforms on data tables")[
+#slide(title: "Answer 2: Deep learning underperforms on data tables")[
 
-  == Tree-based methods outperform tailored deep learning architectures @grinsztajn2022tree
+  === Tree-based methods outperform tailored deep learning architectures @grinsztajn2022tree
 
-  #figure(
-    image("img/ML_1/tree_outperforms_dl.png", width: 83%),
-    caption: "DAG for a RCT: the treatment is independent of the confounders",
-  )
+  #figure(image("img/ML_1/tree_outperforms_dl.png", width: 83%))
 ]
 
+#slide(title: "Nuance: recent work on LLM and pre-trained techniques for tabular learning")[
 
-#slide(title: "Other well known families of models")[
+  == Some references:
 
-  = Generalized linear models
-
-  = Support vector machines
-
-  = Gaussian processes
-
+  - #link("https://skrub-data.org/stable/", "Skrub python library"): data-wrangling and encoding (same people than sklearn)
+  - @kim2024carte: CARTE: pretraining and transfer for tabular learning
+  - @grinsztajn2023vectorizing : Vectorizing string entries for data processing on tables: when are larger language models better?
 ]
 
 
