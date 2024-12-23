@@ -450,16 +450,94 @@
 ]
 
 
-#slide(title: "Random Forests for predictive inference")[
-  = Ensemble principle: average the predictions of multiple predictors
+#slide(title: "Ensemble models")[
+  = Bagging: Bootstrap AGGregatING
 
+  Bootstrap resampling (random sampling with replacement) proposed by @breiman1996bagging
+
+  Built upon Bootstrap, introduced by @efron1992bootstrap to estimate the variance of an estimator.
+
+  Bagging is used in machine learning to reduce the variance of a model prone to overfitting
+
+  Can be used with any model
 ]
 
-#slide(title: "Boosting")[
-
+#slide(title: "Random forests: Bagging with classification trees
+")[
+  #set align(top)
+  #side-by-side(
+    [
+      #only((1, 2))[
+        #figure(image("img/3-flexible_models/bagging0.svg", width: 80%))
+      ]
+      #only(3)[
+        #figure(image("img/3-flexible_models/bagging0_cross.svg", width: 80%))
+      ]
+    ],
+    [
+      #only(1)[
+        #figure(image("img/3-flexible_models/bagging.svg", width: 90%))
+      ]
+      #only(2)[
+        #figure(image("img/3-flexible_models/bagging_line.svg", width: 90%))
+        #figure(image("img/3-flexible_models/bagging_trees.svg", width: 90%))
+      ]
+      #only(3)[
+        #figure(image("img/3-flexible_models/bagging_cross.svg", width: 90%))
+        #figure(image("img/3-flexible_models/bagging_trees_predict.svg", width: 90%))
+        #figure(image("img/3-flexible_models/bagging_vote.svg", width: 90%))
+      ]
+    ],
+  )
+]
+#slide(title: "Random forests: Bagging with regression trees")[
+  #only(1)[
+    #figure(image("img/3-flexible_models/bagging_reg_data.svg", width: 50%))
+  ]
+]
+#slide(title: "Random forests: Bagging with regression trees")[
+  #set align(top)
+  #only(1)[
+    #figure(image("img/3-flexible_models/bagging_reg_grey.svg", width: 100%))
+  ]
+  #only((2, 3))[
+    #figure(image("img/3-flexible_models/bagging_reg_grey_fitted.svg", width: 100%))
+  ]
+  #h(1em)
+  #side-by-side(
+    [
+      #uncover((1, 2, 3))[
+        === - Select multiple subsets of the data
+      ]
+      #uncover((2, 3))[
+        === - Fit one model on each
+      ]
+      #uncover(3)[
+        === - Average the predictions
+      ]
+    ],
+    [
+      #only(3)[
+        #figure(image("img/3-flexible_models/bagging_reg_blue.svg", width: 60%))
+      ]
+    ],
+  )
 ]
 
-#slide(title: "Ensemble models")[]
+//#slide(title: "Therorical advantages of random forests to reduce overfitting")[ ]
+
+#slide(title: "Random Forests are bagged randomized decision trees")[
+  - At each split: a random subset of features are selected
+  - The best split is taken among the restricted subset
+  - Extra randomization decorrelates the prediction errors
+  - Uncorrelated errors make bagging work better
+
+  = Take away
+
+  - Bagging and random forests fit trees independently
+  - Each deep tree overfits individually
+  - Averaging the tree predictions reduces overfitting
+]
 
 #new-section-slide("A word on other families of models")
 
