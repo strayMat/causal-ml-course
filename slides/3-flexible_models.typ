@@ -125,7 +125,7 @@
   title: "Machine Learning for econometrics",
   subtitle: "Flexible models for tabular data",
   date: "February 18th, 2025",
-  //extra: "Extra"
+  extra: [A lot of today's content is taken from the excellent #link("https://inria.github.io/scikit-learn-mooc/toc.html", "sklearn mooc") @loic_esteve_2022_7220307],
 )
 
 #slide(title: "Reminder from previous session")[
@@ -643,27 +643,36 @@
 ]
 
 #slide(title: "Gradient boosting")[
-
+  TODO
 ]
 
 #slide(title: "Gradient boosting: how are the iterative learners chosen?")[
-  == Boosting formulation
+  === Boosting formulation
 
   $F_m(x) = F_(m-1)(x)+h_m(x)$ with $F_(m-1)$ the previous estimator, $h_m$, new week learner.
 
-  == Minimization problem
+  === Minimization problem
 
   $h_m = argmin(h) (L_m)=argmin(h) sum_(i=1)^n l(y_i, F_(m-1)(x_i)+h(x_i))$
 
-  #uncover(3)[
-    - $l(y_i, F_(m-1)(x_i) + h(x_i)) = l(y_i, F_(m-1)(x_i)) + h_m(x_i) [(diff l (y_i, F(x_i))) / (diff F(x_i))]_(F=F_(m-1))$
+  Rewrite inside the sum:#linebreak()
+
+  #uncover((3, 4, 5))[
+
+    $l(y_i, F_(m-1)(x_i) + h(x_i)) = #only(3)[$l(y_i, F_(m-1)(x_i))$] #only((4, 5))[$underbrace(l(y_i, F_(m-1)(x_i)), "constant in "h(x_i))$] + h(x_i) #only(3)[$[(diff l (y_i, F(x_i))) / (diff F(x_i))]_(F=F_(m-1))$] #only((4, 5))[$underbrace([(diff l (y_i, F(x_i))) / (diff F(x_i))]_(F=F_(m-1)), \u{225D} g_i", the gradient")$]$
   ]
   #only((2, 3))[
     #def_box(title: "💡Taylor expansion")[
       For $l(dot)$ differentiable: $l(y+h) approx l(y) + h (diff l) / (diff y) (y)$
     ]
   ]
-]
+
+  #only(5)[
+    Finally:
+    $h_m = argmin(h) sum^n_(i=1) h(x_i) g_i$ -> kind of an inner product $<g, h>$
+
+    So $h_m(x_i)$ should be proportional to $- g_i$, so #alert[fit $h_m$ to the negative gradient.]
+  ]
 ]
 
 #slide(title: "Faster gradient boosting with binned features")[
@@ -676,18 +685,18 @@
   - Much much faster
 ]
 
-
 #slide(title: "Take away for ensemble models")[
-
 
   #table(
     columns: 2,
-    [
-      [strong("Bagging"), strong("Boosting")],
-      ["fit trees independently", "fit trees sequentially"],
-      ["each deep tree overfits", "each shallow tree underfits"],
-      ["averaging the tree predictions reduces overfitting", "sequentially adding trees reduces underfitting"],
-    ],
+    table.header(
+      [*Bagging*],
+      [*Boosting*],
+    ),
+
+    "Fit trees independently", "Fit trees sequentially",
+    "Each deep tree overfits", "Each shallow tree underfits",
+    "Averaging the tree predictions reduces overfitting", "Sequentially adding trees reduces underfitting",
   )
 
 ]
