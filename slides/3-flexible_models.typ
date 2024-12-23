@@ -6,9 +6,9 @@
 #import "@preview/embiggen:0.0.1": * // LaTeX-like delimiter sizing for Typst
 #import "@preview/codly:1.1.1": * // Code highlighting for Typst
 #show: codly-init
-
-#import "@preview/codly-languages:0.1.3": *
+#import "@preview/codly-languages:0.1.3": * // Code highlighting for Typst
 #codly(languages: codly-languages)
+#import "@preview/showybox:2.0.1": showybox
 
 #import themes.metropolis: *
 
@@ -26,6 +26,11 @@
 #let c_control(body) = {
   set text(fill: orange)
   body
+}
+
+
+#let argmin(body) = {
+  $#math.op("argmin", limits: true)_(body)$
 }
 
 #let c_treated(body) = {
@@ -79,6 +84,39 @@
   }
 
   logic.polylux-slide(content)
+}
+
+
+#let my_box(title, color, body) = {
+  showybox(
+    title-style: (
+      color: black,
+      weight: "regular",
+      boxed-style: (
+        anchor: (
+          x: left,
+          y: horizon,
+        ),
+        radius: 10pt,
+      ),
+    ),
+    frame: (
+      border-color: color.darken(50%),
+      title-color: color.lighten(60%),
+      body-color: color.lighten(80%),
+    ),
+    title: title,
+    align(center, body),
+  )
+}
+
+#let hyp_box(title: "Assumption", body) = {
+  my_box(title, rgb("#d39e57"), body)
+}
+
+
+#let def_box(title: "Definition", body) = {
+  my_box(title, rgb("#57b4d3"), body)
 }
 
 
@@ -204,7 +242,6 @@
     - 🙂 Robustly estimate generalization performance
     - 🤩 Estimate variability of the performance: similar to bootstrapping (but different).
     - 🚀 Let's use it to select the best models among several canditates!
-    - Proof that it selects the best model (averaging on the folds): @lecue2012oracle
   ]
 ]
 
@@ -249,17 +286,19 @@
 
 
 #slide(title: "What final model to use for new prediction?")[
-  - Either refit on full data the model with the best hyper-parameters on the full data
+  - Either refit on full data the model with the best hyper-parameters on the full data: often used in pratice.
+
   - Or use the aggregation of outputs from the cross-validation of the best model:
-  $hat(y) = 1/K sum_(k=1)^K hat(y)_k$ where $hat(y)_k$ is the prediction of the model trained on the $k$-th fold
+  #eq[$hat(y) = 1/K sum_(k=1)^K hat(y)_k$] #h(2em)where $hat(y)_k$ is the prediction of the model trained on the $k$-th fold.
+  - Proof that cross-validation selects the best model asymptotically among a family of models (averaging on the folds): @lecue2012oracle
 ]
 
 #slide(title: "Naive cross-validation to select AND estimate the best performances")[
-
+  TODO
 ]
 
 #slide(title: "Nested cross-validation to select the best model")[
-
+  TODO
 ]
 
 #new-section-slide("Flexible models: Tree, random forests and boosting")
@@ -523,17 +562,16 @@
   )
 ]
 
-#slide(title: "Hyper-parameters of random forests")[
+#slide(title: "Main hyper-parameters of random forests")[
   #set text(size: 18pt)
   ```python
   sklearn.ensemble.RandomForestRegressor(
-    n_estimators=100, # Number of trees to fit (sample randomization)
+    n_estimators=100, # Number of trees to fit (sample randomization): not useful to tune in practice
     criterion='squared_error',
-    max_depth=None,
-    min_samples_split=2,
-    min_samples_leaf=1,
-    min_weight_fraction_leaf=0.0,
-    min_impurity_decrease=0.0,
+    max_depth=None, # tree regularization
+    min_samples_split=2, # tree regularization
+    min_samples_leaf=1, # tree regularization
+    min_impurity_decrease=0.0, # tree regularization
     n_jobs=None, # Number of jobs to run in parallel
     random_state=None, # Seed for randomization
     max_features=1.0, # Number/ratio of features at each split (feature randomization)
@@ -558,10 +596,102 @@
   - Averaging the tree predictions reduces overfitting
 ]
 
+#slide(title: "Boosting: Adaptive boosting")[
+  == Boosting use multiple iterative models
 
-#slide(title: "Boosting")[
+  - Use of simple underfitting models: eg. shallow trees
+
+  - Each model corrects the errors of the previous one
+
+  == Two examples of boosting
+
+  - Adaptive boosting (AdaBoost): reweight mispredicted samples at each step @friedman2000additive
+
+  - Gradient boosting: predict the negative errors of previous models at each step @friedman2001greedy
+]
+
+#slide(title: "Boosting: Adaptive boosting")[
+  #side-by-side(
+    [
+      #only(1)[
+        #figure(image("img/3-flexible_models/boosting0.svg"))
+      ]
+      #only(2)[
+        == First prediction:
+        #figure(image("img/3-flexible_models/boosting1.svg"))
+      ]
+      #only(3)[
+        #figure(image("img/3-flexible_models/boosting2.svg"))
+      ]
+      #only(4)[
+        #figure(image("img/3-flexible_models/boosting3.svg"))
+      ]
+    ],
+    [
+      #only(2)[
+        #figure(image("img/3-flexible_models/boosting_trees1.svg"))
+      ]
+      #only(3)[
+        #figure(image("img/3-flexible_models/boosting_trees2.svg"))
+      ]
+      #only(4)[
+        #figure(image("img/3-flexible_models/boosting_trees3.svg"))
+        == At each step, AdaBoost weights mispredicted samples
+      ]
+    ],
+  )
+]
+
+#slide(title: "Gradient boosting")[
 
 ]
+
+#slide(title: "Gradient boosting: how are the iterative learners chosen?")[
+  == Boosting formulation
+
+  $F_m(x) = F_(m-1)(x)+h_m(x)$ with $F_(m-1)$ the previous estimator, $h_m$, new week learner.
+
+  == Minimization problem
+
+  $h_m = argmin(h) (L_m)=argmin(h) sum_(i=1)^n l(y_i, F_(m-1)(x_i)+h(x_i))$
+
+  #uncover(3)[
+    - $l(y_i, F_(m-1)(x_i) + h(x_i)) = l(y_i, F_(m-1)(x_i)) + h_m(x_i) [(diff l (y_i, F(x_i))) / (diff F(x_i))]_(F=F_(m-1))$
+  ]
+  #only((2, 3))[
+    #def_box(title: "💡Taylor expansion")[
+      For $l(dot)$ differentiable: $l(y+h) approx l(y) + h (diff l) / (diff y) (y)$
+    ]
+  ]
+]
+]
+
+#slide(title: "Faster gradient boosting with binned features")[
+  == 😭 Gradient boosting is slow when N>10,000
+
+  == 🚀 HistGradientBoosting
+
+  - Discretize numerical features into 256 bins: less costly for tree splitting
+  - Multi core implementation
+  - Much much faster
+]
+
+
+#slide(title: "Take away for ensemble models")[
+
+
+  #table(
+    columns: 2,
+    [
+      [strong("Bagging"), strong("Boosting")],
+      ["fit trees independently", "fit trees sequentially"],
+      ["each deep tree overfits", "each shallow tree underfits"],
+      ["averaging the tree predictions reduces overfitting", "sequentially adding trees reduces underfitting"],
+    ],
+  )
+
+]
+
 
 #new-section-slide("A word on other families of models")
 
