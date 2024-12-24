@@ -610,7 +610,7 @@
   - Gradient boosting: predict the negative errors of previous models at each step @friedman2001greedy
 ]
 
-#slide(title: "Boosting: Adaptive boosting")[
+#slide(title: "Boosting: Adaptive boosting, classification example")[
   #side-by-side(
     [
       #only(1)[
@@ -642,8 +642,40 @@
   )
 ]
 
-#slide(title: "Gradient boosting")[
-  TODO
+
+#slide(title: "Adaboost for classification: choice of the weight")[
+
+  == Algorithm for Adaboost
+
+  - Initialize the observation weights $w_i = 1/N, i = 1..N$
+  - For m = 1 to M :
+
+    - Fit a classifier $F_m (x)$ to the training data using weights $w_i$
+
+    - Compute $"err"_m = (sum_(i=1)^N w_i bb(1)[y_i != F_m (x_i)]) / (sum_(i=1) w_i)$
+
+    - Compute $alpha_m = log((1 - "err"_m )/"err"_m )$
+
+    - Set $w_i arrow w_i exp[alpha_m bb(1)[y_i !=F_m (x_i )], i = 1..N$
+
+  - Output $F(x) = "sign"(sum_(i=1)^M alpha_m G_m(x))$
+
+  🔎 See @murphy2022probabilistic for the motivation.
+]
+
+#slide(title: "Adaboost: Take-away")[
+
+  - Sequentially fit weak learners (eg. shallow trees)
+  - Each new learner corrects the errors of the previous one thanks to sample weights
+  - The final model is a weighted sum of the weak learners
+  - The weights are learned by the algorithm to given more importance to errors
+  - Any weak learner can be used
+
+  #only(2)[
+    == Adaboost is tailored to a specific loss function (exponential loss)
+
+    🤔 Can we exploit the boosting idea for any loss function?
+  ]
 ]
 
 #slide(title: "Gradient boosting: how are the iterative learners chosen?")[
@@ -672,6 +704,71 @@
     $h_m = argmin(h) sum^n_(i=1) h(x_i) g_i$ -> kind of an inner product $<g, h>$
 
     So $h_m(x_i)$ should be proportional to $- g_i$, so #alert[fit $h_m$ to the negative gradient.]
+  ]
+]
+
+
+
+#slide(title: "Boosting: Gradient boosting, regression example")[
+  #only(1)[
+    #side-by-side(
+      [
+        == Regression
+        - The loss is: $l(y, F(x)) = (y - F(x))^2$
+        - The gradient is: $g_i = -2(y_i - F_(m-1)(x_i))$
+        - The new trees should fit the residuals
+      ],
+      [
+        #figure(image("img/pyfigures/gradient_boosting_data.svg", width: 110%))
+      ],
+    )
+  ]
+  #only(2)[
+    #side-by-side(
+      columns: (1fr, 2fr),
+      [
+        == Fit a shallow tree (depth=3)
+      ],
+      [
+        #figure(image("img/pyfigures/gradient_boosting_fit.svg", width: 85%))
+      ],
+    )
+  ]
+  #only(3)[
+    #side-by-side(
+      columns: (1fr, 2fr),
+      [
+        == Fit a second tree to the residuals
+        This second estimator is doing a poor job on some points
+      ],
+      [
+        #figure(image("img/pyfigures/gradient_boosting_residuals.svg", width: 85%))
+      ],
+    )
+  ]
+  #only(4)[
+    #side-by-side(
+      columns: (1fr, 2fr),
+
+      [
+
+      ],
+      [
+        #figure(image("img/pyfigures/gradient_boosting_fit_zoom.svg", width: 85%))
+      ],
+    )
+  ]
+  #only(5)[
+    #side-by-side(
+      columns: (1fr, 2fr),
+
+      [
+
+      ],
+      [
+        #figure(image("img/pyfigures/gradient_boosting_residuals_zoom.svg", width: 85%))
+      ],
+    )
   ]
 ]
 
@@ -736,7 +833,6 @@
     image("img/ML_1/2020_kdd_dataset_sizes.png", width: 65%),
     caption: [Typical dataset are mid-sized. This does not change with time. #footnote("https://www.kdnuggets.com/2020/07/poll-largest-dataset-analyzed-results.html")],
   )
-
 ]
 
 #slide(title: "Answer 2: Deep learning underperforms on data tables")[
@@ -746,12 +842,14 @@
   #figure(image("img/ML_1/tree_outperforms_dl.png", width: 83%))
 ]
 
-#slide(title: "Nuance: recent work on LLM and pre-trained techniques for tabular learning")[
+#slide(title: "Nuance: LLM and pre-training for tabular learning")[
 
-  == Some references:
+  == Recent work showing that tree-based models can be outperformed
 
   - #link("https://skrub-data.org/stable/", "Skrub python library"): data-wrangling and encoding (same people than sklearn)
+
   - @kim2024carte: CARTE: pretraining and transfer for tabular learning
+
   - @grinsztajn2023vectorizing : Vectorizing string entries for data processing on tables: when are larger language models better?
 ]
 
