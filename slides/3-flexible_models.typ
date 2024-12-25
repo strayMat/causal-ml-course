@@ -678,7 +678,7 @@
   ]
 ]
 
-#slide(title: "Gradient boosting: how are the iterative learners chosen?")[
+#slide(title: "Gradient boosting: how to choose the iterative learners?")[
   === Boosting formulation
 
   $F_m(x) = F_(m-1)(x)+h_m(x)$ with $F_(m-1)$ the previous estimator, $h_m$, new week learner.
@@ -694,7 +694,7 @@
     $l(y_i, F_(m-1)(x_i) + h(x_i)) = #only(3)[$l(y_i, F_(m-1)(x_i))$] #only((4, 5))[$underbrace(l(y_i, F_(m-1)(x_i)), "constant in "h(x_i))$] + h(x_i) #only(3)[$[(diff l (y_i, F(x_i))) / (diff F(x_i))]_(F=F_(m-1))$] #only((4, 5))[$underbrace([(diff l (y_i, F(x_i))) / (diff F(x_i))]_(F=F_(m-1)), \u{225D} g_i", the gradient")$]$
   ]
   #only((2, 3))[
-    #def_box(title: "💡Taylor expansion")[
+    #def_box(title: "🔔Taylor expansion")[
       For $l(dot)$ differentiable: $l(y+h) approx l(y) + h (diff l) / (diff y) (y)$
     ]
   ]
@@ -716,7 +716,7 @@
         == Regression
         - The loss is: $l(y, F(x)) = (y - F(x))^2$
         - The gradient is: $g_i = -2(y_i - F_(m-1)(x_i))$
-        - The new trees should fit the residuals
+        💡The new trees should fit the residuals
       ],
       [
         #figure(image("img/pyfigures/gradient_boosting_data.svg", width: 110%))
@@ -739,7 +739,8 @@
       columns: (1fr, 2fr),
       [
         == Fit a second tree to the residuals
-        This second estimator is doing a poor job on some points
+        - This tree performs poorly on some samples.
+
       ],
       [
         #figure(image("img/pyfigures/gradient_boosting_residuals.svg", width: 85%))
@@ -749,24 +750,45 @@
   #only(4)[
     #side-by-side(
       columns: (1fr, 2fr),
-
       [
-
+        == Fit a second tree to the residuals
+        - This tree performs well on some residuals.
+        - Let's zoom on one of those.
       ],
       [
-        #figure(image("img/pyfigures/gradient_boosting_fit_zoom.svg", width: 85%))
+        #figure(image("img/pyfigures/gradient_boosting_residuals_before_zoom.svg", width: 85%))
       ],
     )
   ]
-  #only(5)[
+  #only((5, 6))[
     #side-by-side(
       columns: (1fr, 2fr),
-
       [
 
+        === Focus on a sample
+        $(x_i, y_i) = (-0.454, -0.417)$
+
+        === First tree prediction
+
+        Prediction: $f_1(x_i) = -0.016$
+
+        Residuals: #linebreak() $y_i-f_1(x_i)= -0.401$
+
+        #only(6)[
+          === Second tree prediction
+          Prediction: $f_2(x_i) = -0.401$
+
+          Residuals: #linebreak() $y_i-f_1(x_i) - f_2(x_i)= 0$
+
+        ]
       ],
       [
-        #figure(image("img/pyfigures/gradient_boosting_residuals_zoom.svg", width: 85%))
+        #only(5)[
+          #figure(image("img/pyfigures/gradient_boosting_fit_zoom.svg", width: 85%))
+        ]
+        #only(6)[
+          #figure(image("img/pyfigures/gradient_boosting_residuals_zoom.svg", width: 85%))
+        ]
       ],
     )
   ]
@@ -774,6 +796,8 @@
 
 #slide(title: "Faster gradient boosting with binned features")[
   == 😭 Gradient boosting is slow when N>10,000
+
+  Fitting each tree is quite slow: $O(p N log(N))$ operations
 
   == 🚀 HistGradientBoosting
 
@@ -787,7 +811,7 @@
   #table(
     columns: 2,
     table.header(
-      [*Bagging*],
+      [*Bagging* (eg. *Random forests*)],
       [*Boosting*],
     ),
 
@@ -830,7 +854,7 @@
   - Typically #only(1)[in economics] (but also everywhere), we have a limited number of observations
 
   #figure(
-    image("img/ML_1/2020_kdd_dataset_sizes.png", width: 65%),
+    image("img/3-flexible_models/2020_kdd_dataset_sizes.png", width: 65%),
     caption: [Typical dataset are mid-sized. This does not change with time. #footnote("https://www.kdnuggets.com/2020/07/poll-largest-dataset-analyzed-results.html")],
   )
 ]
@@ -839,7 +863,7 @@
 
   === Tree-based methods outperform tailored deep learning architectures @grinsztajn2022tree
 
-  #figure(image("img/ML_1/tree_outperforms_dl.png", width: 83%))
+  #figure(image("img/3-flexible_models/tree_outperforms_dl.png", width: 83%))
 ]
 
 #slide(title: "Nuance: LLM and pre-training for tabular learning")[
