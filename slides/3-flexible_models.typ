@@ -294,12 +294,43 @@
 ]
 
 #slide(title: "Naive cross-validation to select AND estimate the best performances")[
-  TODO
+  == Hyper-parameters selection is a kind of model fitting
+
+  Using a single loop of cross-validation, the full dataset is used:
+  - to select the best hyper-parameters
+  - AND to estimate the generalization performance of the selected model
+
+  == ⚠️ Naive cross-validation can lead to overfitting
+
+  #uncover(2)[
+    🚀 Solution -> nested cross-validation @varoquaux2017assessing
+  ]
 ]
 
-#slide(title: "Nested cross-validation to select the best model")[
-  TODO
+#slide(title: "Nested cross-validation to select AND estimate the best performances")[
+  - Inner CV loop to select the best hyper-parameters
+  - Outer loop to estimate the generalization performance of the selected model
+  #figure(image("img/3-flexible_models/nested_cross_validation.png", width: 70%))
 ]
+
+
+#slide(title: "Over optimistic performance estimation: example")[
+  #side-by-side(
+    [
+      - Dataset: Breast cancer (N, p) = (569, 30)
+      - Classifier: RandomForestClassifier with multiple choices of hyper-parameter],
+    [
+      #figure(
+        image(
+          "img/pyfigures/3_flexible_models_cross_validation_nested_overfitting.svg",
+          width: 100%,
+        ),
+      )
+    ],
+  )
+
+]
+
 
 #new-section-slide("Flexible models: Tree, random forests and boosting")
 

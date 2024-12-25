@@ -23,6 +23,8 @@
 # generalization performance.
 #
 # We will illustrate this difference using the breast cancer dataset.
+# %%
+from mleco.constants import DIR2FIG
 
 # %%
 from sklearn.datasets import load_breast_cancer
@@ -30,17 +32,36 @@ from sklearn.datasets import load_breast_cancer
 data, target = load_breast_cancer(return_X_y=True)
 
 # %% [markdown]
-# First, we use `GridSearchCV` to find the best parameters via cross-validation
-# on a minimal parameter grid.
+# First, we use `RandomizedSearchCV` to find the best parameters via cross-validation on a minimal parameter grid.
+# %%
+from scipy.stats import loguniform
+
+
+class loguniform_int:
+    """Integer valued version of the log-uniform distribution"""
+
+    def __init__(self, a, b):
+        self._distribution = loguniform(a, b)
+
+    def rvs(self, *args, **kwargs):
+        """Random variable sample"""
+        return self._distribution.rvs(*args, **kwargs).astype(int)
+
 
 # %%
-from sklearn.model_selection import GridSearchCV
-from sklearn.svm import SVC
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.ensemble import RandomForestClassifier
 
-param_grid = {"C": [0.1, 1, 10], "gamma": [0.01, 0.1]}
-model_to_tune = SVC()
+param_grid = {
+    "max_depth": loguniform_int(5, 500),
+    "max_leaf_nodes": loguniform_int(2, 256),
+    "min_samples_leaf": loguniform_int(1, 100),
+}
+model_to_tune = RandomForestClassifier()
 
-search = GridSearchCV(estimator=model_to_tune, param_grid=param_grid, n_jobs=2)
+search = RandomizedSearchCV(
+    estimator=model_to_tune, param_distributions=param_grid, n_iter=10, n_jobs=2
+)
 search.fit(data, target)
 
 # %% [markdown]
@@ -97,8 +118,12 @@ inner_cv = KFold(n_splits=5, shuffle=True, random_state=0)
 outer_cv = KFold(n_splits=3, shuffle=True, random_state=0)
 
 # Inner cross-validation for parameter search
-model = GridSearchCV(
-    estimator=model_to_tune, param_grid=param_grid, cv=inner_cv, n_jobs=2
+model = RandomizedSearchCV(
+    estimator=model_to_tune,
+    param_distributions=param_grid,
+    cv=inner_cv,
+    n_iter=10,
+    n_jobs=2,
 )
 
 # Outer cross-validation to compute the testing score
@@ -123,8 +148,9 @@ print(
 test_score_not_nested = []
 test_score_nested = []
 
-N_TRIALS = 20
+N_TRIALS = 10
 for i in range(N_TRIALS):
+    print(i)
     # For each trial, we use cross-validation splits on independently
     # randomly shuffled data by passing distinct values to the random_state
     # parameter.
@@ -132,14 +158,18 @@ for i in range(N_TRIALS):
     outer_cv = KFold(n_splits=3, shuffle=True, random_state=i)
 
     # Non_nested parameter search and scoring
-    model = GridSearchCV(
-        estimator=model_to_tune, param_grid=param_grid, cv=inner_cv, n_jobs=2
+    model = RandomizedSearchCV(
+        estimator=model_to_tune,
+        param_distributions=param_grid,
+        cv=inner_cv,
+        n_iter=10,
+        n_jobs=-1,
     )
     model.fit(data, target)
     test_score_not_nested.append(model.best_score_)
 
     # Nested CV with parameter optimization
-    test_score = cross_val_score(model, data, target, cv=outer_cv, n_jobs=2)
+    test_score = cross_val_score(model, data, target, cv=outer_cv, n_jobs=-1)
     test_score_nested.append(test_score.mean())
 
 # %% [markdown]
@@ -162,9 +192,12 @@ all_scores.plot.box(color=color, vert=False)
 plt.xlabel("Accuracy")
 _ = plt.title(
     "Comparison of mean accuracy obtained on the test sets with\n"
-    "and without nested cross-validation"
+    f"and without nested cross-validation N={N_TRIALS}"
 )
-
+plt.savefig(
+    DIR2FIG / "3_flexible_models_cross_validation_nested_overfitting.svg",
+    bbox_inches="tight",
+)
 # %% [markdown]
 # We observe that the generalization performance estimated without using nested
 # CV is higher than what we obtain with nested CV. The reason is that the tuning
