@@ -12,8 +12,8 @@
 # ---
 
 # %% [markdown]
-# # 📝 Exercise M3.02
 #
+# # 📝 TODO
 # The goal is to find the best set of hyperparameters which maximize the
 # generalization performance on a training set.
 

@@ -86,6 +86,7 @@ survey.target.head()
 
 from sklearn.model_selection import train_test_split
 
+# ### 📝 TODO make the split
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
 
 # %%
@@ -138,6 +139,7 @@ survey.data.info()
 from sklearn.compose import make_column_transformer
 from sklearn.preprocessing import OneHotEncoder
 
+# # 📝 TODO : create a preprocessor that handle the categorical columns with a OneHotEncoder and does nothing with the numerical ones
 categorical_columns = ["RACE", "OCCUPATION", "SECTOR", "MARR", "UNION", "SEX", "SOUTH"]
 numerical_columns = ["EDUCATION", "EXPERIENCE", "AGE"]
 
@@ -146,11 +148,11 @@ preprocessor = make_column_transformer(
     remainder="passthrough",
     verbose_feature_names_out=False,  # avoid to prepend the preprocessor names
 )
-
 # %%
 # To describe the dataset as a linear model we use a ridge regressor
 # with a very small regularization and to model the logarithm of the WAGE.
-
+# # 📝 TODO: make a pipeline with the preprocessor, and a ridge regressor encapusled in a TransformedTargetRegressor with a log10 transformation.
+# Use
 from sklearn.compose import TransformedTargetRegressor
 from sklearn.linear_model import Ridge
 from sklearn.pipeline import make_pipeline
@@ -211,7 +213,10 @@ plt.tight_layout()
 #
 # First of all, we can take a look to the values of the coefficients of the
 # regressor we have fitted.
+# ### 📝 TODO: use the `.get_feature_names_out()` to inspect the coefs
+
 feature_names = model[:-1].get_feature_names_out()
+
 
 coefs = pd.DataFrame(
     model[-1].regressor_.coef_,
@@ -257,7 +262,7 @@ plt.subplots_adjust(left=0.3)
 X_train_preprocessed = pd.DataFrame(
     model[:-1].transform(X_train), columns=feature_names
 )
-
+### 📝 TODO: plot the standard deviations of the features
 X_train_preprocessed.std(axis=0).plot.barh(figsize=(9, 7))
 plt.title("Feature ranges")
 plt.xlabel("Std. dev. of feature values")
@@ -346,6 +351,8 @@ plt.subplots_adjust(left=0.3)
 from sklearn.model_selection import RepeatedKFold, cross_validate
 
 cv = RepeatedKFold(n_splits=5, n_repeats=5, random_state=0)
+
+### 📝 TODO: use the cross_validate function to evaluate the coefficients on repeated splits. Use the splitting strategy `cv` defined above.
 cv_model = cross_validate(
     model,
     X,
@@ -354,7 +361,8 @@ cv_model = cross_validate(
     return_estimator=True,
     n_jobs=2,
 )
-
+# %%
+# Assembling the coefficients
 coefs = pd.DataFrame(
     [
         est[-1].regressor_.coef_ * est[:-1].transform(X.iloc[train_idx]).std(axis=0)
@@ -362,7 +370,6 @@ coefs = pd.DataFrame(
     ],
     columns=feature_names,
 )
-
 # %%
 plt.figure(figsize=(9, 7))
 sns.stripplot(data=coefs, orient="h", palette="dark:k", alpha=0.5)
@@ -384,7 +391,7 @@ plt.subplots_adjust(left=0.3)
 #
 # To verify this interpretation we plot the variability of the AGE and
 # EXPERIENCE coefficient.
-#
+### 📝 TODO: use the plt.scatter for this.
 # .. _covariation:
 
 plt.ylabel("Age coefficient")
@@ -401,7 +408,7 @@ _ = plt.title("Co-variations of coefficients for AGE and EXPERIENCE across folds
 #
 # To go further we remove one of the 2 features and check what is the impact
 # on the model stability.
-
+# ### 📝 TODO: drop the AGE column and run the same repeated split analysis on the dataset without this column.
 column_to_drop = ["AGE"]
 
 cv_model = cross_validate(
@@ -448,9 +455,9 @@ plt.subplots_adjust(left=0.3)
 # in the ridge.
 # The preprocessor is redefined in order to subtract the mean and scale
 # variables to unit variance.
-
 from sklearn.preprocessing import StandardScaler
 
+### 📝 TODO: redifine the preprocessor to scale the numerical columns
 preprocessor = make_column_transformer(
     (OneHotEncoder(drop="if_binary"), categorical_columns),
     (StandardScaler(), numerical_columns),
@@ -493,7 +500,7 @@ plt.tight_layout()
 # %%
 # For the coefficient analysis, scaling is not needed this time because it
 # was performed during the preprocessing step.
-
+### 📝 TODO: plot the new model coefficients
 coefs = pd.DataFrame(
     model[-1].regressor_.coef_,
     columns=["Coefficients importance"],
@@ -566,6 +573,7 @@ model[-1].regressor_.alpha_
 
 # %%
 # Then we check the quality of the predictions.
+### 📝 TODO: check the performances of the new regularized model.
 mae_train = median_absolute_error(y_train, model.predict(X_train))
 y_pred = model.predict(X_test)
 mae_test = median_absolute_error(y_test, y_pred)
@@ -587,7 +595,7 @@ plt.tight_layout()
 # %%
 # The ability to reproduce the data of the regularized model is similar to
 # the one of the non-regularized model.
-
+### 📝 TODO: plot the new regularized model coefficients
 coefs = pd.DataFrame(
     model[-1].regressor_.coef_,
     columns=["Coefficients importance"],
@@ -647,10 +655,10 @@ _ = plt.title("Co-variations of coefficients for AGE and EXPERIENCE across folds
 # coefficients. :class:`~sklearn.linear_model.LassoCV` applies cross
 # validation in order to determine which value of the regularization parameter
 # (`alpha`) is best suited for the model estimation.
-
 from sklearn.linear_model import LassoCV
 
 alphas = np.logspace(-10, 10, 21)  # alpha values to be chosen from by cross-validation
+### 📝 TODO: do the same analysis with LassoCV (L1 regularization)
 model = make_pipeline(
     preprocessor,
     TransformedTargetRegressor(
