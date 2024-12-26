@@ -1025,7 +1025,6 @@
   - url: https://github.com/strayMat/causal-ml-course/tree/main/notebooks
 ]
 
-
 #slide(title: "Take home messages: Bias-variance trade-off")[
   == High bias == underfitting
 
