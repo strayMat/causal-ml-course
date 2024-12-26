@@ -128,7 +128,7 @@ jupyter-notebook:
 	poetry run jupyter notebook --notebook-dir=notebooks
 
 .PHONY: jupyter-ipynb
-## Convert all notebooks to ipynb format
+## Convert all notebooks to ipynb format (wo execution)
 jupyter-ipynb:
 	poetry run jupytext notebooks/*.py --to ipynb 
 
@@ -137,7 +137,12 @@ jupyter-ipynb:
 ## e.g.,
 ## `make docs-html` builds the docs in HTML format,
 ## `make docs-clean` cleans the docs build directory
+## Steps:
+## - Copy slides to docs
+## - convert into ipynb the python files for the practical sessions (wo execution)
+## - Build docs
 docs-%:
+	poetry run jupytext notebooks/*.py --to ipynb 
 	cp slides/biblio.bib slides/*.pdf docs/source/_static/slides/
 	$(MAKE) $* -C docs
 

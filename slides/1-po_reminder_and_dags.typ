@@ -488,9 +488,6 @@
   )
 
 ]
-//TODO: what could go wrong : selection bias, and other design issues
-
-
 
 #slide(title: [PICO: other examples in econometrics])[
   The Oregon Health Insurance Experiment @finkelstein2012oregon : A randomized experiment by lottery assessing the impact of Medicaid on low-income adults in Oregon.
