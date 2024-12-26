@@ -4,9 +4,18 @@ from pgmpy.base.DAG import DAG
 import matplotlib.pyplot as plt
 import pandas as pd
 # %% [markdown]
+
+# In this practical session, we will cover the following topics:
+# - Graph Generation and Plotting
+# - Simulation studies for common causal fallacies
+#   - Fork paths
+#   - Collider bias
+
 # # Graph Generation and Plotting
 
 # The following DAG is due to Judea Pearl.
+# We will use it to illustrate how to generate a graph and plot it.
+# We will also show how to compute the ancestors and descendants of a node.
 # %%
 digraph = nx.DiGraph(
     [
@@ -46,16 +55,20 @@ for dsep in dseps.get_assertions():
         print(dsep)
 # %% [markdown]
 # # Simulation studies
-
+#
 # ## A fork of icecream under the sun
-
+#
 # [Credits to Prof. Reza Arghandeh](https://github.com/Ci2Lab/Applied_Causal_Inference_Course/blob/main/lectures/CH-3-Graphical-Causal-Models.ipynb)
-
-# In hot summer months, people tend to consume more ice cream and are also more likely to get sunburns. While it might seem that Ice Cream Consumption (I) and Number of Sunburns (S) are related, this relationship is actually driven by a third variable, Hot Temperature (H).
+#
+# In hot summer months, people tend to consume more ice cream and are also more
+# likely to get sunburns. While it might seem that Ice Cream Consumption (I) and
+#  Number of Sunburns (S) are related, this relationship is actually driven by a
+# third variable, Hot Temperature (H).
 
 # ### Causal graph for icecream and sunburns
 #
-# - TODO: Draw the graph the graph corresponding to the causal relationships between these variables.
+# - TODO: Draw the causal graph corresponding to the causal relationships
+# between these variables.
 # %%
 digraph = nx.DiGraph(
     [
@@ -67,7 +80,7 @@ G = DAG(digraph)
 nx.draw_planar(G, with_labels=True)
 plt.show()
 # %% [markdown]
-# ## Simulate the data for icecream and sunburns
+# ### Simulate the data for icecream and sunburns
 # Let's generate synthetic data for the three variables:
 # %%
 import numpy as np
@@ -106,9 +119,11 @@ data = pd.DataFrame(
 data.head()
 # %% [markdown]
 # ### Visualize the relationships between icecream and sunburns
-# We now use a scatter plot matrix to visualize the pairwise relationships between Hot Temperature, Ice Cream Consumption, and Number of Sunburns.
+# We now use a scatter plot matrix to visualize the pairwise relationships
+# between Hot Temperature, Ice Cream Consumption, and Number of Sunburns.
 # %%
-# Visualizing the scatter plot matrix
+# - TODO: Visualize the scatter plot matrix for the data. You can use the
+# pairplot function from seaborn.
 sns.pairplot(data)
 plt.suptitle(
     "Scatter Plot Matrix: Ice Cream Consumption, Sunburns, and Hot Temperature", y=1.02
@@ -117,8 +132,8 @@ plt.show()
 
 # %% [markdown]
 # ### Regression analysis for icecream and sunburns
-# First let's begin by a naive regression analysis between Ice Cream Consumption and Number of Sunburns.
-
+# First let's begin by a naive regression analysis between Ice Cream Consumption
+#  and Number of Sunburns.
 # %%
 import statsmodels.formula.api as smf
 
@@ -126,16 +141,22 @@ import statsmodels.formula.api as smf
 naive_fit = smf.ols("number_sunburns ~ ice_cream_consumption", data).fit()
 print(naive_fit.summary())
 # %% [markdown]
-# We see that the coefficient for ice_cream_consumption is positive and statistically significant. This might lead us to believe that ice cream consumption causes sunburns. However, this is not the case. The relationship between ice cream consumption and sunburns is confounded by hot temperature. Let's see what happens when we control for hot temperature.
+# We see that the coefficient for ice_cream_consumption is positive and
+# statistically significant. This might lead us to believe that ice cream
+# consumption causes sunburns. However, this is not the case. The relationship
+#  between ice cream consumption and sunburns is confounded by hot temperature.
+#  Let's see what happens when we control for hot temperature.
 # %%
-# Resizualized with Hot Temperature
-# the ice_cream_consumption
+# ### Resizualized with Hot Temperature
+# - TODO: Perform a regression analysis for both the ice cream and the number of
+#  sun burns to *regress away* the effect of the hot_temperature.
+# Regression for ice_cream_consumption
 ice_cream_ols = smf.ols("ice_cream_consumption ~ hot_temperature", data).fit()
 print(ice_cream_ols.summary())
 ice_cream_debiased = data["ice_cream_consumption"] - ice_cream_ols.predict(
     data[["hot_temperature"]]
 )
-# the sun_burns
+# Regression for number_sunburns
 sun_burns_ols = smf.ols("number_sunburns ~ hot_temperature", data).fit()
 print(sun_burns_ols.summary())
 sunburns_debiased = data["number_sunburns"] - sun_burns_ols.predict(
@@ -150,27 +171,36 @@ residuals_data = pd.DataFrame(
         "sunburns_residuals": sunburns_debiased,
     }
 )
-# Visualize residuals (relationship after conditioning)
+# ## Visualize the residuals (relationship after conditioning)
 sns.pairplot(residuals_data)
 plt.suptitle("Residuals (Conditioned on Temperature)", y=1.02)
 plt.show()
 # %% [markdown]
-# Debiased regression
+# ## Debiased regression
 # %%
 print(
     smf.ols("sunburns_residuals ~ ice_cream_residuals", residuals_data).fit().summary()
 )
 # %% [markdown]
-# The coefficient for ice_cream_residuals is now close to zero and not statistically significant. This suggests that the relationship between ice cream consumption and number of sunburns is spurious and driven by hot temperature.
+# The coefficient for ice_cream_residuals is now close to zero and not
+# statistically significant. This suggests that the relationship between ice
+# cream consumption and number of sunburns is spurious and driven by hot
+# temperature.
 # %% [markdown]
-# ## Collider bias for celebrities at Hollywood
-
-# Here is a simple example to illustate the collider or M-bias.
-# Credits to [Chernozhulov et al., Causal ML book](https://www.causalml-book.org/).
-
-# The idea is that people who get to Hollywood have to have high congenility = talent + beauty. Funnily enough this induces a negative correlation between talents and looks, when we condition on the set of actors or celebrities.
+# # Collider bias for celebrities at Hollywood
 #
-# This simple example explains an anecdotal observation that "talent and beaty are negatively correlated" for celebrities.
+# Here is a simple example to illustate the collider or M-bias.
+# Credits to [Chernozhulov et al., 2024, Causal ML book](https://www.causalml-book.org/).
+#
+# The idea is that people who get to Hollywood tend to have a high
+# congenility = talent + beauty. Funnily enough this induces a negative
+# correlation between talents and looks, when we condition on the set of actors
+# or celebrities.
+#
+# This simple example explains an anecdotal observation that "talent and beauty
+# are negatively correlated" for celebrities.
+# This is a form of collider bias, also coined as selection bias for this specific case.
+#
 # ### Causal graph for celebrities at Hollywood
 
 # - TODO: Draw the graph the graph corresponding to the causal relationships between these variables.
@@ -195,7 +225,7 @@ hollywood_data = pd.DataFrame(
         "congeniality": congeniality,
     }
 )
-# Create the conditional variables
+# Create the conditional variable: celebrity is True if congeniality > 2
 hollywood_data["celebrity"] = hollywood_data["congeniality"] > 2
 # %% [markdown]
 # ### Visualize the relationships for celebrities at Hollywood
@@ -216,11 +246,16 @@ plt.suptitle("Pair plot (celebrities only) : Talent, Beauty", y=1.02)
 plt.show()
 
 # %% [markdown]
-# We see that for the whole data, there is no correlation between talent and beauty. However, when we condition on the set of celebrities, we see a negative correlation between talent and beauty. This is an example of collider bias.
+# We see that for the whole data, there is no correlation between talent and
+# beauty. However, when we condition on the set of celebrities, we see a
+# negative correlation between talent and beauty. This is an example of collider
+# bias.
 
 # ### Regression analysis for celebrities at Hollywood
-# Recover what we have seen in the pairplot, that is, the negative correlation between talent and beauty for celebrities.
-# - TODO: Perform regression analysis to show the collider bias.
+# Recover what we have seen in the pairplot, that is, the negative correlation
+# between talent and beauty for celebrities.
+# - TODO: Perform regression analysis to show the collider bias. You should
+# contrast a regression analysis for the whole data and for the celebrities only.
 print(smf.ols("talent ~ beauty", hollywood_data).fit().summary())
 print(smf.ols("talent ~ beauty + congeniality", hollywood_data).fit().summary())
 # %%
