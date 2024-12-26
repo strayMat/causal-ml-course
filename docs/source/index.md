@@ -8,6 +8,7 @@
    
    Syllabus <syllabus>
    Slides <slides>
+   Pratical sessions <practical_sessions>
    ```
 
 ```{eval-rst}
