@@ -28,21 +28,12 @@ classifiers = [
 python = "^3.10"
 
 # Project-Specific
-python-dotenv = "^0.20.0"
-click = "^8.0.4"
-ipython = "^8.29.0"
 numpy = "^2.1.2"
 networkx = "^3.4.1"
 pgmpy = "^0.1.26"
-wooldridge = "^0.4.5"
 tabulate = "^0.9.0"
 seaborn = "^0.13.2"
-
-[tool.poetry.group.notebooks.dependencies]
-# Jupyter Notebook
-jupyter = "^1.0.0"
 matplotlib = "^3.5.1"
-jupytext = "^1.13.7"
 
 [tool.poetry.group.documentation.dependencies]
 sphinx = "^8.0.2"
@@ -52,9 +43,12 @@ pygments = "^2.18.0"
 pydata-sphinx-theme = "^0.15.4"
 sphinxcontrib-bibtex = "^2.6.1"
 
-
 [tool.poetry.group.dev.dependencies]
 ipdb = "^0.13.13"
+ipython = "^8.29.0"
+jupytext = "^1.13.7"
+jupyter = "^1.0.0"
+python-dotenv = "^0.20.0"
 
 [tool.poetry.scripts]
 cli = "bin.cli:cli"

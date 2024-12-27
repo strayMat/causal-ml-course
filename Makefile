@@ -143,6 +143,7 @@ jupyter-ipynb:
 ## - Build docs
 docs-%:
 	poetry run jupytext notebooks/*.py --to ipynb 
+	mkdir -p docs/source/_static/slides
 	cp slides/biblio.bib slides/*.pdf docs/source/_static/slides/
 	$(MAKE) $* -C docs
 
