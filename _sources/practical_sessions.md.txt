@@ -5,7 +5,7 @@
 - Introduction to scikit-learn: [![Open practical session in colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/strayMat/causal-ml-course/blob/main/notebooks/penalized_linear_models_sklearn_intro.ipynb)
 
 
-- [test sspcloud](https://datalab.sspcloud.fr/launcher/ide/jupyter-python?autoLaunch=true&onyxia.friendlyName=%C2%ABpenalized_linear_models_sklearn_intro%C2%BB&init.personalInit=%C2%ABhttps%3A%2F%2Fraw.githubusercontent.com%2Fstraymat2Fcausal-ml-course%2Fmaster%2Fsspcloud%2Finit-jupyter.sh%C2%BB&init.personalInitArgs=%C2%ABpenalized_linear_models_sklearn_intro%C2%BB&security.allowlist.enabled=false)
+- [test sspcloud](https://datalab.sspcloud.fr/launcher/ide/jupyter-python?autoLaunch=true&onyxia.friendlyName=%C2%ABpenalized_linear_models_sklearn_intro%C2%BB&init.personalInit=%C2%ABhttps%3A%2F%2Fraw.githubusercontent.com%2FstrayMat2Fcausal-ml-course%2Fmain%2Fsspcloud%2Finit-jupyter.sh%C2%BB&init.personalInitArgs=%C2%ABpenalized_linear_models_sklearn_intro%C2%BB&security.allowlist.enabled=false)
 
 ## 1b) Statistical learning and regularized linear models
 
