@@ -3,6 +3,7 @@ Simple styling used for matplotlib figures
 """
 
 from matplotlib import pyplot as plt
+from pyparsing import C
 
 # Configuration settings to help visibility on small screen / prints
 plt.rcParams["xtick.labelsize"] = 20
@@ -34,3 +35,7 @@ def light_axis():
 def no_axis():
     plt.axis("off")
     plt.subplots_adjust(left=0.0, bottom=0.0, top=1, right=1)
+
+
+TREATED_COLOR = plt.get_cmap("tab10")(0)  # Default matplotlib blue
+CONTROL_COLOR = plt.get_cmap("tab10")(1)  # Default matplotlib orange

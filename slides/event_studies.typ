@@ -117,23 +117,110 @@
   date: "February, 11th, 2025",
 )
 
+
+#new-section-slide("Motivation")
+#slide(title: "Setup: event studies")[
+
+  == Estimation of the effect of a treatment when data is
+
+
+  Aggregated: eg. country-level data such as employment rate, GDP, etc.
+
+  #pause
+
+  Longitudinal: eg. multiple time periods or repeated cross-sections
+
+  #pause
+
+  With multiple units: eg. multiple countries, firms, regions.
+
+  #pause
+
+  Staggered adoption of the treatment: eg. different countries adopt a policy at different times.
+
+  #pause
+
+  This setup is known as: #alert[panel data, event studies, longitudinal data, time-series data.]
+]
+
+#slide(title: "Setup: event studies are quasi-experiment")[
+  - #link("https://en.wikipedia.org/wiki/Quasi-experiment", "Quasi-experiment"): a situation where the treatment is not randomly assigned by the researcher but by nature or society.
+
+  - A convincing quasi-experiment introduces a certain amount of randomness in the treatment assignment (sometimes called exogeneity): it enforces the ignorability assumption (unconfoundedness).
+
+  == Today: Three quasi-experimental designs for event studies
+
+  - The simple method of difference-in-differences with a strong assumption called paralled trend
+
+  - Synthetic control method: a balancing method (think to propensity score matching)
+
+  - Conditional DID: a doubly robust method combining outcomes and propensity score models
+]
+
+
 #slide(title: "Table of contents")[
   #metropolis-outline
 ]
-
-#new-section-slide("Motivation")
-
-
-#new-section-slide("A visual reminder on difference-in-differences")
+#new-section-slide("Reminder on difference-in-differences")
 
 #slide(title: "Difference-in-differences")[
 
-  == Difference-in-differences
+  == History
 
-  - Introduced by
-  - A method to estimate the effect of a treatment on a treated unit
-  - The treatment effect is estimated by comparing the evolution of the treated unit to a control unit
+  - First documented example (though not formalized): John Snow showing how cholera spread through the water in London @snow1855mode #footnote[#text(size: 15pt)[Good description: #link("https://mixtape.scunning.com/09-difference_in_differences#john-snows-cholera-hypothesis")]]
+
+  - Modern usage introduced formally by @ashenfelter1978estimating, applied to labor economics
+
+  == Idea
+  - Contrast the temporal effect of the treated unit with the control unit temporal effect:
+
   - The difference between the two differences is the treatment effect
+]
+
+#slide(title: "Difference-in-differences framework")[
+  #only(1)[
+    == Two period of times: t=1, t=2
+    #figure(image("img/pyfigures/did_setup.svg", width: 50%))
+  ]
+  #only((2, 3))[
+    === Potential outcomes: $Y_t (d)$ where $d={0,1}$ is the treatment at period 2
+
+    #figure(image("img/pyfigures/did_t1_factual.svg", width: 50%))
+  ]
+  #only(3)[
+    ⚠️ $EE[Y_1(1)] = EE[Y_1 (1) |D=1] PP(D=1) +  EE[Y_1 (1) |D=0] PP(D=0)$ #linebreak() but we only observe $EE[Y_1 (1) |D=1]$
+  ]
+  #only((4, 5))[
+    === Our target is the average treatment effect on the treated (ATT)
+
+    #figure(image("img/pyfigures/did_factual.svg", width: 50%))
+  ]
+
+  #only(4)[$tau_("ATT") = EE[Y_2 (1)| D = 1] - EE [Y_2(0)| D = 1]$]
+
+  #only(5)[$tau_("ATT") = EE[Y_2 (1)| D = 1] - underbrace(EE [Y_2(0)| D = 1], "unobserved since counterfactual")$]
+
+  #only((6, 7, 8))[
+    === First assumption: Parallel trends #only(7)[
+  #footnote[⚠️ Strong assumption ! We will come back to it later.]
+  ]
+    $EE[Y_2(0) - Y_1(0) | D = 1] = EE[Y_2(0) - Y_1(0) | D = 0]$
+    #figure(image("img/pyfigures/did_parallel_trends.svg", width: 50%))
+  ]
+
+  #only(13)[
+    === Second assumption: No anticipation of the treatment
+
+    $E[Y_1(1)|D=1]=E[Y_1(0)|D=1]$
+
+    #figure(image("img/pyfigures/did_no_anticipation.svg", width: 50%))
+
+  ]
+]
+
+
+#slide(title: "Difference-in-differences: formalization")[
+
 ]
 
 #slide(title: "Target effect: Sample Average Treatment effect on the Treated, SATT")[
@@ -178,7 +265,8 @@
   This link can be seen with the parallel trend assumption: $beta_t= $
 ]
 
-#new-section-slide("Interrupted Time Series")
+#new-section-slide("Conditional difference-in-differences")
+
 
 #new-section-slide("Synthetic Controls")
 
@@ -192,7 +280,10 @@
   Example for the effect of taxes on sugar-based product consumption in @puig2021impact, review of usage in healthcare @bouttell2018synthetic.
 ]
 
-#new-section-slide("Time-series modelisation: other methods")
+#new-section-slide("Time-series modelisation: methods without a control group")
+
+#new-section-slide("Interrupted Time Series")
+
 
 #slide(title: "State space models")[
 
