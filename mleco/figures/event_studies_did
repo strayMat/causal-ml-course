@@ -1,0 +1,152 @@
+# %%
+import matplotlib.pyplot as plt
+import numpy as np
+from mleco.constants import DIR2FIG
+from mleco.figures import style_figs
+
+# %%
+# Create the figure and axis
+fig, ax = plt.subplots(figsize=(10, 6))
+
+fontsize = 15
+# Define coordinates for the points
+# At t=1
+label_treated_t1 = "$E[Y_1(0)|D=1]$"
+E_Y10_D1 = (1, 2)
+label_control_t1 = "$E[Y_1(0)|D=0]$"
+E_Y10_D0 = (1, 4)
+
+# At t=2
+label_treated_t2 = "$E[Y_2(1)|D=1]$"
+E_Y21_D1 = (2, 1.5)
+label_control_t2 = "$E[Y_2(0)|D=0]$"
+E_Y20_D0 = (2, 3)
+label_treated_counterfactual_t2 = "$E[Y_2(0)|D=1]$"
+coef_parallel_trends = E_Y20_D0[1] - E_Y10_D0[1]
+E_Y20_D1 = (2, E_Y10_D1[1] + coef_parallel_trends)
+
+# setup without any points
+# styling
+ax.set_xticks([1, 2])
+ax.set_xticklabels(["t = 1", "t = 2"])
+# ax.set_yticks([])
+ax.axhline(0, color="black", linewidth=0.5)
+ax.axvline(0, color="black", linewidth=0.5)
+ax.set_xlim(0.8, 2.35)
+ax.set_ylim(0, 5)
+# add treatment vline
+ax.vlines(x=1.5, ymin=0, ymax=5, linestyles="--", color="grey", alpha=0.5)
+label_treatment = ax.text(1.52, 0.05, "Treatment", fontsize=fontsize, color="black")
+plt.savefig(DIR2FIG / "did_setup.svg", bbox_inches="tight")
+# Plot points
+ax.plot(*E_Y10_D0, "ko", label=label_control_t1, color=style_figs.CONTROL_COLOR)
+ax.text(
+    E_Y10_D0[0],
+    E_Y10_D0[1] + 0.15,
+    label_control_t1,
+    fontsize=fontsize,
+    color=style_figs.CONTROL_COLOR,
+)
+ax.plot(*E_Y10_D1, "ko", label=label_treated_t1, color=style_figs.TREATED_COLOR)
+label_treated_t1_factual = "$E[Y_1(1)|D=1]$"
+plot_label_treated_t1_factual = ax.text(
+    E_Y10_D1[0],
+    E_Y10_D1[1] + 0.15,
+    label_treated_t1_factual,
+    fontsize=fontsize,
+    color=style_figs.TREATED_COLOR,
+)
+plt.savefig(DIR2FIG / "did_t1_factual.svg", bbox_inches="tight")
+ax.plot(*E_Y20_D0, "ko", label=label_control_t2, color=style_figs.CONTROL_COLOR)
+ax.text(
+    E_Y20_D0[0],
+    E_Y20_D0[1] + 0.15,
+    label_control_t2,
+    fontsize=fontsize,
+    color=style_figs.CONTROL_COLOR,
+)
+ax.plot(*E_Y21_D1, "ko", label=label_treated_t2, color=style_figs.TREATED_COLOR)
+ax.text(
+    E_Y21_D1[0],
+    E_Y21_D1[1] + 0.15,
+    label_treated_t2,
+    fontsize=fontsize,
+    color=style_figs.TREATED_COLOR,
+)
+
+# Draw solid lines for observed paths
+ax.plot([1, 2], [E_Y10_D1[1], E_Y21_D1[1]], "k-", color=style_figs.TREATED_COLOR)
+ax.plot([1, 2], [E_Y10_D0[1], E_Y20_D0[1]], "k-", color=style_figs.CONTROL_COLOR)
+plt.savefig(DIR2FIG / "did_factual.svg", bbox_inches="tight")
+
+plot_label_treated_t1_factual.remove()
+label_treated_t1_no_anticipation = ax.text(
+    E_Y10_D1[0],
+    E_Y10_D1[1] + 0.15,
+    "$E[Y_1(1)|D=1]=$" + label_treated_t1,
+    fontsize=fontsize,
+    color=style_figs.TREATED_COLOR,
+)
+plt.savefig(DIR2FIG / "did_no_anticipation.svg", bbox_inches="tight")
+label_treated_t1_no_anticipation.remove()
+ax.text(
+    E_Y10_D1[0],
+    E_Y10_D1[1] + 0.15,
+    label_treated_t1,
+    fontsize=fontsize,
+    color=style_figs.TREATED_COLOR,
+)
+# Draw dashed lines for parallel trends assumption
+ax.plot(
+    [1, 2],
+    [E_Y10_D0[1], E_Y20_D0[1]],
+    "b--",
+    label="Parallel Trends",
+    color="black",
+    alpha=0.5,
+)
+ax.plot(
+    [1, 2],
+    [E_Y10_D1[1], E_Y20_D1[1]],
+    "b--",
+    label="Parallel Trends",
+    color="black",
+    alpha=0.5,
+)
+ax.plot(*E_Y20_D1, "ko", label=label_treated_t2, color=style_figs.TREATED_COLOR)
+ax.text(
+    E_Y20_D1[0],
+    E_Y20_D1[1] - 0.05,
+    label_treated_counterfactual_t2 + "\n counterfactual",
+    va="top",
+    fontsize=fontsize,
+    color=style_figs.TREATED_COLOR,
+)
+plt.savefig(DIR2FIG / "did_parallel_trends.svg", bbox_inches="tight")
+
+# %%
+# Add annotation for ATET
+ax.annotate(
+    "ATET = $E[Y_2(1)|D=1] - E[Y_2(0)|D=1]$",
+    xy=(2, 4),
+    xytext=(1.5, 4.5),
+    arrowprops=dict(facecolor="red", arrowstyle="->"),
+    color="red",
+)
+
+# Add labels for each point
+ax.text(E_Y10_D0[0] - 0.15, E_Y10_D0[1] - 0.15, "$E[Y_1(0)|D=0]$", fontsize=10)
+ax.text(E_Y10_D1[0] - 0.15, E_Y10_D1[1] + 0.1, "$E[Y_1(0)|D=1]$", fontsize=10)
+ax.text(E_Y20_D0[0] + 0.05, E_Y20_D0[1] - 0.15, "$E[Y_2(0)|D=0]$", fontsize=10)
+ax.text(E_Y20_D1[0] + 0.05, E_Y20_D1[1] + 0.1, "$E[Y_2(1)|D=1]$", fontsize=10)
+
+# Draw "No Anticipation" text
+ax.text(1.5, 3.2, "No Anticipation", fontsize=10, color="blue")
+
+
+# Add legend
+ax.legend(fontsize=9, loc="upper left")
+
+# Show plot
+plt.tight_layout()
+plt.show()
