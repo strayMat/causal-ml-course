@@ -80,7 +80,7 @@
   }
 
   let footer = {
-    set text(size: 0.8em)
+    set text(size: 0.6em)
     show: pad.with(.5em)
     set align(bottom)
     text(fill: m-dark-teal.lighten(40%), m-footer.display())
@@ -91,7 +91,7 @@
   set page(
     header: header,
     footer: footer,
-    margin: (top: 3em, bottom: 1.5em),
+    margin: (top: 3em, bottom: 0.5em),
     fill: m-extra-light-gray,
   )
 
@@ -143,10 +143,15 @@
   This setup is known as: #alert[panel data, event studies, longitudinal data, time-series data.]
 ]
 
+#slide(title: "Examples of event studyies for policy question")[
+
+]
+
 #slide(title: "Setup: event studies are quasi-experiment")[
   - #link("https://en.wikipedia.org/wiki/Quasi-experiment", "Quasi-experiment"): a situation where the treatment is not randomly assigned by the researcher but by nature or society.
 
-  - A convincing quasi-experiment introduces a certain amount of randomness in the treatment assignment (sometimes called exogeneity): it enforces the ignorability assumption (unconfoundedness).
+  - Should introduces some randomness in the treatment assignment: enforcing treatment exogeneity, ie. ignorability (ie. unconfoundedness).
+  //#TODO causal diagram with times
 
   == Today: Three quasi-experimental designs for event studies
 
@@ -198,87 +203,121 @@
 
   #only(4)[$tau_("ATT") = EE[Y_2 (1)| D = 1] - EE [Y_2(0)| D = 1]$]
 
-  #only(5)[$tau_("ATT") = EE[Y_2 (1)| D = 1] - underbrace(EE [Y_2(0)| D = 1], "unobserved since counterfactual")$]
+  #only(5)[$tau_("ATT") = underbrace([Y_2 (1)| D = 1], #c_treated("treated outcome for t=2")) - underbrace(EE [Y_2(0)| D = 1], "unobserved counterfactual")$]
 
-  #only((6, 7, 8))[
-    === First assumption: Parallel trends #only(7)[
-  #footnote[⚠️ Strong assumption ! We will come back to it later.]
-  ]
+  #only(6)[
+    === First assumption, parallel trends
+
     $EE[Y_2(0) - Y_1(0) | D = 1] = EE[Y_2(0) - Y_1(0) | D = 0]$
     #figure(image("img/pyfigures/did_parallel_trends.svg", width: 50%))
   ]
+  #only(7)[
+    === First assumption, parallel trends // #only(7)[#footnote[#text("⚠️ Strong assumption ! We will come back to it later.", size: 15pt)]
+    $underbrace([Y_2(0) - Y_1(0) | D = 1], #c_treated("Trend(1)")) = underbrace(EE[Y_2(0) - Y_1(0) | D = 0], #c_control("Trend(0)"))$
+    #figure(image("img/pyfigures/did_parallel_trends_w_coefs.svg", width: 50%))
+  ]
 
-  #only(13)[
-    === Second assumption: No anticipation of the treatment
+  #only(8)[
+    === First assumption, parallel trends
+
+    $EE[Y_2(0) | D = 1]= EE[Y_1(0) | D = 1] + EE[Y_2(0) - Y_1(0) | D = 0]$
+    #figure(image("img/pyfigures/did_parallel_trends_w_coefs.svg", width: 50%))
+  ]
+  #only(8)[
+    === First assumption, parallel trends
+
+    $EE[Y_2(0) | D = 1]= underbrace([Y_1(0) | D = 1], "unobserved counterfactual") + EE[Y_2(0) - Y_1(0) | D = 0]$
+    #figure(image("img/pyfigures/did_parallel_trends_w_coefs.svg", width: 50%))
+  ]
+
+  #only(9)[
+    === Second assumption, no anticipation of the treatment
 
     $E[Y_1(1)|D=1]=E[Y_1(0)|D=1]$
 
     #figure(image("img/pyfigures/did_no_anticipation.svg", width: 50%))
+  ]
+]
 
+#slide(title: "Difference-in-differences framework: identification of ATT")[
+
+  $tau_("ATT") &= EE[Y_2(1)| D = 1] - EE [Y_2(0)| D = 1]\
+    &= underbrace(EE[Y_2(1)| D = 1] - EE[Y_1(0)|D=1], #c_treated("Factual Trend(1)")) - underbrace(EE[Y_2(0)|D=0] - EE[Y_1(0)|D=0], #c_control("Trend(0)"))$
+  #figure(image("img/pyfigures/did_att.svg", width: 50%))
+]
+
+#slide(title: "Estimation: link with two way fixed effect (TWFE)")[
+
+  #eq[$Y = alpha + gamma D + lambda bb(1) (t=2) + tau_("ATT") D bb(1) (t=2)$]
+
+  #figure(image("img/pyfigures/did_twfe.svg", width: 50%))
+
+  ⚠️ Mechanic link working only with assumptions
+]
+
+//#slide(title: "Failure of the no-anticipation assumption")[]
+
+
+#slide(title: "Failure of the parallel trend assumption")[
+  #only(1)[
+    == Seems like the treatment decreases the outcome!
+    #figure(image("img/pyfigures/did_non_parallel_trends_last_periods.svg", width: 90%))
+  ]
+
+  #only(2)[
+    == Oups...
+    #figure(image("img/pyfigures/did_non_parallel_trends_all_periods.svg", width: 90%))
   ]
 ]
 
 
-#slide(title: "Difference-in-differences: formalization")[
+#slide(title: "DID estimator for more than two time units")[
+  === Target estimand: sample average treatment effect on the treated (SATT)
 
-]
-
-#slide(title: "Target effect: Sample Average Treatment effect on the Treated, SATT")[
   #eq($tau_(text("SATT")) = 1 / (|{i \: D_i=1}|) sum_(i:D_i=1) 1 / (T-H) sum_(t=H+1)^T Y_(i t)(1) - Y_(i t)(0)$)
-]
 
-#slide(title: "DID estimator")[
+  === DID estimator
+
   #eq($hat(tau_(text("DID"))) = 1 / (|{i \: D_i=1}|) sum_(i:D_i=1) [1 / (T-H) sum_(t=H+1)^T Y_(i t) - 1 / H sum_(t=1)^H Y_(i t)] - 1 / (|{i \: D_i=0}|) sum_(i:D_i=0) [1 / (T-H) sum_(t=H+1)^T Y_(i t) - 1 / H sum_(t=1)^H Y_(i t)]$)
-]
-
-#slide(title: "Temporal consistency assumption")[
-  == No anticipation of the treatment (in practice, not always true)
-  #hyp_box[
-    #eq($Y_(i t)(0) = Y_(i t)(1) forall t = 1,..., H.$)
-  ]
-]
-
-#slide(title: "Parallel trend assumption")[
-  == Main and #alert[strong] assumption of the DID method
 
   #hyp_box[
-    #eq($EE [Y_(i t)(0, infinity) - Y_(i 1)(0, infinity)] = beta_t, t = 2,..., T.$)
+    === No anticipation of the treatment: $Y_(i t)(0) = Y_(i t)(1) forall t = 1,..., H.$
+
+    === Parallel trend: $EE [Y_(i t)(0, infinity) - Y_(i 1)(0, infinity)] = beta_t, t = 2,..., T.$
   ]
+  See @wager2024causal for a clear proof of consistancy.
 ]
 
 
-#slide(title: "Parallel trend assumption")[
-  Under the temporal consistency and the parallel trend assumptions, the DID estimator is unbiased ie. $EE[hat(tau_(text("DID")) - tau_(text("SATT")))]=0$
-
-  See @wager2024causal for a clear proof.
+#slide(title: "DID: Take-away")[
+  - Extremely common in economics
+  - Very strong assumptions: parallel trends and no anticipation
+  - Can be extended to @wager2024causal:
+    - more than two time periods: exact same formulation
+    - staggered adoption of the treatment: a bit more complex
+  - Does not account for heterogeneity of treatment effect over time
 ]
-
-#slide(title: "Estimation: link with two way fixed effect")[
-
-  In practice, DID is estimated with a two-way fixed effect model (TWFE):
-
-  #eq[$Y_(i t) tilde alpha_i + beta_t + A_(i t) tau$ where $A_(i t) = D_i * (t<=H)$]
-
-  - $alpha_i$ capture the individual fixed effect
-  - $beta_t$ capture the time fixed effect (under pararell trend)
-
-  This link can be seen with the parallel trend assumption: $beta_t= $
-]
-
-#new-section-slide("Conditional difference-in-differences")
-
+//# TODO?
+//#slide(title:"Inference for DID")[]
 
 #new-section-slide("Synthetic Controls")
 
 #slide()[
   == Synthetic Controls
   Introduced in @abadie2003economic and @abadie2010synthetic, well described in @abadie2021using
-  - A method for estimating the effect of a treatment on a single unit
+  - Estimates the effect of a treatment on a single unit
   - The treatment unit is compared to a weighted average of control units
   - The weights are chosen to minimize the difference between the treated unit and the synthetic control
 
-  Example for the effect of taxes on sugar-based product consumption in @puig2021impact, review of usage in healthcare @bouttell2018synthetic.
+  == Example
+
+  - What is the effect of taxes on sugar-based product consumption @puig2021impact
+
+  - Review for epidemiology @bonander2021synthetic.
 ]
+
+#new-section-slide("Conditional difference-in-differences")
+
 
 #new-section-slide("Time-series modelisation: methods without a control group")
 
