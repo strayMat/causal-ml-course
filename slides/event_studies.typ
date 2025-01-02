@@ -124,11 +124,11 @@
   == Estimation of the effect of a treatment when data is
 
 
-  Aggregated: eg. country-level data such as employment rate, GDP, etc.
+  Aggregated: eg. country-level data such as employment rate, GDP.
 
   #pause
 
-  Longitudinal: eg. multiple time periods or repeated cross-sections
+  Longitudinal: eg. multiple time periods or repeated cross-sections.
 
   #pause
 
@@ -252,7 +252,7 @@
 
   #figure(image("img/pyfigures/did_twfe.svg", width: 50%))
 
-  ⚠️ Mechanic link working only with assumptions
+  ⚠️ Mechanic link: works only under parallel trends and no anticipation assumptions.
 ]
 
 //#slide(title: "Failure of the no-anticipation assumption")[]
@@ -290,38 +290,281 @@
 
 
 #slide(title: "DID: Take-away")[
-  - Extremely common in economics
-  - Very strong assumptions: parallel trends and no anticipation
-  - Can be extended to @wager2024causal:
+  == Pros
+  - Extremely common in economics and quite simple to implement.
+  - Can be extended to @wager2024causal
     - more than two time periods: exact same formulation
     - staggered adoption of the treatment: a bit more complex
-  - Does not account for heterogeneity of treatment effect over time
+
+  == Cons
+  - Very strong assumptions: parallel trends and no anticipation.
+  - Does not account for heterogeneity of treatment effect over time @de2020two.
+
+  #pause
+
+  == Can we do better: ie. robust to the parallel trend assumption?
 ]
 //# TODO?
 //#slide(title:"Inference for DID")[]
 
-#new-section-slide("Synthetic Controls")
+#new-section-slide("Synthetic controls")
 
-#slide()[
-  == Synthetic Controls
-  Introduced in @abadie2003economic and @abadie2010synthetic, well described in @abadie2021using
-  - Estimates the effect of a treatment on a single unit
-  - The treatment unit is compared to a weighted average of control units
-  - The weights are chosen to minimize the difference between the treated unit and the synthetic control
+#slide(title: "Synthetic controls")[
+
+  === References
+
+  Introduced by @abadie2003economic and @abadie2010synthetic.
+
+  Quick introduction in @bonander2021synthetic, technical overiew in @abadie2021using,
+
+  #pause
+
+  #quote(attribution: [@athey2017state], block: true)[
+    The most important innovation in the policy evaluation literature in the last few years
+  ]
+
+  #pause
+  === Idea
+  Find a weighted average of controls that predicts well the treated unit outcome before treatment.
 
   == Example
+  What is the effect of tobacco tax on cigarettes sales? @abadie2010synthetic
+]
 
+#slide(title: "Examples of application of synthetic controls to epidemiology")[
   - What is the effect of taxes on sugar-based product consumption @puig2021impact
 
-  - Review for epidemiology @bonander2021synthetic.
 ]
+
+#slide(title: [Synthetic control example: California's Proposition 99 @abadie2010synthetic])[
+
+  == Context
+
+  1988: 25-cent tax per pack of cigarettes, ban of on cigarette vending machines in public areas accessible by juveniles, and a ban on the individual sale of single cigarettes.
+
+  #pause
+
+  == Setup
+
+  === Outcome, $Y_(j, t)$: cigarette sales per capita
+  #pause
+
+  === Treated unit, $j=1$: California as from 1988
+  #pause
+
+  === Control units, $j in {2,..J}$: 39 other US states without similar policies
+  #pause
+
+  === Time period: $t in {1,..T} = {1970, ..2000}$ and treatment time $T_0 = 1988$
+
+  #pause
+
+  == Covariates $X_(j, t)$: cigarette price, previous cigarette sales.
+]
+
+#slide(title: [Synthetic control example: plot the data])[
+  #figure(image("img/pyfigures/scm_california_vs_other_states.svg", width: 70%))
+
+
+  #pause
+  😯 Decrease in cigarette sales in California.
+
+  #pause
+  🤔 Decrease began before the treatment and occured also for other states.
+]
+
+#slide(title: [Synthetic control example: plot the data])[
+  #figure(image("img/pyfigures/scm_california_and_other_states.svg", width: 70%))
+  #pause
+  💡 Force parallel trends: Find a weighted average of other states that predicts well the pre-treatment trend of California (before $T_0=1988$).
+]
+
+#slide(title: "Synthetic control as weighted average of control outcomes")[
+
+  #side-by-side()[
+    Build a predictor for #c_treated($Y_(1, t)$) (California):
+
+    $#c_treated[$hat(Y)_(1, t)$] = sum_(j=2)^(n_0 + 1) hat(w)_j #c_control[$Y_(j, t)$]$
+
+    #only((2, 3, 4))[
+      🤔How to choose the weights?
+    ]
+
+    #only((2, 3, 4))[
+      Minimize some distance between the treated and the controls.
+    ]
+
+
+    #only(4)[
+      🤓 This is called a balancing estimator: kind of Inverse Probability Weighting @wager2024causal[chapter 7]
+    ]
+  ][
+    #figure(image("img/event_studies/scm_weighted_average.png", width: 100%))
+  ]
+
+]
+
+#slide(title: "Synthetic controls: minimization problem")[
+
+  === Characteristics
+
+  Pre-treatment characteristics concatenate pre-treatment outcomes and other pre-treatment predictors $Z_1$ eg. cigarette prices:
+
+  #c_treated[$X_("treat") = X_1 = vec(Y_(1, 1), Y_(1,2), .., Y_(1, T_0), Z_1)$] $in R^(p times 1)$
+
+
+  #pause
+  Let the control pre-treatment characteristics be: #c_control[$X_("control") = (X_2, .., X_(n_0 + 1))$] $in R^(p times n_0)$
+
+  === Minimization problem #only(5)[with constraints]
+
+  #set align(center)
+  #only((3, 4))[
+    $w^(*) &= "argmin"_(w) ||X_("treat") - X_("control") w||_V^2$
+  ]
+
+  #only(4)[
+    where $||X||_V = sqrt(X^T V X) " with " V in "diag"(R^p)$
+
+    This gives more importance to some features than others.
+  ]
+  #only(5)[
+    $w^(*) &= "argmin"_(w) ||X_("treat") - X_("control") w||_V^2\
+      &s.t. space w_j >= 0, \
+      &sum_(j=2)^(n_0 + 1) w_j = 1$
+  ]
+]
+
+
+#slide(title: "Synthetic controls: Why choose positive weights summing to one?")[
+  == This is called interpolation (vs extrapolation)
+
+  #figure(image("img/event_studies/extrapolation.png", width: 70%))
+
+  #only(2)[
+    == Interpolation enforces regularization, thus limits overfitting
+
+    Same kind of regularization than L1 norm in Lasso: forces some coefficient to be zero (both are #link("https://en.wikipedia.org/wiki/Convex_optimization", [_optimization with constraints on a simplex_])).
+  ]
+]
+
+#slide(title: "Synthetic controls: Extrapolation failure with unconstrained weight")[
+  #set align(horizon)
+  #side-by-side(columns: (2fr, 2fr))[
+    $p=2 T_0$ covariates:
+
+    $X_j= vec(Y_(j, 1), ..,Y_(j, T_0), Z_(j, 1), .., Z_(j, T_0))^T in R^(2T_0)$
+
+    Y cigarette sales, Z cigarette prices.
+
+    #pause
+    Model: $underbrace(X_("treat"), p times 1)  tilde underbrace(X_("control"), p times n_0) underbrace(w, n_0)$
+
+    #pause
+    Prediction: $hat(Y)_("synth") = vec(Y_(t, j))_(t=1..T#linebreak()j=2..n_0+1) w$
+  ][
+    #pause
+    #figure(image("img/pyfigures/scm_california_vs_synth_lr.svg", width: 100%))
+  ]
+  #only(5)[=== 😭 Overfitting]
+]
+
+
+#slide(title: [Synthetic controls: How to choose the predictor weights $V$?])[
+
+  1. Don't choose: set $V = I_(p)$, ie. $||X||_V = ||X||_2$.
+
+  #pause
+  2. Rescale by the variance of the predictors: #linebreak() $V = "diag"("var"(Y_(j, 1))^(-1), .., "var"(Y_(j, T_0))^(-1), "var"(Z_(j, 1))^(-1), .., "var"(Z_(j, T_0))^(-1))$.
+
+  #pause
+  3. Minimize the pre-treatment mean squared prediction error (MSPE) of the treated unit:
+
+  $"MSPE"(V) &= sum_(t=1)^(T_0) [Y_(1, t) - sum_(j=2)^(n_0+1) w_j^*(V) Y_(j, t)]^2 \
+    &= || vec(Y_(1, t))_(t=1..T_0) - vec(Y_(j, t))^T_(j=2..n_0+1#linebreak()t=1..T_0) hat(w) ||_(2)^(2)$
+
+  This solution is solved by running two optimization problems:
+  - inner loop solving $w^*(V)= "argmin"_(w) ||X_("treat") - X_("control") w||_V^2$
+
+  - aouter loop solving $V^*= "argmin"_(V) "MSPE"(V)$
+]
+//TODO: cross validation for the choice of V
+
+#slide(title: "Synthetic controls: estimation without the outer optimization problem")[
+  #side-by-side(columns: (1.5fr, 2fr))[
+
+    Same coviarates: $X_j= vec(Y_(j, 1), ..,Y_(j, T_0), Z_(j, 1), .., Z_(j, T_0))^T$
+
+    Y cigarette sales, Z cigarette prices.
+
+
+    SCM minization with $V = I_(p)$, hence, $||X||_V = ||X||_2$.
+    #v(1em)
+
+    $w^(*) &= "argmin"_(w) ||X_("treat") - X_("control") w||_2^2\
+      &s.t. space w_j >= 0, \
+      &sum_(j=2)^(n_0 + 1) w_j = 1$
+
+  ][
+    #pause
+    #figure(image("img/pyfigures/scm_california_vs_synth_wo_v.svg", width: 100%))
+  ]
+
+]
+
+
+#slide(title: "Synthetic controls: estimation with the outer optimization problem")[
+  #figure(image("img/pyfigures/scm_california_vs_synth_pysyncon.svg", width: 70%))
+]
+
+#slide(title: "Synthetic controls: inference")[
+
+  = Variability does not come from the variability of the outcomes
+
+  Indeed, aggregates are often not very noisy (once deseasonalized)...
+
+  #pause
+  = ... but from the variability of the chosen control units
+
+]
+
+
+#slide(title: "Synthetic controls: inference with Placebo tests")[
+
+]
+
+#slide(title: "Synthetic controls: inference with conformal prediction")[
+
+]
+
+#slide(title: "Synthetic controls: Take-away")[
+  == Pros
+  - More convincing for parallel trends assumption.
+  - Simple for multiple time periods.
+  - Gives confidence intervals.
+
+  == Cons
+  - Requires many control units to yield good pre-treatment fits.
+  - Might be prone to overfitting during the pre-treatment period.
+  - Still requires a strong assumption: the weights should also balance the post-treatment unexposed outcomes. See @arkhangelsky2021synthetic for discussions.
+  - Still requires the no-anticipation assumption.
+]
+
 
 #new-section-slide("Conditional difference-in-differences")
 
 
 #new-section-slide("Time-series modelisation: methods without a control group")
 
-#new-section-slide("Interrupted Time Series")
+#slide(title: "Interrupted Time Series")[
+  == Idea
+
+  - Compare the evolution of the outcome before and after the treatment
+  - The treatment effect is the difference between the two trends
+
+  == Example
+  -
+]
 
 
 #slide(title: "State space models")[
@@ -331,6 +574,13 @@
 
 #slide(title: "Take-away")[
 
+]
+
+#slide(title: "Good references for event studies")[
+
+  - The causal mixtape: #link("https://mixtape.scunning.com/09-difference_in_differences")
+
+  - Causal inference for the brave and true: #link("https://matheusfacure.github.io/python-causality-handbook/13-Difference-in-Differences.html")
 ]
 
 #new-section-slide("Python hands-on")

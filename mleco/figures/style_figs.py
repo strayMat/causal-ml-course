@@ -3,7 +3,6 @@ Simple styling used for matplotlib figures
 """
 
 from matplotlib import pyplot as plt
-from pyparsing import C
 
 # Configuration settings to help visibility on small screen / prints
 plt.rcParams["xtick.labelsize"] = 20
