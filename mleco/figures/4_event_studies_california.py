@@ -196,6 +196,11 @@ class SyntheticControl(BaseEstimator, RegressorMixin):
         return X @ self.w_
 
 
+# utils
+def pretreatment_error(Y_train_treated, Y_train_synth):
+    return np.sqrt(np.mean((Y_train_treated - Y_train_synth) ** 2))
+
+
 # %%
 model = SyntheticControl()
 
@@ -204,23 +209,8 @@ calif_synth_wo_v = model.predict(Y.drop(columns=[3]))
 plot_california_vs_synthetic(cigar, calif_synth_wo_v)
 plt.savefig(DIR2FIG / "scm_california_vs_synth_wo_v.svg", bbox_inches="tight")
 # %%
+# using pysyncon
 from pysyncon import Dataprep, Synth
-
-# dataprep = Dataprep(
-#     foo=cigar,
-#     predictors=["cigsale", "retprice"],
-#     predictors_op="mean",
-#     time_predictors_prior=range(1980, 1988),
-#     dependent="cigsale",
-#     unit_variable="state",
-#     time_variable="year",
-#     treatment_identifier=3,
-#     controls_identifier=np.array(
-#         list(set(cigar["state"].values).difference([3]))
-#     ).tolist(),
-#     time_optimize_ssr=range(1970, 1988),
-# )
-# print(dataprep)
 
 synth = Synth()
 synth.fit(
@@ -237,7 +227,11 @@ print(synth.weights().T)
 california_synth = Y_control @ synth.W.T
 plot_california_vs_synthetic(cigar, california_synth)
 plt.savefig(DIR2FIG / "scm_california_vs_synth_pysyncon.svg", bbox_inches="tight")
+# %% [markdown]
+# # Making inference
+# ## With placebo tests
 # %%
+# defining data
 outcome_name = "cigsale"
 Y = cigar.pivot(index="year", columns="state", values=outcome_name)
 # adding more covariates
@@ -247,23 +241,35 @@ Y_train = Y[Y.index < 1988]
 X = pd.concat([Y_train, predictors_train], axis=0)
 X_control = X.drop(columns=[3])
 X_treated = X[3]
+
 # %%
 from tqdm import tqdm
 
-
+pretreatment_errors = {}
 effects = {}
 for state in tqdm(Y.columns):
     model_iter = SyntheticControl()
     X_control = X.drop(columns=[state])
     X_treated = X[state]
     model_iter.fit(X_control, X_treated)
-
-    effect = Y[state] - model_iter.predict(Y.drop(columns=[state]))
-    effects[state] = effect
-
-# %%
+    # effect
+    Y_synth = model_iter.predict(Y.drop(columns=[state]))
+    effects[state] = Y[state] - Y_synth
+    # pretreatment error
+    Y_treated_train = Y_train[state]
+    Y_train_synth = Y_synth[Y.index < 1988]
+    pretreatment_errors[state] = pretreatment_error(Y_treated_train, Y_train_synth)
 effect_df = pd.DataFrame(effects)
+pretreatment_errors_df = pd.Series(pretreatment_errors)
 # %%
+remove_outliers = True
+if remove_outliers:
+    states_w_good_fit = pretreatment_errors_df[
+        (pretreatment_errors_df < pretreatment_errors_df.quantile(0.9)).values
+    ].index
+    print(f"Kept {len(states_w_good_fit)} states: {states_w_good_fit}")
+else:
+    states_w_good_fit = Y.columns
 plt.figure(figsize=(10, 5))
 # axes
 plt.hlines(y=0, xmin=1970, xmax=2000, lw=2, color="Black")
@@ -277,7 +283,7 @@ plt.vlines(
 )
 # plot states
 for s, effect in effect_df.items():
-    if s != 3:
+    if (s != 3) and (s in states_w_good_fit):
         plt.plot(effect, color=style_figs.CONTROL_COLOR, alpha=0.3)
 plt.plot(effect_df[3], color=style_figs.TREATED_COLOR)
 # formatting
@@ -296,4 +302,33 @@ plt.legend(
     ]
 )
 plt.grid(alpha=0.3)
-plt.savefig(DIR2FIG / "scm_placebo.svg", bbox_inches="tight")
+figname = (
+    "scm_placebo_test_wo_outliers.svg" if remove_outliers else "scm_placebo_test.svg"
+)
+plt.savefig(DIR2FIG / figname, bbox_inches="tight")
+
+# %%
+effects_wo_outliers = effect_df[states_w_good_fit]
+mean_effects_post_treatment = effects_wo_outliers.loc[1988:].mean(axis=0)
+california_effect = mean_effects_post_treatment[3]
+
+pv = (np.abs(mean_effects_post_treatment) > np.abs(california_effect)).mean()
+print(f"Cumulated California Treatment Effect: {california_effect}")
+print(f"Two sided p-value: {pv}")
+# %%
+# %%
+_, bins, _ = plt.hist(
+    mean_effects_post_treatment,
+    bins=20,
+    color=style_figs.CONTROL_COLOR,
+    alpha=0.5,
+    label="Other states",
+)
+plt.hist(
+    [california_effect], bins=bins, color=style_figs.TREATED_COLOR, label="California"
+)
+plt.ylabel("Frequency")
+plt.title("Distribution of\ncumulative Effects")
+plt.legend(loc="upper left")
+plt.savefig(DIR2FIG / "scm_placebo_test_distribution.svg", bbox_inches="tight")
+# %%
