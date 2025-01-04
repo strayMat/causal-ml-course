@@ -121,7 +121,7 @@
 #new-section-slide("Motivation")
 #slide(title: "Setup: event studies")[
 
-  == Estimation of the effect of a treatment when data is
+  == Estimation of the effect of a treatment when data is:
 
 
   Aggregated: eg. country-level data such as employment rate, GDP.
@@ -143,7 +143,7 @@
   This setup is known as: #alert[panel data, event studies, longitudinal data, time-series data.]
 ]
 
-#slide(title: "Examples of event studyies for policy question")[
+#slide(title: "Examples of event studies for policy question")[
 
 ]
 
@@ -155,12 +155,16 @@
 
   == Today: Three quasi-experimental designs for event studies
 
-  - The simple method of difference-in-differences with a strong assumption called paralled trend
+  - Reminder on difference-in-differences
 
-  - Synthetic control method: a balancing method (think to propensity score matching)
+  - Synthetic control method: balancing method (similar to propensity score weighting)
 
-  - Conditional DID: a doubly robust method combining outcomes and propensity score models
+  - Conditional DID: doubly robust method combining outcomes and treatment models
+
+  #pause
+  - Methods without controls: if we have time
 ]
+
 
 
 #slide(title: "Table of contents")[
@@ -519,18 +523,69 @@
 
 #slide(title: "Synthetic controls: inference")[
 
-  = Variability does not come from the variability of the outcomes
+  === Variability does not come from the variability of the outcomes
 
   Indeed, aggregates are often not very noisy (once deseasonalized)...
 
   #pause
-  = ... but from the variability of the chosen control units
+  === ... but from the variability of the chosen control units
+
+  Treatment assignment introduces more noise than outcome variability.
+
+  #pause
+
+  @abadie2010synthetic introduced the placebo test to assess the variability of the synthetic control.
 
 ]
 
 
 #slide(title: "Synthetic controls: inference with Placebo tests")[
+  === Idea of Fisher’s Exact tests
 
+  - Permute the treated and control exhaustively.
+
+  - For each unit, we pretend it is the treated while the others are the control: we call it a placebo
+
+  - Compute the synthetic control for each placebo: it should be close to zero.
+
+]
+
+
+#slide(title: "Synthetic controls: inference with Placebo tests, example")[
+  #only((1, 2))[
+    === Placebo estimation for all 38 control states
+
+    #figure(image("img/pyfigures/scm_placebo_test.svg", width: 70%))
+  ]
+  #only(2)[
+    - More variance after the treatment for California than before.
+    - Some states have pre-treatment trends which are hard to predict.
+  ]
+  #only(3)[
+    === Placebo estimation for 34 control states with "good" pre-treatment fit
+
+    #figure(image("img/pyfigures/scm_placebo_test_wo_outliers.svg", width: 70%))
+
+    I removed the states above the 90 percentiles of the distribution of the pre-treatment fit.
+
+  ]
+]
+
+#slide(title: "Synthetic controls: inference with Placebo tests, example")[
+  #side-by-side()[
+    === California absolute cumulative effect
+
+    $hat(tau)_("scm, california")=-17.00$
+
+    #only(2)[
+      === Get a p-value
+      #h(1em)
+      $"PV" &= 1 / (n_0) sum_(j=2)^(n_0) bb(1) big("(") |hat(tau)_("scm, california")| > |hat(tau)_("scm", j)| big(")")\ &= 0.029$
+    ]
+
+  ][
+    #figure(image("img/pyfigures/scm_placebo_test_distribution.svg", width: 100%))
+  ]
 ]
 
 #slide(title: "Synthetic controls: inference with conformal prediction")[
