@@ -119,32 +119,58 @@
 
 
 #new-section-slide("Motivation")
+
 #slide(title: "Setup: event studies")[
-
   == Estimation of the effect of a treatment when data is:
+  Aggregated: country-level data such as employment rate, GDP...
+  #only(1)[
+    #figure(
+      image("img/event_studies/aggregation_units.svg", width: 50%)
+  )
+  ]
 
+  #only((2,3, 4, 5))[
+    Longitudinal: multiple time periods (or repeated cross-sections)...
+  ]
+  #only(2)[
+    #figure(
+      image("img/event_studies/multiple_time_periods.svg", width: 50%)
+  )
+  ]
 
-  Aggregated: eg. country-level data such as employment rate, GDP.
+  #only((3,4, 5))[
+  With multiple aggregated units: countries, firms, geographical regions...
+    ]
+  #only(3)[
+    #figure(
+      image("img/event_studies/geographic_units.png", width: 40%),
+      caption: [Figure from @degli2020can]
 
-  #pause
+  )
+  ]
 
-  Longitudinal: eg. multiple time periods or repeated cross-sections.
+  #only((4, 5))[
+  Staggered adoption of the treatment: units adopt the policy/treatment at different times...
+  ]
+  #only((4))[
 
-  #pause
+   #figure(
+      image("img/event_studies/staggered_adoption.svg", width: 40%),
+   )
+  ]
 
-  With multiple units: eg. multiple countries, firms, regions.
-
-  #pause
-
-  Staggered adoption of the treatment: eg. different countries adopt a policy at different times.
-
-  #pause
-
-  This setup is known as: #alert[panel data, event studies, longitudinal data, time-series data.]
+  #only(5)[
+  This setup is known as 
+  #set align(center) 
+  == #alert[Panel data, event studies, longitudinal data, time-series data.]
+    ]
 ]
 
-#slide(title: "Examples of event studies for policy question")[
+#slide(title: "Examples of event studies")[
 
+  - Did this new marketing campaign had an effect on the sales of a product?
+  - Did a new tax policy had an effect on the consumption of a specific product? 
+  - Did the guidelines on the prescription of a specific drug had an effect on the practices? 
 ]
 
 #slide(title: "Setup: event studies are quasi-experiment")[

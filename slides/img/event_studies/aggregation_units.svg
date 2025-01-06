@@ -1,0 +1,36 @@
+<svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+  <!-- First circle -->
+  <ellipse rx="41" ry="39.5" cx="104" cy="57.5" fill="blue" opacity="0.7" />
+  <text x="77" y="68" font-size="16" fill="white" font-family="Arial">👤</text>
+  <text x="112" y="68" font-size="16" fill="white" font-family="Arial">👤</text>
+
+  <!-- Second circle -->
+  <ellipse rx="39.5" ry="38.5" cx="173.5" cy="123.5" fill="orange" opacity="0.7" />
+  <text x="149.5" y="134" font-size="16" fill="white" font-family="Arial">👤</text>
+  <text x="176" y="131" font-size="16" fill="white" font-family="Arial">👤</text>
+
+  <!-- Aggregated circle -->
+  <ellipse rx="40.5" ry="39.5" cx="250.5" cy="69.5" fill="purple" opacity="0.7" />
+  <text x="212.5" y="68.5" font-size="16" fill="white" font-family="Arial">👤</text>
+  <text x="247.5" y="68.5" font-size="16" fill="white" font-family="Arial">👤</text>
+  <text x="233.5" y="93.5" font-size="16" fill="white" font-family="Arial">👤</text>
+  <text x="262.5" y="93.5" font-size="16" fill="white" font-family="Arial">👤</text>
+    <text fill="white" font-family="Arial" font-size="16" x="177" y="131">
+    👤
+</text>
+    <text fill="white" font-family="Arial" font-size="16" x="161" y="151">
+    👤
+</text>
+    <text x="83.8" y="44.5" fill="rgb(255, 255, 255)">
+    Unit 1
+</text>
+    <text fill="rgb(255, 255, 255)" x="153.8" y="108.1">
+    Unit 2
+</text>
+    <text fill="rgb(255, 255, 255)" x="229.8" y="50.6">
+    Unit 3
+</text>
+    <text fill="white" font-family="Arial" font-size="16" x="149.5" y="134">
+    👤
+</text>
+</svg>
