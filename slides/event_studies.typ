@@ -168,8 +168,10 @@
 
 #slide(title: "Examples of event studies")[
 
-  - Did this new marketing campaign had an effect on the sales of a product?
-  - Did a new tax policy had an effect on the consumption of a specific product? 
+  - Did the new marketing campaign had an effect on the sales of a product?
+  
+  - Did the new tax policy had an effect on the consumption of a specific product? 
+  
   - Did the guidelines on the prescription of a specific drug had an effect on the practices? 
 ]
 
