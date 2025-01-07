@@ -36,6 +36,7 @@ seaborn = "^0.13.2"
 matplotlib = "^3.5.1"
 pysyncon = "^1.5.1"
 cvxpy = "^1.6.0"
+statsmodels = "^0.14.4"
 
 [tool.poetry.group.documentation.dependencies]
 sphinx = "^8.0.2"
