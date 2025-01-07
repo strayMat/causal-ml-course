@@ -645,8 +645,31 @@
   - Compare the evolution of the outcome before and after the treatment
   - The treatment effect is the difference between the two trends
 
+  == Tools 
+
+  - ARIMA models: autoregressive integrated moving average
+
   == Example
   -
+]
+
+#slide(title: "A summary on R packages for event studies")[
+
+  #table(
+    columns: 4,
+    align: (left, center, center, center),
+    table.header([], "Predictors", "Control units", "Multiple time periods"),
+      
+      [#link("https://cran.r-project.org/web/packages/did/index.html", "Difference-in-differences")],
+      [❌], [❌], [❌],
+     [#link("https://pkg.robjhyndman.com/forecast/reference/Arima.html", "forecast")],
+      [✅], [❌], [✅],
+      [#link("https://cran.r-project.org/web/packages/Synth/index.html", "Synthetic control")],
+      [❌], [✅], [✅],
+      [#link("", "Causal impact")],
+      [✅], [❌], [✅],
+  )
+  
 ]
 
 
