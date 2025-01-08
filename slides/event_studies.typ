@@ -33,14 +33,13 @@
 }
 // define custom tables
 #set table(
-    fill: (x, y) =>
-      if x == 0 or y == 0 {
-        gray.lighten(40%)
-      },
-    align: right,
-  )
-  #show table.cell.where(x: 0): strong
-  #show table.cell.where(y: 0): strong
+  fill: (x, y) => if x == 0 or y == 0 {
+    gray.lighten(40%)
+  },
+  align: right,
+)
+#show table.cell.where(x: 0): strong
+#show table.cell.where(y: 0): strong
 
 // assumption box
 //
@@ -64,7 +63,7 @@
       body-color: color.lighten(80%),
     ),
     title: title,
-    align(center, body),
+    align(left, body),
   )
 }
 
@@ -134,73 +133,78 @@
   == Estimation of the effect of a treatment when data is:
   Aggregated: country-level data such as employment rate, GDP...
   #only(1)[
-    #figure(
-      image("img/event_studies/aggregation_units.svg", width: 50%)
-  )
+    #figure(image("img/event_studies/aggregation_units.svg", width: 50%))
   ]
 
-  #only((2,3, 4, 5))[
+  #only((2, 3, 4, 5))[
     Longitudinal: multiple time periods (or repeated cross-sections)...
   ]
   #only(2)[
-    #figure(
-      image("img/event_studies/multiple_time_periods.svg", width: 50%)
-  )
+    #figure(image("img/event_studies/multiple_time_periods.svg", width: 50%))
   ]
 
-  #only((3,4, 5))[
-  With multiple aggregated units: countries, firms, geographical regions...
-    ]
+  #only((3, 4, 5))[
+    With multiple aggregated units: countries, firms, geographical regions...
+  ]
   #only(3)[
     #figure(
       image("img/event_studies/geographic_units.png", width: 40%),
-      caption: [Figure from @degli2020can]
-
-  )
+      caption: [Figure from @degli2020can],
+    )
   ]
 
   #only((4, 5))[
-  Staggered adoption of the treatment: units adopt the policy/treatment at different times...
+    Staggered adoption of the treatment: units adopt the policy/treatment at different times...
   ]
-  #only((4))[
+  #only(4)[
 
-   #figure(
-      image("img/event_studies/staggered_adoption.svg", width: 40%),
-   )
+    #figure(image("img/event_studies/staggered_adoption.svg", width: 40%))
   ]
 
   #only(5)[
-  This setup is known as 
-  #set align(center) 
-  == #alert[Panel data, event studies, longitudinal data, time-series data.]
-    ]
+    This setup is known as
+    #set align(center)
+    == #alert[Panel data, event studies, longitudinal data, time-series data.]
+  ]
 ]
 
 #slide(title: "Examples of event studies")[
 
+  === Archetypal questions
+
   - Did the new marketing campaign had an effect on the sales of a product?
-  
-  - Did the new tax policy had an effect on the consumption of a specific product? 
-  
-  - Did the guidelines on the prescription of a specific drug had an effect on the practices? 
+
+  - Did the new tax policy had an effect on the consumption of a specific product?
+
+  - Did the guidelines on the prescription of a specific drug had an effect on the practices?
+
+  #pause
+  === Modern examples
+
+  - What is the effect of the extension of Medicaid on mortality? @miller2019medicaid
+
+  - What is the effect of Europe’s protected area policies (_Natura 2000_) on vegetation cover and on economic activity? @grupp2023evaluation
+
+  - Which policies achieved major carbon emission reductions? @stechemesser2024climate
 ]
 
 #slide(title: "Setup: event studies are quasi-experiment")[
-  - #link("https://en.wikipedia.org/wiki/Quasi-experiment", "Quasi-experiment"): a situation where the treatment is not randomly assigned by the researcher but by nature or society.
 
-  - Should introduces some randomness in the treatment assignment: enforcing treatment exogeneity, ie. ignorability (ie. unconfoundedness).
+  #def_box(title: "Quasi-experiment")[
+    A situation where the treatment is not randomly assigned by the researcher but by nature or society. #linebreak()
+    It should introduce _some_ randomness in the treatment assignment: enforcing treatment exogeneity, ie. ignorability (ie. unconfoundedness).
+  ]
   //#TODO causal diagram with times
-
+  #pause
   == Today: Three quasi-experimental designs for event studies
 
-  - Reminder on difference-in-differences
+  - Reminder on difference-in-differences.
 
-  - Synthetic control method: balancing method (similar to propensity score weighting)
+  - Synthetic control method: data-driven method to find appropriate control units.
 
-  - Conditional DID: doubly robust method combining outcomes and treatment models
+  - Conditional DID: doubly robust method combining outcomes and treatment models.
 
-  #pause
-  - Methods without controls: if we have time
+  - Methods without controls: if we have time.
 ]
 
 
@@ -655,7 +659,7 @@
   - Compare the evolution of the outcome before and after the treatment
   - The treatment effect is the difference between the two trends
 
-  == Tools 
+  == Tools
 
   - ARIMA models: autoregressive integrated moving average
 
@@ -685,20 +689,20 @@
 ]
 
 #slide(title: "A summary on R packages for event studies")[
-  
+
   #table(
     columns: 5,
     align: (left, left, center, center, center),
-    table.header([Package name], "Methods","Predictors", "Control units", "Multiple time periods"),
-      
-      [#link("https://cran.r-project.org/web/packages/did/index.html", "did")], "Difference-in-differences",
-      [❌], [❌], [❌],
-     [#link("https://pkg.robjhyndman.com/forecast/reference/Arima.html", "forecast")], "ARIMA, ITS",
-      [✅], [❌], [✅],
-      [#link("https://cran.r-project.org/web/packages/Synth/index.html", "Synth")], "Synthetic control",
-      [❌], [✅], [✅],
-      [#link("https://github.com/google/CausalImpact", "Causal impact")], "Bayesian state space models",
-      [✅], [❌], [✅],
+    table.header([Package name], "Methods", "Predictors", "Control units", "Multiple time periods"),
+    [#link("https://cran.r-project.org/web/packages/did/index.html", "did")],
+    "Difference-in-differences",
+    [❌],
+    [❌],
+    [❌],
+
+    [#link("https://pkg.robjhyndman.com/forecast/reference/Arima.html", "forecast")], "ARIMA, ITS", [✅], [❌], [✅],
+    [#link("https://cran.r-project.org/web/packages/Synth/index.html", "Synth")], "Synthetic control", [❌], [✅], [✅],
+    [#link("https://github.com/google/CausalImpact", "Causal impact")], "Bayesian state space models", [✅], [❌], [✅],
   )
 ]
 
@@ -708,20 +712,37 @@
   #table(
     columns: 5,
     align: (left, left, center, center, center),
-    table.header([Package name], [Methods],[Predictors], [Control units],  [Multiple time periods]),
-      
-      [#link("https://www.statsmodels.org/stable/regression.html", "statsmodels.OLS")], "Difference-in-differences, TWFE",
-      [❌], [❌], [❌],
-     [#link("https://www.statsmodels.org/stable/examples/index.html#state-space-models", "statsmodels")], "ARIMA(X), ITS, bayesian state space models",
-      [✅], [❌], [✅],
-      [#link("https://github.com/OscarEngelbrektson/SyntheticControlMethods", "SyntheticControlMethods")], "Synthetic control",
-      [❌], [✅], [✅],
-        [#link("https://github.com/sdfordham/pysyncon", "pysyncon")], "Synthetic control",
-      [❌], [✅], [✅],
-      [#link("https://github.com/jamalsenouci/causalimpact/", "causalimpact (pymc implementation)") ], "Bayesian state space models",
-      [✅], [❌], [✅],
-      [#link("https://github.com/tcassou/causal_impact/tree/master", "causal-impact (statsmodels implementation)")], "Bayesian state space models",
-      [✅], [❌], [✅],
+    table.header([Package name], [Methods], [Predictors], [Control units], [Multiple time periods]),
+    [#link("https://www.statsmodels.org/stable/regression.html", "statsmodels.OLS")],
+    "Difference-in-differences, TWFE",
+    [❌],
+    [❌],
+    [❌],
+
+    [#link("https://www.statsmodels.org/stable/examples/index.html#state-space-models", "statsmodels")],
+    "ARIMA(X), ITS, bayesian state space models",
+    [✅],
+    [❌],
+    [✅],
+
+    [#link("https://github.com/OscarEngelbrektson/SyntheticControlMethods", "SyntheticControlMethods")],
+    "Synthetic control",
+    [❌],
+    [✅],
+    [✅],
+
+    [#link("https://github.com/sdfordham/pysyncon", "pysyncon")], "Synthetic control", [❌], [✅], [✅],
+    [#link("https://github.com/jamalsenouci/causalimpact/", "causalimpact (pymc implementation)") ],
+    "Bayesian state space models",
+    [✅],
+    [❌],
+    [✅],
+
+    [#link("https://github.com/tcassou/causal_impact/tree/master", "causal-impact (statsmodels implementation)")],
+    "Bayesian state space models",
+    [✅],
+    [❌],
+    [✅],
   )
 ]
 
