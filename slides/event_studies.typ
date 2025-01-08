@@ -31,6 +31,16 @@
   set text(size: size)
   body
 }
+// define custom tables
+#set table(
+    fill: (x, y) =>
+      if x == 0 or y == 0 {
+        gray.lighten(40%)
+      },
+    align: right,
+  )
+  #show table.cell.where(x: 0): strong
+  #show table.cell.where(y: 0): strong
 
 // assumption box
 //
@@ -651,25 +661,68 @@
 
   == Example
   -
+
+]
+
+
+#slide(title: "Take-away on ITS")[
+
+  == Pros
+
+  - Suitable when no control unit is available. The pre-treatment trend is the control.
+
+  - Handles multiple time periods.
+
+  - A lot of software available (eg. ARIMA models).
+
+  - Simple: few parameters to tune.
+
+  == Cons
+
+  - Prone to bias by other events happening around the treatment time and impacting the outcome trend.
+
+  - Prone to overfitting of the pre-treatment trend.
 ]
 
 #slide(title: "A summary on R packages for event studies")[
-
+  
   #table(
-    columns: 4,
-    align: (left, center, center, center),
-    table.header([], "Predictors", "Control units", "Multiple time periods"),
+    columns: 5,
+    align: (left, left, center, center, center),
+    table.header([Package name], "Methods","Predictors", "Control units", "Multiple time periods"),
       
-      [#link("https://cran.r-project.org/web/packages/did/index.html", "Difference-in-differences")],
+      [#link("https://cran.r-project.org/web/packages/did/index.html", "did")], "Difference-in-differences",
       [❌], [❌], [❌],
-     [#link("https://pkg.robjhyndman.com/forecast/reference/Arima.html", "forecast")],
+     [#link("https://pkg.robjhyndman.com/forecast/reference/Arima.html", "forecast")], "ARIMA, ITS",
       [✅], [❌], [✅],
-      [#link("https://cran.r-project.org/web/packages/Synth/index.html", "Synthetic control")],
+      [#link("https://cran.r-project.org/web/packages/Synth/index.html", "Synth")], "Synthetic control",
       [❌], [✅], [✅],
-      [#link("", "Causal impact")],
+      [#link("https://github.com/google/CausalImpact", "Causal impact")], "Bayesian state space models",
       [✅], [❌], [✅],
   )
-  
+]
+
+
+#slide(title: "A summary on Python packages for event studies")[
+  #set text(size: 18pt)
+  #table(
+    columns: 5,
+    align: (left, left, center, center, center),
+    table.header([Package name], [Methods],[Predictors], [Control units],  [Multiple time periods]),
+      
+      [#link("https://www.statsmodels.org/stable/regression.html", "statsmodels.OLS")], "Difference-in-differences, TWFE",
+      [❌], [❌], [❌],
+     [#link("https://www.statsmodels.org/stable/examples/index.html#state-space-models", "statsmodels")], "ARIMA(X), ITS, bayesian state space models",
+      [✅], [❌], [✅],
+      [#link("https://github.com/OscarEngelbrektson/SyntheticControlMethods", "SyntheticControlMethods")], "Synthetic control",
+      [❌], [✅], [✅],
+        [#link("https://github.com/sdfordham/pysyncon", "pysyncon")], "Synthetic control",
+      [❌], [✅], [✅],
+      [#link("https://github.com/jamalsenouci/causalimpact/", "causalimpact (pymc implementation)") ], "Bayesian state space models",
+      [✅], [❌], [✅],
+      [#link("https://github.com/tcassou/causal_impact/tree/master", "causal-impact (statsmodels implementation)")], "Bayesian state space models",
+      [✅], [❌], [✅],
+  )
 ]
 
 
