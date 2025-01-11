@@ -960,16 +960,6 @@
   ]
 ]
 
-// #slide(title: "Approximate sparsity: theoretical considerations")[
-//   #def_box(title: [Definition: Approximate sparsity])[
-//     The sorted absolute values of the coefficients decay quickly.
-
-//     $|beta|_((j)) < A j^(-a)$ #h(1em) $a> 1 / 2$
-
-//     for each j, where the constants a and A do not depend on the sample size n.
-//   ]
-// ]
-
 #slide(title: "Regularized linear models for classification")[
 
   === Log likelihood for Lasso classification
@@ -992,11 +982,6 @@
   ]
 ]
 
-
-#slide(title: "Post lasso")[
-  TODO
-]
-
 #slide(title: "How to choose lambda?")[
 
   == Theoretical garuantees
@@ -1014,6 +999,36 @@
     We will look into that in more details in the next session.
   ]
 ]
+
+#slide(title: "OLS Post-Lasso")[
+
+  === Lasso coefficients are shrunk to zero
+
+  #only(2)[
+    #figure(image("img/pyfigures/approximate_sparse_true_coeffs.svg", width: 55%))
+  ]
+  #only(3)[
+    #figure(image("img/pyfigures/approximate_sparse_ols_coeffs.svg", width: 55%))
+  ]
+
+  #only(4)[
+    #figure(image("img/pyfigures/approximate_sparse_lasso_coeffs.svg", width: 55%))
+    This is good for true zero coefficients but not so good for true non-zeros coefficients.
+  ]
+]
+
+#slide(title: "OLS Post-Lasso")[
+
+  💡 Fit an OLS on the features selected by the Lasso @belloni2013least
+
+  #pause
+  #figure(image("img/pyfigures/approximate_sparse_postlasso_coeffs.svg", width: 55%))
+
+  #pause
+  ⚠️ Cross-validation should apply to the full procedure: Lasso + OLS, not only to the Lasso.
+
+]
+
 
 #slide(title: [Short introduction to scikit-learn])[
   - url: https://github.com/strayMat/causal-ml-course/tree/main/notebooks
@@ -1062,3 +1077,17 @@
 #slide[
   #bibliography
 ]
+
+
+#new-section-slide("Theory supplements")
+
+#slide(title: "Statistical model for lasso: approximate sparsity")[
+  #def_box(title: [Definition: Approximate sparsity])[
+    The sorted absolute values of the coefficients decay quickly.
+
+    $|beta|_((j)) < A j^(-a)$ #h(1em) $a> 1 / 2$
+
+    for each j, where the constants a and A do not depend on the sample size n.
+  ]
+]
+
