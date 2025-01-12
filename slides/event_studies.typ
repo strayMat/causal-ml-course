@@ -5,6 +5,9 @@
 #import "@preview/polylux:0.3.1": *
 #import "@preview/embiggen:0.0.1": * // LaTeX-like delimiter sizing for Typst
 #import "@preview/showybox:2.0.1": showybox
+#import "@preview/codly:1.1.1": * // Code highlighting for Typst
+#show: codly-init
+#import "@preview/codly-languages:0.1.3": * // Code highlighting for Typst
 
 #import themes.metropolis: *
 
@@ -479,15 +482,18 @@
 
 
 #slide(title: "Synthetic controls: Why choose positive weights summing to one?")[
+  #pause
   == This is called interpolation (vs extrapolation)
 
   #figure(image("img/event_studies/extrapolation.png", width: 70%))
 
-  #only(2)[
-    == Interpolation enforces regularization, thus limits overfitting
+  #pause
+  == Interpolation enforces regularization, thus limits overfitting
 
-    Same kind of regularization than L1 norm in Lasso: forces some coefficient to be zero (both are #link("https://en.wikipedia.org/wiki/Convex_optimization", [_optimization with constraints on a simplex_])).
-  ]
+  Same kind of regularization than L1 norm in Lasso: forces some coefficient to be zero.
+
+  // (both are #link("https://en.wikipedia.org/wiki/Convex_optimization", [_optimization with constraints on a simplex_])).
+
 ]
 
 #slide(title: "Synthetic controls: Extrapolation failure with unconstrained weight")[
@@ -501,6 +507,8 @@
 
     #pause
     Model: $underbrace(X_("treat"), p times 1)  tilde underbrace(X_("control"), p times n_0) underbrace(w, n_0)$
+
+    #only(2)[#alert("-> simple linear regression estimated by OLS")]
 
     #pause
     Prediction: $hat(Y)_("synth") = vec(Y_(t, j))_(t=1..T#linebreak()j=2..n_0+1) w$
@@ -526,9 +534,9 @@
     &= || vec(Y_(1, t))_(t=1..T_0) - vec(Y_(j, t))^T_(j=2..n_0+1#linebreak()t=1..T_0) hat(w) ||_(2)^(2)$
 
   This solution is solved by running two optimization problems:
-  - inner loop solving $w^*(V)= "argmin"_(w) ||X_("treat") - X_("control") w||_V^2$
+  - #alert[Inner loop] solving $w^*(V)= "argmin"_(w) ||X_("treat") - X_("control") w||_V^2$
 
-  - aouter loop solving $V^*= "argmin"_(V) "MSPE"(V)$
+  - #alert[Outer loop] solving $V^*= "argmin"_(V) "MSPE"(V)$
 ]
 //TODO: cross validation for the choice of V
 
@@ -649,23 +657,30 @@
 
 #new-section-slide("Time-series modelisation: methods without a control group")
 
-#slide(title: "Interrupted Time Series")[
-  == Intuition
-
-  - Compare the evolution of the outcome before and after the treatment.
-  - The treatment effect is the difference between the two trends.
-
+#slide(title: "Interrupted Time Series: intuition")[
   == Setup
 
-  - One treated unit.
+  - One #c_treated[treated unit], no #c_control[control unit].
   - Multiple time periods.
-  - No control unit.
   - Sometimes, predictors are availables: there are called exogeneous covariates.
 
-  == Goal
+  #pause
+  == Intuition
 
-  - Learn $Y_(t)(0)$.
+  - Model the pre-treatment trend: $Y_t(1) "for" t<T_0$
+  - Predict post-treatment trend as the control: $#c_control[$hat(Y_t)$(0)] "for" t>T_0 $
 
+  - Obtain treatment effect by taking the difference between observed and predicted post-treatment observations: $#c_treated[$Y_(t)(1)$] - #c_control[$hat(Y_t)$(0)]$
+]
+
+#slide(title: [Interrupted Time Series: illustration from @schaffer2021interrupted])[
+
+  #figure(image("img/event_studies/its_illustration.png", width: 65%))
+
+  #set text(size: 18pt)
+  $Y_t$: Dispensations of quetiapine, an anti-psychotic medicine.
+
+  Treatment: Restriction of the conditions under which quetiapine could be subsidised.
 
 ]
 
@@ -687,12 +702,49 @@
   )
 
 
-  A good reference: #link("TODO:")
+  A good reference for ARIMA: #link("https://otexts.com/fpp3/","Forecasting: Principles and Practice, chapter 8")
 
 ]
 
+#slide(title: [ARIMA are State Space Models (SSM) #text("says the machine learning community",size: 18pt)])[
+  == Why showing this formulation ?
 
+  - I better understand ARIMA formulated as state space models.
 
+  - SSM are more general than ARIMA models.
+
+  - ARIMA are (almost always) fitted with SSM optimization algorithms.
+
+  == What is a state space model?
+
+]
+
+#slide(title: "A word on model families for ITS")[
+  We saw ARIMA models and the more general class of state space models.
+
+  However, we could any model that we want to fit the pre-treatment trend !
+
+  #pause
+  - #link("https://facebook.github.io/prophet/", [Facebook prophet model @taylor2018forecasting]) uses Generalized Additive Models (GAM).
+
+  #pause
+  - Any sklearn estimator could do the trick: Linear regression, Random Forest, Gradient Boosting...
+
+  #pause
+  ⚠️ You should pay attention to appropriate train/test split when cross-validating a time-series model not to use the future to predict the past.
+
+  Relevant remark for all time series models (even ARIMA or state space models).
+]
+
+#slide(title: "Cross-validation for time-series models")[
+
+  ```python
+  from sklearn.model_selection import TimeSeriesSplit
+  ```
+  #figure(image("img/event_studies/time_series_cv.png", width: 70%))
+
+  This avoids to use the future to predict the past.
+]
 
 #slide(title: "Take-away on ITS")[
 
@@ -713,12 +765,6 @@
   - Prone to overfitting of the pre-treatment trend.
 ]
 
-
-
-#slide(title: "State space models")[
-  == ARIMA are state space models (Machine Learning community)
-
-]
 
 #slide(title: "An attempt to map event study methods")[
   #set text(size: 15pt)
@@ -741,7 +787,7 @@
     [No controls, no/few predictors, seasonality],
     [Stationnarity , no anticipation, prone to overfitting],
     [Epidemiology, Economics],
-    [#link("https://fcheysson.github.io/serc/serc.pdf", "Introduction à l'analyse temporelle")],
+    [#link("https://otexts.com/fpp3/arima.html", "Forecasting: Principles and Practice")],
     [@schaffer2021interrupted],
 
     "State space models",
