@@ -25,10 +25,10 @@ classifiers = [
 # Changelog = "https://github.com/straymat/causal-ml-course/releases"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.10,<3.13"
 
 # Project-Specific
-numpy = "^2.1.2"
+numpy = "1.26"
 networkx = "^3.4.1"
 pgmpy = "^0.1.26"
 tabulate = "^0.9.0"
@@ -37,6 +37,7 @@ matplotlib = "^3.5.1"
 pysyncon = "^1.5.1"
 cvxpy = "^1.6.0"
 statsmodels = "^0.14.4"
+pmdarima = "^2.0.4"
 
 [tool.poetry.group.documentation.dependencies]
 sphinx = "^8.0.2"
