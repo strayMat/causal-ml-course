@@ -194,17 +194,13 @@
     A situation where the treatment is not randomly assigned by the researcher but by nature or society. #linebreak()
     It should introduce _some_ randomness in the treatment assignment: enforcing treatment exogeneity, ie. ignorability (ie. unconfoundedness).
   ]
-  //#TODO causal diagram with times
+
   #pause
-  == Today: Three quasi-experimental designs for event studies
+  == Other quasi-experiment designs
 
-  - Reminder on difference-in-differences.
+  - #alert[Instrumental variables:] a variable that is correlated with the treatment but not with the outcome.
 
-  - Synthetic control method: data-driven method to find appropriate control units.
-
-  - Conditional DID: doubly robust method combining outcomes and treatment models.
-
-  - Methods without controls: if we have time.
+  - #alert[Regression discontinuity design:] the treatment is assigned based on a threshold of a continuous variable.
 ]
 
 
@@ -654,19 +650,48 @@
 #new-section-slide("Time-series modelisation: methods without a control group")
 
 #slide(title: "Interrupted Time Series")[
-  == Idea
+  == Intuition
 
-  - Compare the evolution of the outcome before and after the treatment
-  - The treatment effect is the difference between the two trends
+  - Compare the evolution of the outcome before and after the treatment.
+  - The treatment effect is the difference between the two trends.
+
+  == Setup
+
+  - One treated unit.
+  - Multiple time periods.
+  - No control unit.
+  - Sometimes, predictors are availables: there are called exogeneous covariates.
+
+  == Goal
+
+  - Learn $Y_(t)(0)$.
+
+
+]
+
+#slide(title: "Modelization of a time-series")[
 
   == Tools
 
-  - ARIMA models: autoregressive integrated moving average
+  - ARIMA models: AutoRegressive Integrated Moving Average
 
-  == Example
-  -
+  #my_box(
+    "Motivation of ARIMA",
+    rgb("#57b4d3"),
+    [
+      Take into account:
+      - the structure of autodependance between observation,
+      - linear trends,
+      - seasonality.
+    ],
+  )
+
+
+  A good reference: #link("TODO:")
 
 ]
+
+
 
 
 #slide(title: "Take-away on ITS")[
@@ -686,6 +711,60 @@
   - Prone to bias by other events happening around the treatment time and impacting the outcome trend.
 
   - Prone to overfitting of the pre-treatment trend.
+]
+
+
+
+#slide(title: "State space models")[
+  == ARIMA are state space models (Machine Learning community)
+
+]
+
+#slide(title: "An attempt to map event study methods")[
+  #set text(size: 15pt)
+
+  #table(
+    columns: 6,
+    align: (left, left, center, center, center),
+    table.header("Methods", "Characteristics", "Hypotheses", "Community", "Introduction", "Good reference"),
+    "DID/TWFE",
+    [Treated/control units, few time periods, no predictors],
+    [Parallel trends, no anticipation, prone to overfitting],
+    [Economics],
+    [#link(
+        "https://matheusfacure.github.io/python-causality-handbook/13-Difference-in-Differences.html",
+        "Causal Inference for the Brave and True, chapter 13",
+      )],
+    [@arkhangelsky2024causal],
+
+    "ARIMA, ITS",
+    [No controls, no/few predictors, seasonality],
+    [Stationnarity , no anticipation, prone to overfitting],
+    [Epidemiology, Economics],
+    [#link("https://fcheysson.github.io/serc/serc.pdf", "Introduction à l'analyse temporelle")],
+    [@schaffer2021interrupted],
+
+    "State space models",
+    [Multiple time periods, control units or predictors, generalization of ARIMA],
+    [Contional ignorability on predictors, goodness of fit pre-treatment],
+    [Machine learning, bayesian methods],
+    [#link(
+        "repository.cinec.edu/bitstream/cinec20/1109/1/2016_Book_IntroductionToTimeSeriesAndFor.pdf#page=259",
+        [@brockwell2016introduction[chapter 9]],
+      )],
+    [@murphy2022probabilistic[chapter 18]],
+
+    "Synthetic control",
+    [Treated/control units, multiple time periods],
+    [Conditional parallel trend on controls, goodness of fit pre-treatment],
+    [Economics],
+    [#link(
+        "https://matheusfacure.github.io/python-causality-handbook/15-Synthetic-Control.html",
+        "Causal Inference for the Brave and True",
+      )],
+    [@abadie2021using],
+  )
+
 ]
 
 #slide(title: "A summary on R packages for event studies")[
@@ -725,6 +804,7 @@
     [❌],
     [✅],
 
+    [#link("https://alkaline-ml.com/pmdarima/index.html", "pmdarima")], "ARIMA(X), ITS", [✅], [❌], [✅],
     [#link("https://github.com/OscarEngelbrektson/SyntheticControlMethods", "SyntheticControlMethods")],
     "Synthetic control",
     [❌],
@@ -744,23 +824,6 @@
     [❌],
     [✅],
   )
-]
-
-
-#slide(title: "State space models")[
-
-]
-
-
-#slide(title: "Take-away")[
-
-]
-
-#slide(title: "Good references for event studies")[
-
-  - The causal mixtape: #link("https://mixtape.scunning.com/09-difference_in_differences")
-
-  - Causal inference for the brave and true: #link("https://matheusfacure.github.io/python-causality-handbook/13-Difference-in-Differences.html")
 ]
 
 #new-section-slide("Python hands-on")
