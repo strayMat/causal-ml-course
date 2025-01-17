@@ -123,7 +123,7 @@
 }
 
 #title-slide(
-  author: [Authors],
+  author: [Matthieu Doutreligne],
   title: "Machine Learning for econometrics",
   subtitle: "Event studies: Causal methods for pannel data",
   date: "February, 11th, 2025",
@@ -638,16 +638,23 @@
 
 ]
 
+#slide(title: "Synthetic controls: A failure of synthetic controls")[
+  == Failure of conditional ignorability
+
+  TODO
+]
+
 #slide(title: "Synthetic controls: Take-away")[
   == Pros
   - More convincing for parallel trends assumption.
   - Simple for multiple time periods.
   - Gives confidence intervals.
-
+  
+  #pause
   == Cons
   - Requires many control units to yield good pre-treatment fits.
   - Might be prone to overfitting during the pre-treatment period.
-  - Still requires a strong assumption: the weights should also balance the post-treatment unexposed outcomes. See @arkhangelsky2021synthetic for discussions.
+  - Still requires a strong assumption: the weights should also balance the post-treatment unexposed outcomes ie. conditional ignorability. See @arkhangelsky2021synthetic for discussions.
   - Still requires the no-anticipation assumption.
 ]
 
@@ -719,6 +726,50 @@
 
 ]
 
+#slide(title: "State space models: Graphical representation with DAG")[
+
+]
+
+#slide(title: "State space models: a general formulation")[
+  == Idea
+
+  - Decompose the time series into two components: the state and the observation.
+
+  - The state is a latent variable that evolves over time.
+
+  - The observation is a noisy version of the state.
+
+  == Formalization
+
+  - State equation: $x_t = F x_(t-1) + v_t$
+
+  - Observation equation: $y_t = H x_t + w_t$
+
+  - $v_t$ and $w_t$ are noise terms.
+
+  == Example
+
+  - ARIMA(1,1,1) model: $x_t = x_(t-1) + v_t$, $y_t = x_t + w_t$
+
+  - $F = 1$, $H = 1$, $v_t = 0$, $w_t = 0$.
+]
+
+#slide(title: "Fitting state space model")[
+
+]
+
+#slide(title: "Modern state space models")[
+
+
+  - Long Short Term Memory (LSTM) networks @graves2012long: a type of Recurrent Neural Network (RNN) that can learn long-term dependencies. Was state of the art for language tasks before transformers.
+
+  - Mamba @gu2023mamba: A recent proposition to mitigate the main limitations of transfomers which is high complexity relative to the length of the sequence. Good blog-style introduction in @Ayonrinde2024mamba.
+
+
+]
+
+
+
 #slide(title: "A word on model families for ITS")[
   We saw ARIMA models and the more general class of state space models.
 
@@ -745,6 +796,28 @@
 
   This avoids to use the future to predict the past.
 ]
+
+
+#slide(title: "Main threat to validity for an ITS: historical bias")[
+
+
+  #side-by-side()[
+    ⚠ If there is a co-intervention, it will impact the outcome trend and bias the treatment effect estimation.
+    
+    #uncover(2)[
+      💡 Adding a control series of predictors can help to mitigate this bias.  
+    ]
+  ][
+    #only(1)[
+      #figure(image("img/event_studies/its_cofounding_event.png", width: 100%))
+      ]
+    #only(2)[
+      #figure(image("img/event_studies/its_cofounding_event_controlled.png", width: 100%))
+    ]
+    #text(size: 18pt)[Illustration from @degli2020can[Fig. 1]]
+  ]  
+]
+
 
 #slide(title: "Take-away on ITS")[
 
@@ -871,6 +944,40 @@
     [✅],
   )
 ]
+
+
+#slide(title: "State Space Models")[
+
+]
+
+
+#slide(title: "State space models: Take-away")[
+
+]
+
+#slide(title: "Final word -- What methods to chose: some guides")[
+  
+  #set text(size: 18pt)
+  == DID-family methods
+
+  - Control units available (at least one)
+  - Few time periods
+  - Parallel trend is credible (if necessary by adjusting the model on predictors).
+
+  == Synthetic Control Methods
+
+  - Mutiple and different controls as well as multiple time periods
+  - Pre-treatment outcomes of the control units predict well the treated unit outcome.
+  - No-spill over from the treatment to the control units.
+
+  == ITS: SARIMA or state space models
+
+  - No evident control units
+  - Pre-treatment outcome of the treated unit seems a good control
+  - Control predictors not impacted by the treatment availables
+  - No co-intervention that could impact the treated outcome.
+]
+
 
 #new-section-slide("Python hands-on")
 

@@ -3,3 +3,4 @@
 
 # ... except for this one.
 !.gitignore
+!homicides_data.csv

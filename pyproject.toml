@@ -37,7 +37,9 @@ matplotlib = "^3.5.1"
 pysyncon = "^1.5.1"
 cvxpy = "^1.6.0"
 statsmodels = "^0.14.4"
+skrub = "^0.4.1"
 pmdarima = "^2.0.4"
+causalimpact = "^0.2.6"
 
 [tool.poetry.group.documentation.dependencies]
 sphinx = "^8.0.2"
