@@ -8,6 +8,7 @@
 #import "@preview/codly:1.1.1": * // Code highlighting for Typst
 #show: codly-init
 #import "@preview/codly-languages:0.1.3": * // Code highlighting for Typst
+#import "@preview/fletcher:0.5.1" as fletcher: diagram, node, edge // for dags
 
 #import themes.metropolis: *
 
@@ -134,20 +135,20 @@
 
 #slide(title: "Setup: event studies")[
   == Estimation of the effect of a treatment when data is:
-  Aggregated: country-level data such as employment rate, GDP...
+  - Aggregated: country-level data such as employment rate, GDP...
   #only(1)[
     #figure(image("img/event_studies/aggregation_units.svg", width: 50%))
   ]
 
   #only((2, 3, 4, 5))[
-    Longitudinal: multiple time periods (or repeated cross-sections)...
+    - Longitudinal: multiple time periods (or repeated cross-sections)...
   ]
   #only(2)[
     #figure(image("img/event_studies/multiple_time_periods.svg", width: 50%))
   ]
 
   #only((3, 4, 5))[
-    With multiple aggregated units: countries, firms, geographical regions...
+    - With multiple aggregated units: countries, firms, geographical regions...
   ]
   #only(3)[
     #figure(
@@ -157,15 +158,14 @@
   ]
 
   #only((4, 5))[
-    Staggered adoption of the treatment: units adopt the policy/treatment at different times...
+    - Staggered adoption of the treatment: units adopt the policy/treatment at different times...
   ]
   #only(4)[
-
-    #figure(image("img/event_studies/staggered_adoption.svg", width: 40%))
+    #figure(image("img/event_studies/staggered_adoption.svg", width: 37%))
   ]
 
   #only(5)[
-    This setup is known as
+    This setup is known as:
     #set align(center)
     == #alert[Panel data, event studies, longitudinal data, time-series data.]
   ]
@@ -222,9 +222,9 @@
   - Modern usage introduced formally by @ashenfelter1978estimating, applied to labor economics
 
   == Idea
-  - Contrast the temporal effect of the treated unit with the control unit temporal effect:
+  - Contrast the temporal effect of the treated unit with the control unit temporal effect.
 
-  - The difference between the two differences is the treatment effect
+  - The difference between the two differences is the treatment effect.
 ]
 
 #slide(title: "Difference-in-differences framework")[
@@ -238,7 +238,7 @@
     #figure(image("img/pyfigures/did_t1_factual.svg", width: 50%))
   ]
   #only(3)[
-    ⚠️ $EE[Y_1(1)] = EE[Y_1 (1) |D=1] PP(D=1) +  EE[Y_1 (1) |D=0] PP(D=0)$ #linebreak() but we only observe $EE[Y_1 (1) |D=1]$
+    ⚠️ $EE[Y_1(1)] = underbrace([EE[Y_1 (1) |D=0]], "counterfactural") PP(D=0) + underbrace([Y_1 (1) |D=1], "observed") PP(D=1)$
   ]
   #only((4, 5))[
     === Our target is the average treatment effect on the treated (ATT)
@@ -271,14 +271,14 @@
   #only(8)[
     === First assumption, parallel trends
 
-    $EE[Y_2(0) | D = 1]= underbrace([Y_1(0) | D = 1], "unobserved counterfactual") + EE[Y_2(0) - Y_1(0) | D = 0]$
+    $EE[Y_2(0) | D = 1]= underbrace(EE[Y_1(0) | D = 1], "unobserved counterfactual") + EE[Y_2(0) - Y_1(0) | D = 0]$
     #figure(image("img/pyfigures/did_parallel_trends_w_coefs.svg", width: 50%))
   ]
 
   #only(9)[
     === Second assumption, no anticipation of the treatment
 
-    $E[Y_1(1)|D=1]=E[Y_1(0)|D=1]$
+    $EE[Y_1(1)|D=1]=EE[Y_1(0)|D=1]$
 
     #figure(image("img/pyfigures/did_no_anticipation.svg", width: 50%))
   ]
@@ -342,15 +342,13 @@
     - staggered adoption of the treatment: a bit more complex
 
   == Cons
-  - Very strong assumptions: parallel trends and no anticipation.
+  - Strong assumptions: parallel trends and no anticipation.
   - Does not account for heterogeneity of treatment effect over time @de2020two.
 
   #pause
 
   == Can we do better: ie. robust to the parallel trend assumption?
 ]
-//# TODO?
-//#slide(title:"Inference for DID")[]
 
 #new-section-slide("Synthetic controls")
 
@@ -377,8 +375,18 @@
 ]
 
 #slide(title: "Examples of application of synthetic controls to epidemiology")[
-  - What is the effect of taxes on sugar-based product consumption @puig2021impact
 
+  - Literature review of the usage of SCM in healthcare (up to 2016): @bouttell2018synthetic
+  
+  == Some use cases
+   
+  - What is the effect of UK pay-for-performance program in primary care on mortality? @ryan2016long
+
+  - What is the effect of soda taxes on sugar-based product consumption? @puig2021impact
+  
+  - What is the effect of Ohio vaccine lottery on covid-19 vaccination? @brehm2022ohio
+
+  - What is the effect of wildfire storm on respiratory hospitalizations? @sheridan2022using
 ]
 
 #slide(title: [Synthetic control example: California's Proposition 99 @abadie2010synthetic])[
@@ -439,9 +447,10 @@
       Minimize some distance between the treated and the controls.
     ]
 
-
     #only(4)[
-      🤓 This is called a balancing estimator: kind of Inverse Probability Weighting @wager2024causal[chapter 7]
+      🤓 This is called a balancing estimator: kind of Inverse Probability Weighting. 
+      
+      Cf.  @wager2024causal[chapter 7] for details on balancing estimators.
     ]
   ][
     #figure(image("img/event_studies/scm_weighted_average.png", width: 100%))
@@ -493,7 +502,6 @@
   Same kind of regularization than L1 norm in Lasso: forces some coefficient to be zero.
 
   // (both are #link("https://en.wikipedia.org/wiki/Convex_optimization", [_optimization with constraints on a simplex_])).
-
 ]
 
 #slide(title: "Synthetic controls: Extrapolation failure with unconstrained weight")[
@@ -538,7 +546,6 @@
 
   - #alert[Outer loop] solving $V^*= "argmin"_(V) "MSPE"(V)$
 ]
-//TODO: cross validation for the choice of V
 
 #slide(title: "Synthetic controls: estimation without the outer optimization problem")[
   #side-by-side(columns: (1.5fr, 2fr))[
@@ -582,11 +589,12 @@
 
   @abadie2010synthetic introduced the placebo test to assess the variability of the synthetic control.
 
+  There is also a modern approach on inference for SCM based on Conformal prediction @chernozhukov2021exact (see end of the slides for intuition).
 ]
 
 
 #slide(title: "Synthetic controls: inference with Placebo tests")[
-  === Idea of Fisher’s Exact tests
+  === Idea of placebo tests, also called Fisher's Exact tests
 
   - Permute the treated and control exhaustively.
 
@@ -634,14 +642,8 @@
   ]
 ]
 
-#slide(title: "Synthetic controls: inference with conformal prediction")[
-
-]
-
 #slide(title: "Synthetic controls: A failure of synthetic controls")[
-  == Failure of conditional ignorability
-
-  TODO
+  == If there exists common causes of outcome and for only part of the controls. 
 ]
 
 #slide(title: "Synthetic controls: Take-away")[
@@ -657,10 +659,6 @@
   - Still requires a strong assumption: the weights should also balance the post-treatment unexposed outcomes ie. conditional ignorability. See @arkhangelsky2021synthetic for discussions.
   - Still requires the no-anticipation assumption.
 ]
-
-
-#new-section-slide("Conditional difference-in-differences")
-
 
 #new-section-slide("Time-series modelisation: methods without a control group")
 
@@ -708,9 +706,7 @@
     ],
   )
 
-
   A good reference for ARIMA: #link("https://otexts.com/fpp3/","Forecasting: Principles and Practice, chapter 8")
-
 ]
 
 #slide(title: [ARIMA are State Space Models (SSM) #text("says the machine learning community",size: 18pt)])[
@@ -722,23 +718,21 @@
 
   - ARIMA are (almost always) fitted with SSM optimization algorithms.
 
+  #pause
   == What is a state space model?
 
-]
-
-#slide(title: "State space models: Graphical representation with DAG")[
-
-]
-
-#slide(title: "State space models: a general formulation")[
-  == Idea
-
-  - Decompose the time series into two components: the state and the observation.
+  - The time series has two components: the state and the observation.
 
   - The state is a latent variable that evolves over time.
 
   - The observation is a noisy version of the state.
+]
 
+#slide(title: "State space models: Graphical representation with DAG")[
+  TODO
+]
+
+#slide(title: "State space models: a general formulation")[
   == Formalization
 
   - State equation: $x_t = F x_(t-1) + v_t$
@@ -754,20 +748,74 @@
   - $F = 1$, $H = 1$, $v_t = 0$, $w_t = 0$.
 ]
 
-#slide(title: "Fitting state space model")[
 
+#slide(title: "Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007")[
+  == Context 
+
+  In 2001, compared to the European Union countries, France was a country where:
+  - the population consumed the most antibiotics in town
+  - the resistance of Streptococcus pneumoniae to β-lactams was the highest (53%)
+  - a significant number of antibiotic prescriptions would be unnecessary (viral infections)
+
+  == Campaign (october 2002)
+
+  France implemented a national plan to “preserve the effectiveness of antibiotics and improve their use” with the main action undertaken by the National Health Insurance. 
+
+  The campaign was reactivated every year until from october to march. 
+
+  == Question
+  
+  What has been the effect of the campaign on the consumption of antibiotics? @sabuncu2009significant
+]
+
+#slide(title: "Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007")[
+  == Weekly reimbursed prescription of antibiotics in town
+
+ #figure(image("img/event_studies/sabuncu2009_fig1.png", width: 70%))
+
+ Interventions during the months of october to march: $"month"(t) in M_0$.
+]
+
+
+#slide(title: "Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007")[
+  == Estimation
+
+  - Fit an ARIMA model on the pre-treatment trend
+
+  - Introduce an additive term for the intervention: #linebreak()
+  $Y_t = c + sum_i hat(tau_i) bb(1)["month"(t) in M_0 and "year"(t)==i] + underbrace([a(B)^(-1) - b (B) epsilon_s], "ARIMA term fitted on pre-treatment")$
+
+  - Assess if the additive term and other parameters are significantly different pre-treatment and post-treatment.
+]
+
+#slide(title: "Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007")[
+  
+   #figure(image("img/event_studies/sabuncu2009_fig4.png", width: 68%))
+  #set text(size: 18pt)
+  - #text(red)[Red curve: arima fitted with intervention]
+  - #text(red)[Red Horizontal line: intervention effect fitted during intervention]
+  
+  - Black curve: arima fitted without intervention
+  - Black horizontal line: intervention effect fitted pre-intervention
+  
+]
+
+
+
+#slide(title: "Example of ITS with more general SSM: Causal impact")[
+TODO
+]
+
+#slide(title: "Fitting state space model")[
+TODO
 ]
 
 #slide(title: "Modern state space models")[
 
-
   - Long Short Term Memory (LSTM) networks @graves2012long: a type of Recurrent Neural Network (RNN) that can learn long-term dependencies. Was state of the art for language tasks before transformers.
 
   - Mamba @gu2023mamba: A recent proposition to mitigate the main limitations of transfomers which is high complexity relative to the length of the sequence. Good blog-style introduction in @Ayonrinde2024mamba.
-
-
 ]
-
 
 
 #slide(title: "A word on model families for ITS")[
@@ -799,8 +847,6 @@
 
 
 #slide(title: "Main threat to validity for an ITS: historical bias")[
-
-
   #side-by-side()[
     ⚠ If there is a co-intervention, it will impact the outcome trend and bias the treatment effect estimation.
     
@@ -946,15 +992,6 @@
 ]
 
 
-#slide(title: "State Space Models")[
-
-]
-
-
-#slide(title: "State space models: Take-away")[
-
-]
-
 #slide(title: "Final word -- What methods to chose: some guides")[
   
   #set text(size: 18pt)
@@ -984,6 +1021,72 @@
 #slide(title: [To your notebooks 🧑‍💻!])[
   - url: https://github.com/strayMat/causal-ml-course/tree/main/notebooks
 ]
+
+#new-section-slide("Supplementary materials")
+
+
+#slide(title: [Synthetic controls: conformal prediction inference])[
+  == Introduced by @chernozhukov2021exact
+  
+  - Recast the problem as #alert[counterfactual inference], ie. predict:  $Y_(i t)(0) "for" t>T_0 $ 
+
+  - Test hypothesis: $H_0$ eg. $H_0 = (0, 0, .., 0)$ ie no effect for $t > T_0$
+  
+  - This imply the generation of a hypothesis counterfactual trajectory $Y_t (0)$
+
+  == Question
+
+  Are the post-treatment residuals of a model fitted on the hypothesis counterfactual trajectory an outlier of the distribution of the residuals pre-treatment?
+
+  == Why does this works? 
+
+  Syntehtic controls estimation are invariant under the time series dimension so we can resample under this dimension to introduce data variability.
+
+]
+
+#slide(title: [Conformal inference: hypothesis generation])[
+  - Test a hypothesis : $H_0$ eg. $H_0 = (0, 0, .., 0)$ ie no effect for $t > T_0$
+
+  - Gerenate a counterfactual trajectory $Y_t (0)$ under this null
+]
+
+#slide(title: [Conformal inference: Fit a model and compute residuals])[
+  - Fit a counterfactual model on the #alert[full generated trajectory]: $hat(Y_t)$
+
+  - Compute the residuals: $hat(u)_t = Y_t (0) - hat(Y)_t$
+]
+
+#slide(title: [Conformal inference: test statistic and resampling])[
+  Summarize the residuals in a statistic: $S(hat(u)) = big("(") 1 / sqrt(T-T_0 + 1) sum_(t=T_0 + 1)^(T) |hat(u)_t|^q big(")")^(1/q)$ 
+
+]
+
+
+#slide(title: [Conformal inference: resampling])[
+  == Resample this statistic by block permutation $pi$ of the time periods
+
+  Same as permutting the data since SCM are invariant under the time series dimension.
+    
+  #figure(image("img/event_studies/block-perm.png", width: 60%))
+    
+  #align(center)[#text(size:12pt)[Image from: Causal Inference for the Brave and True]]
+]
+
+#slide(title: [Conformal inference: P-value])[
+ - Assess if the post-treatment statistics is an outlier of this distribution. 
+  
+- P-value: $hat(F) (x) = 1/(|Pi|) sum_(pi in Pi) bb(1) [S(hat(u)_(pi_(0))) <= S(hat(u)_(pi))]$ where $pi_(0)$ is the original data.
+
+]
+#slide(title: "Conformal inference: confidence intervals")[
+  TODO
+]
+
+
+#slide(title: "Conditional difference-in-differences")[
+  TODO
+]
+
 
 
 #let bibliography = bibliography("biblio.bib", style: "apa")
