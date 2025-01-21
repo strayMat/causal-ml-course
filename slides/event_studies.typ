@@ -729,23 +729,78 @@
 ]
 
 #slide(title: "State space models: Graphical representation with DAG")[
+  #only(1)[
+  == DAG for AR(1) model ie. ARIMA(1,0,0) model
+  #align(center)[
+      #diagram(
+        cell-size: 30mm,
+        node-stroke: 0.6pt,
+        node-shape: circle,
+        spacing: 1em,
+        let (X1, X2, X3) = ((0, 0), (1, 0), (2, 0)),
+        node(X1, radius: 8mm, [$Y_(t-1)$]),
+        node(X2, radius: 8mm, [$Y_t$]),
+        node(X3, radius: 8mm, [$Y_(t+1)$]),
+        edge(X1, X2, "->"),
+        edge(X2, X3, "->"),
+      )
+        ]
+
+  == Formalization 
+  $y_t = y_(t-1) + epsilon_t$
+  ]
+
+  #only(2)[
+  == DAG for MA(1) model ie. ARIMA(0,0,1) model
+
+  #align(center)[
+      #diagram(
+        cell-size: 30mm,
+        node-stroke: 0.6pt,
+        node-shape: circle,
+        spacing: 1em,
+        let (Y1, Y2, Y3) = ((0, 0), (1, 0), (2, 0)),
+        let (alpha_1, alpha_2, alpha_3) = ((-0.5, -1), (0.5, -1), (1.5, -1)),
+        node(Y1, radius: 8mm, [$Y_(t-1)$]),
+        node(Y2, radius: 8mm, [$Y_t$]),
+        node(Y3, radius: 8mm, [$Y_(t+1)$]),
+        node(alpha_1, radius: 8mm, [$alpha_(t-1)$]),
+        node(alpha_2, radius: 8mm, [$alpha_t$]),
+        node(alpha_3, radius: 8mm, [$alpha_(t+1)$]),
+        edge(alpha_1, Y1, "->"),
+        edge(alpha_2, Y1, "->"),
+        edge(alpha_2, Y2, "->"),
+        edge(alpha_3, Y2, "->"),
+        edge(alpha_3, Y3, "->")
+      )
+    ]
+
+    == Formalization 
+    $y_t = alpha_t + eta_t$
+    $alpha_t = epsilon_t$
+  ]
+ 
+ #only(3)[
+  == DAG for ARMA(1, 1) model ie. ARIMA(1,0,1) model
   TODO
 ]
+]
 
-#slide(title: "State space models: a general formulation")[
+#slide(title: "State space models: General formulation")[
   == Formalization
 
-  - State equation: $x_t = F x_(t-1) + v_t$
+  - State equation: $alpha_t = T_t alpha_(t-1) + c_t R_t eta_t$ with $eta_t ~ N(0, Q_t)$
 
-  - Observation equation: $y_t = H x_t + w_t$
+  - Observation equation: $y_t = Z_t alpha_t + beta^T x_t + H_t epsilon_t$ with $epsilon_t ~ N(0, V_t)$
 
-  - $v_t$ and $w_t$ are noise terms.
+  - $eta_t$ and $epsilon_t$ are white noise terms.
+]
 
-  == Example
-
-  - ARIMA(1,1,1) model: $x_t = x_(t-1) + v_t$, $y_t = x_t + w_t$
-
-  - $F = 1$, $H = 1$, $v_t = 0$, $w_t = 0$.
+#slide(title: "State space models: Complex example")[
+  TODO
+  == DAG
+  
+  == Formalization
 ]
 
 
