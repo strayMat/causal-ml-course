@@ -129,7 +129,7 @@ jupyter-notebook:
 
 .PHONY: jupyter-ipynb
 ## Convert all notebooks to ipynb format (wo execution)
-jupyter-ipynb:
+jupyter-create:
 	poetry run jupytext notebooks/*.py --to ipynb 
 
 .PHONY: docs-%
