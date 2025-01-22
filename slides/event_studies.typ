@@ -726,82 +726,222 @@
   - The state is a latent variable that evolves over time.
 
   - The observation is a noisy version of the state.
+
+  #alert[Good reference:] @murphy2022probabilistic[book 2, chap 29]
 ]
 
-#slide(title: "State space models: Graphical representation with DAG")[
-  #only(1)[
-  == DAG for AR(1) model ie. ARIMA(1,0,0) model
+
+#slide(title: "State space models: AR(1) or AR(2) model example")[
+  == AR(1)
+  #set align(horizon)
+  #side-by-side(
+    [ 
   #align(center)[
-      #diagram(
-        cell-size: 30mm,
-        node-stroke: 0.6pt,
-        node-shape: circle,
-        spacing: 1em,
-        let (X1, X2, X3) = ((0, 0), (1, 0), (2, 0)),
-        node(X1, radius: 8mm, [$Y_(t-1)$]),
-        node(X2, radius: 8mm, [$Y_t$]),
-        node(X3, radius: 8mm, [$Y_(t+1)$]),
-        edge(X1, X2, "->"),
-        edge(X2, X3, "->"),
-      )
-        ]
-
-  == Formalization 
-  $y_t = y_(t-1) + epsilon_t$
-  ]
-
-  #only(2)[
-  == DAG for MA(1) model ie. ARIMA(0,0,1) model
-
-  #align(center)[
-      #diagram(
-        cell-size: 30mm,
-        node-stroke: 0.6pt,
-        node-shape: circle,
-        spacing: 1em,
-        let (Y1, Y2, Y3) = ((0, 0), (1, 0), (2, 0)),
-        let (alpha_1, alpha_2, alpha_3) = ((-0.5, -1), (0.5, -1), (1.5, -1)),
-        node(Y1, radius: 8mm, [$Y_(t-1)$]),
-        node(Y2, radius: 8mm, [$Y_t$]),
-        node(Y3, radius: 8mm, [$Y_(t+1)$]),
-        node(alpha_1, radius: 8mm, [$alpha_(t-1)$]),
-        node(alpha_2, radius: 8mm, [$alpha_t$]),
-        node(alpha_3, radius: 8mm, [$alpha_(t+1)$]),
-        edge(alpha_1, Y1, "->"),
-        edge(alpha_2, Y1, "->"),
-        edge(alpha_2, Y2, "->"),
-        edge(alpha_3, Y2, "->"),
-        edge(alpha_3, Y3, "->")
-      )
+      == DAG 
+        #diagram(
+          cell-size: 30mm,
+          node-stroke: 0.6pt,
+          node-shape: circle,
+          spacing: 1em,
+          let (y_1, y_2, y_3) = ((0, 0), (1, 0), (2, 0)),
+          node(y_1, radius: 8mm, [$y_(t-1)$]),
+          node(y_2, radius: 8mm, [$y_t$]),
+          node(y_3, radius: 8mm, [$y_(t+1)$]),
+          edge(y_1, y_2, "->"),
+          edge(y_2, y_3, "->")
+        )
     ]
-
-    == Formalization 
-    $y_t = alpha_t + eta_t$
-    $alpha_t = epsilon_t$
+    ],
+  [
+  == Formalization 
+  Observation: $y_t = rho  y_(t-1) + epsilon_(y, t)$ 
+  
+  $"with" &epsilon_(y, t) ~ N(0, sigma_y^2)\
+  &|rho|< 1
+  $
   ]
- 
- #only(3)[
-  == DAG for ARMA(1, 1) model ie. ARIMA(1,0,1) model
-  TODO
-]
-]
+  )
 
-#slide(title: "State space models: General formulation")[
+  #pause
+  == AR(2)
+  #set align(horizon)
+  #side-by-side(
+    [
+  #align(center)[
+      == DAG 
+        #diagram(
+          cell-size: 30mm,
+          node-stroke: 0.6pt,
+          node-shape: circle,
+          spacing: 1em,
+          let (y_1, y_2, y_3, y_4) = ((0, 0), (1, 0), (2, 0), (3, 0)),
+          node(y_1, radius: 8mm, [$y_(t-1)$]),
+          node(y_2, radius: 8mm, [$y_t$]),
+          node(y_3, radius: 8mm, [$y_(t+1)$]),
+          edge(y_1, y_2, "->"),
+          edge(y_2, y_3, "->"),
+          edge(y_1, y_3, "->", bend: 30deg),
+          edge(y_2, y_4, "->", bend: 30deg)
+        )
+    ]
+    ],
+  [
   == Formalization
+  Observation: $y_t = rho_1  y_(t-1) + rho_2  y_(t-2) + epsilon_(y, t)$
 
+  $"with" &epsilon_(y, t) ~ N(0, sigma_y^2)\
+  &|rho_1|< 1, |rho_2|< 1
+  $
+  ]
+  )
+
+]
+
+#slide(title: "State space models: MA(1) ie. ARIMA(0,0,1) model example")[
+  #side-by-side(
+    [ 
+      #align(center)[
+      == DAG
+      #diagram(
+        cell-size: 20mm,
+        node-stroke: 0.6pt,
+        node-shape: circle,
+        spacing: 1em,
+        let (y_1, y_2, y_3) = ((0, 1), (1, 1), (2, 1)),
+        let (mu_1, mu_2, mu_3) = ((0, 0), (1, 0), (2, 0)),
+        let (delta_1, delta_2, delta_3) = ((0, -1), (1, -1), (2, -1)),
+        node(y_1, radius: 8mm, [$y_(t-1)$]),
+        node(y_2, radius: 8mm, [$y_t$]),
+        node(y_3, radius: 8mm, [$y_(t+1)$]),
+        node(delta_1, radius: 8mm, [$delta_(t-1)$]),
+        node(delta_2, radius: 8mm, [$delta_t$]),
+        node(delta_3, radius: 8mm, [$delta_(t+1)$]),
+        node(mu_1, radius: 8mm, [$mu_(t-1)$]),
+        node(mu_2, radius: 8mm, [$mu_t$]),
+        node(mu_3, radius: 8mm, [$mu_(t+1)$]),
+        edge(delta_1, mu_1, "->"),
+        edge(delta_1, mu_2, "->"),
+        edge(delta_2, mu_2, "->"),
+        edge(delta_2, mu_3, "->"),
+        edge(delta_3, mu_3, "->"),
+         edge(mu_1, y_1, "->"),
+        edge(mu_2, y_2, "->"),
+        edge(mu_3, y_3, "->")
+      )
+    
+    ]
+    ],
+    [
+    == Formalization 
+    Observation: $y_t = mu_t + theta mu_(t-1) + epsilon_(y, t)$ 
+
+    Latent: $mu_t = delta_(t)$ 
+    
+     $"with" &epsilon_(y, t) ~ N(0, sigma_y^2)\
+    &delta_(t) ~ N(0, sigma_delta^2)\
+     $
+
+    ]
+  )
+]
+
+#slide(title: "State space models: ARMA(p, q) ie. ARIMA(p,0,q) model example")[
+  TODO: check the SSM formulation
+    == Formalization 
+    Observation: $y_t = mu_t + epsilon_(y, t)$ 
+
+    Latent: $mu_t = delta_(t) + theta delta_(t-1) + epsilon_(mu, t)$ 
+    
+     $"with" &epsilon_(y, t) ~ N(0, sigma_y^2)\
+    &epsilon_(mu, t) ~ N(0, sigma_mu^2)\
+    &delta_(mu, t) ~ N(0, sigma_delta^2)\
+     $
+
+    == Unfolding the state space equations
+    $y_t = sum_(i=1)^(p) rho_i y_(t-i) + sum_(j=1)^(q) theta_j delta_(t-j) + epsilon_(y, t)$
+]
+
+
+#slide(title: "State space models: Adding a seasonnality and a covariate component")[
+#side-by-side(
+    [ 
+      #align(center)[
+      == DAG
+      #diagram(
+        cell-size: 15mm,
+        node-stroke: 0.6pt,
+        node-shape: circle,
+        spacing: 1em,
+        let (s_11, s_12, s_13) = ((0, 0), (0, -1), (0, -2)),
+        let (s_1, s_2, s_3) = ((1, 0), (1, -1), (1, -2)),
+        let (mu_1, mu_2) = ((1, -3), (0, -3)),
+        let y = ((1, 1)),
+        let x = ((1, 2)),
+        node(s_11, radius: 7mm, [$s_(t-1)$]),
+        node(s_12, radius: 7mm, [$s_(t-2)$]),
+        node(s_13, radius: 7mm, [$s_(t-3)$]),
+        node(s_1, radius: 7mm, [$s_(t)$]),
+        node(s_2, radius: 7mm, [$s_(t-1)$]),
+        node(s_3, radius: 7mm, [$s_(t-2)$]),
+        node(mu_1, radius: 7mm, [$mu_(t)$]),
+        node(mu_2, radius: 7mm, [$mu_(t-1)$]),
+        node(y, radius: 7mm, [$y_t$]),        
+        node(x, radius: 7mm, [$x_t$]),
+        edge(s_11, s_1, "->"),
+        edge(s_11, s_2, "->"),
+        edge(s_12, s_1, "->"),
+        edge(s_12, s_3, "->"),
+        edge(s_13, s_1, "->"),
+        edge(s_1, y, "->"),
+        edge(mu_2, mu_1, "->"),
+        edge(mu_1, y, "->", bend: 40deg),
+        edge(x, y, "->"),
+      )
+    
+    ]
+    ],
+    [
+    == Formalization
+
+    Observation with covariates and seasonality: 
+    
+    $y_t = mu_t + beta x_t + s_t + epsilon_(y,t)$ 
+    
+    #v(1em)
+    Where seasonality:
+
+    $s_t &= - sum^(S-1)_(k=1) s_(t-k) + epsilon_(s,t)\
+    &"with" epsilon_s,t ~ N(0, sigma^2_s)$
+    ]
+  )
+]
+
+#slide(title: [State space models: General formulation])[
+  == SSM have a more general formulation than ARIMA models
+  
   - State equation: $alpha_t = T_t alpha_(t-1) + c_t R_t eta_t$ with $eta_t ~ N(0, Q_t)$
 
   - Observation equation: $y_t = Z_t alpha_t + beta^T x_t + H_t epsilon_t$ with $epsilon_t ~ N(0, V_t)$
 
   - $eta_t$ and $epsilon_t$ are white noise terms.
+
+  #side-by-side(
+    columns: (1fr, 2fr),
+    [
+      #set align(horizon)
+      Complex SSM DAG from the Causal Impact paper @brodersen2015inferring
+    ],
+    [
+  #figure(image("img/event_studies/complex_ssm.png", width: 90%))
+    ]
+  
+  )
 ]
 
-#slide(title: "State space models: Complex example")[
-  TODO
-  == DAG
-  
-  == Formalization
+#slide(title: [State space models: a brief word on fitting])[
+  TODO: Kalman filter and full gaussianity
 ]
+
 
 
 #slide(title: "Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007")[
