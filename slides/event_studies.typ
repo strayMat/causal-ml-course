@@ -642,9 +642,36 @@
   ]
 ]
 
-#slide(title: "Synthetic controls: A failure of synthetic controls")[
-  == If there exists common causes of outcome and for only part of the controls. 
-  TODO
+#slide(title: [Synthetic controls failure: confounding event for some controls])[
+  === Common causes of outcome and for only part of the controls and the treated unit 
+  #side-by-side(
+    [TODO: explain setup @degli2020can],
+    [#figure(image("img/event_studies/scm_failure_map.png", width: 70%))]
+  )
+  
+  #pause
+  === Suppose that this other event have an impact on the outcome after the treatment.
+  For state in [KS, MD, AL, CT, FL], there is a step change in the outcome after the treatment: $bb(1)[t>T_0]$
+]
+
+#slide(title: [Synthetic controls failure: appropriate controls])[
+  === Focus only on states affected by the confounding events 
+
+  #figure(image("img/event_studies/scm_failure_appropriate_control.png", width: 50%))
+
+  Here, the comparison states are: KS, MD, AL, CT : also affected by the counfounding event.
+
+  === No problem: we would conclude to no effect of the treatment.
+]
+
+#slide(title: [Synthetic controls failure: data-driven controls])[
+ === Focus on all comparison states 
+
+  #figure(image("img/event_studies/scm_failure_data_driven_controls.png", width: 50%))
+
+  SCM matches pre-treatment trends, without taking into account the confounding event.
+
+  === Problem: we would falsely conclude to a positive treatment effect.
 ]
 
 #slide(title: "Synthetic controls: Take-away")[
