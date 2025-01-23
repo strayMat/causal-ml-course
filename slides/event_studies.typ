@@ -761,7 +761,9 @@
   $
   ]
   )
-
+  #only(1)[
+    Auto-regression time series model an outcome as a linear regression of its prior values. 
+  ]
   #pause
   == AR(2)
   #set align(horizon)
@@ -794,7 +796,6 @@
   $
   ]
   )
-
 ]
 
 #slide(title: "State space models: MA(1) ie. ARIMA(0,0,1) model example")[
@@ -843,6 +844,8 @@
 
     ]
   )
+  #pause
+  The MA time series models the residual of the regression of $y_t$ on its previous values as a linear combination of the previous residuals : ie. vanishing shocks.
 ]
 
 #slide(title: "State space models: ARMA(p, q) ie. ARIMA(p,0,q) model example")[
@@ -938,10 +941,32 @@
   )
 ]
 
-#slide(title: [State space models: a brief word on fitting])[
-  TODO: Kalman filter and full gaussianity
+#slide(title: [State space models: a brief word on fitting (ie. learning the parameters)])[
+  === When the error terms are gaussians
+
+  These modeles are called linear Gaussian state space model (LG-SSM) or linear dynamical system (LDS). 
+
+  === The likelihood is jointly gaussian 
+  
+  #alert[Closed form formula] for the likelihood of the data under the model.
+
+  #pause
+
+  == Expectation-Minimization: a widespread algorithm for fitting
+
+  - Expectaction: Compute the joint likelihood of the data and the parameters (observed outcome, unknown state) given the parameters.
+
+  - Maximization: find parameters maximizing the likelihood: analytically since gaussian. 
+
+  - Iter until convergence to a (local) maximum of likelihood.
 ]
 
+#slide(title: "Modern state space models")[
+
+  - Long Short Term Memory (LSTM) networks @graves2012long: a type of Recurrent Neural Network (RNN) that can learn long-term dependencies. Was state of the art for language tasks before transformers.
+
+  - Mamba @gu2023mamba: A recent proposition to mitigate the main limitations of transfomers which is high complexity relative to the length of the sequence. Good blog-style introduction in @Ayonrinde2024mamba.
+]
 
 
 #slide(title: "Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007")[
@@ -995,21 +1020,8 @@
   
 ]
 
-
-
 #slide(title: "Example of ITS with more general SSM: Causal impact")[
 TODO
-]
-
-#slide(title: "Fitting state space model")[
-TODO
-]
-
-#slide(title: "Modern state space models")[
-
-  - Long Short Term Memory (LSTM) networks @graves2012long: a type of Recurrent Neural Network (RNN) that can learn long-term dependencies. Was state of the art for language tasks before transformers.
-
-  - Mamba @gu2023mamba: A recent proposition to mitigate the main limitations of transfomers which is high complexity relative to the length of the sequence. Good blog-style introduction in @Ayonrinde2024mamba.
 ]
 
 
