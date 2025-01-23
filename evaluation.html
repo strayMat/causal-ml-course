@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Machine Learning for Econometrics &#8212; mleco 0.0.0 documentation</title>
+    <title>Evaluation &#8212; mleco 0.0.0 documentation</title>
   
   
   
@@ -38,11 +38,11 @@
     <script src="_static/documentation_options.js?v=7026087e"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'evaluation';</script>
     <link rel="icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Course syllabus" href="syllabus.html" />
+    <link rel="prev" title="Jupyter notebooks for practical sessions" href="practical_sessions.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -111,7 +111,7 @@
     
   
 
-<a class="navbar-brand logo" href="#">
+<a class="navbar-brand logo" href="index.html">
   
   
   
@@ -159,8 +159,8 @@
 </li>
 
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="evaluation.html">
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
     Evaluation
   </a>
 </li>
@@ -236,6 +236,10 @@ document.write(`
   
 
   
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
 </div>
 
     </header>
@@ -246,9 +250,7 @@ document.write(`
       
       
       
-        
-      
-      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -284,8 +286,8 @@ document.write(`
 </li>
 
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="evaluation.html">
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
     Evaluation
   </a>
 </li>
@@ -332,6 +334,15 @@ document.write(`
     
   </div>
   
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"></div>
+</nav></div>
+    </div>
+  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
@@ -347,7 +358,33 @@ document.write(`
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article d-print-none"></div>
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Evaluation</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
               
               
               
@@ -355,18 +392,106 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <p><a class="reference internal" href="#straymat.github.io/causal-ml-course/"><span class="xref myst"><img alt="Site web" src="https://img.shields.io/badge/course_website-blue" /></span></a></p>
-<section id="machine-learning-for-econometrics">
-<h1>Machine Learning for Econometrics<a class="headerlink" href="#machine-learning-for-econometrics" title="Link to this heading">#</a></h1>
-<p>Eight sessions of three hours presenting important concepts and methods on machine learning for econometrics. The course focuses on flexible models and causal inference in high dimensions. Most of the sessions will display a mix between theoretical considerations and practical application with hands-on in python.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slides.html">Slides</a></li>
-<li class="toctree-l1"><a class="reference internal" href="practical_sessions.html">Pratical sessions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="evaluation.html">Evaluation</a></li>
+  <section id="evaluation">
+<h1>Evaluation<a class="headerlink" href="#evaluation" title="Link to this heading">#</a></h1>
+<p>The evaluation is based on a small project on real data making use of some important concepts seen in course. Run through the different steps of causal inference with machine learning on a dataset of your choice (see below for some propositions of dataset).</p>
+<p>You will hand over a notebook detailing both the formalization of your problem, the chosen methods to address the question of interest, and the results of your analysis. The notebook should be clear and well-structured, with a good balance between text and code. You can use either R or python.</p>
+<section id="details-plan-of-the-analysis">
+<h2>Details plan of the analysis<a class="headerlink" href="#details-plan-of-the-analysis" title="Link to this heading">#</a></h2>
+<p>Important concepts that should appear are shown in parentheses.</p>
+<ul class="simple">
+<li><p>PICO formulation</p></li>
+<li><p>Data exploration (EDA)</p></li>
+<li><p>Identification (Causal Graph)</p></li>
+<li><p>Choice of the covariate to include</p></li>
+<li><p>Estimation with a statistical model: appropriate causal estimator and regressor</p></li>
+<li><p>Parameter/model selection</p></li>
+<li><p>Conclusion and discussion</p></li>
 </ul>
+<p>If time allows, you are encouraged to explore the following. This is not necessary to obtain the maximum note.</p>
+<ul class="simple">
+<li><p>Discussion on the assumptions chosen for identification of the effect</p></li>
+<li><p>sensitivity analysis : placebo check, different models, different covariate sets</p></li>
+<li><p>heterogeneous treatment effects</p></li>
+</ul>
+</section>
+<section id="datasets">
+<h2>Datasets<a class="headerlink" href="#datasets" title="Link to this heading">#</a></h2>
+<p>Here are some datasets that you can use for the project. You can also use your own dataset but in this case, please add a short justification for the interest of the dataset.</p>
+<div class="pst-scrollable-table-container"><table class="table" id="id1">
+<caption><span class="caption-text">Dataset Information</span><a class="headerlink" href="#id1" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Dataset Name</p></th>
+<th class="head"><p>URL</p></th>
+<th class="head"><p>N</p></th>
+<th class="head"><p>P</p></th>
+<th class="head"><p>Question Example</p></th>
+<th class="head"><p>Interventional</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Marketing</p></td>
+<td><p><a class="reference external" href="http://archive.ics.uci.edu/dataset/222/bank+marketing">Link</a></p></td>
+<td><p>45211</p></td>
+<td><p>16</p></td>
+<td><p>“What is the effect of multiple phone call on the term deposit subscription?”</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>Nutritional Followup</p></td>
+<td><p><a class="reference external" href="https://wwwn.cdc.gov/nchs/nhanes/nhefs/">Link</a></p></td>
+<td><p>Unknown</p></td>
+<td><p>Unknown</p></td>
+<td><p>“How do nutrition habits affect long-term health outcomes?”</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>Wages (french version)</p></td>
+<td><p><a class="reference external" href="https://www.insee.fr/fr/statistiques/7651654#dictionnaire">Link</a></p></td>
+<td><p>2403775</p></td>
+<td><p>31</p></td>
+<td><p>“What factors affect wage disparities?”</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>Diabetes 130-US hospitals</p></td>
+<td><p><a class="reference external" href="http://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008">Link</a></p></td>
+<td><p>101766</p></td>
+<td><p>47</p></td>
+<td><p>“What is the effect of HbA1c measurement on hospital readmission rates at 30 days?”</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>Student’s dropout and academic success</p></td>
+<td><p><a class="reference external" href="http://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success">Link</a></p></td>
+<td><p>4424</p></td>
+<td><p>36</p></td>
+<td><p>“What factor influence the dropout of students?”</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>Obesity levels in Mexico</p></td>
+<td><p><a class="reference external" href="http://archive.ics.uci.edu/dataset/544/estimation+of+obesity+levels+based+on+eating+habits+and+physical+condition">Link</a></p></td>
+<td><p>2111</p></td>
+<td><p>16</p></td>
+<td><p>“What action is the most effective to prevent obesity?”</p></td>
+<td><p>No</p></td>
+</tr>
+</tbody>
+</table>
 </div>
+<p>Other potential sources for Datasets:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://cran.r-project.org/web/packages/causaldata/causaldata.pdf&#64;">causal data, mixtape course</a></p></li>
+<li><p><a class="reference external" href="https://www.data.gouv.fr/fr/pages/donnees_apprentissage-automatique/">Aller explorer</a></p></li>
+<li><p><a class="reference external" href="https://gssdataexplorer.norc.org/variables/vfilter">The Welfare experiment</a></p></li>
+<li><p><a class="reference external" href="http://archive.ics.uci.edu/datasets?skip=10&amp;take=10&amp;sort=desc&amp;orderBy=NumHits&amp;search=&amp;NumInstances=572&amp;NumInstances=114237&amp;NumFeatures=12&amp;NumFeatures=3231961">UC Irvine ML repository</a></p></li>
+</ul>
+</section>
+<section id="criteria-for-notations">
+<h2>Criteria for notations<a class="headerlink" href="#criteria-for-notations" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>30 %: General form of the notebook, clarity of the text, and the structure of the notebook.</p></li>
+<li><p>50 %: Multiple concepts seen during the course are present and appropriately used. Are the results correctly interpreted?</p></li>
+<li><p>15 %: Presence and intelligibility of figures (during the exploration and presenting the results).</p></li>
+<li><p>15 %: Do the analysis and its conclusion make sense? Is it convincing?</p></li>
+</ul>
+</section>
 </section>
 
 
@@ -379,14 +504,14 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="right-next"
-       href="syllabus.html"
-       title="next page">
+    <a class="left-prev"
+       href="practical_sessions.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Course syllabus</p>
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Jupyter notebooks for practical sessions</p>
       </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -394,6 +519,25 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#details-plan-of-the-analysis">Details plan of the analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#datasets">Datasets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#criteria-for-notations">Criteria for notations</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

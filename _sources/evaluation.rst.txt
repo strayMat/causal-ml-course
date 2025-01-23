@@ -1,0 +1,102 @@
+==========
+Evaluation 
+==========
+
+The evaluation is based on a small project on real data making use of some important concepts seen in course. Run through the different steps of causal inference with machine learning on a dataset of your choice (see below for some propositions of dataset).
+
+You will hand over a notebook detailing both the formalization of your problem, the chosen methods to address the question of interest, and the results of your analysis. The notebook should be clear and well-structured, with a good balance between text and code. You can use either R or python.
+
+----------------------------
+Details plan of the analysis 
+----------------------------
+
+Important concepts that should appear are shown in parentheses.
+
+- PICO formulation
+- Data exploration (EDA)
+- Identification (Causal Graph)
+- Choice of the covariate to include
+- Estimation with a statistical model: appropriate causal estimator and regressor 
+- Parameter/model selection
+- Conclusion and discussion 
+
+If time allows, you are encouraged to explore the following. This is not necessary to obtain the maximum note. 
+
+- Discussion on the assumptions chosen for identification of the effect
+- sensitivity analysis : placebo check, different models, different covariate sets
+- heterogeneous treatment effects
+
+---------
+Datasets 
+---------
+
+Here are some datasets that you can use for the project. You can also use your own dataset but in this case, please add a short justification for the interest of the dataset.
+
+.. list-table:: Dataset Information
+   :header-rows: 1
+
+   * - Dataset Name
+     - URL
+     - N
+     - P
+     - Question Example
+     - Interventional
+   * - Marketing
+     - `Link <http://archive.ics.uci.edu/dataset/222/bank+marketing>`__
+     - 45211
+     - 16
+     - "What is the effect of multiple phone call on the term deposit subscription?"
+     - No
+   * - Nutritional Followup
+     - `Link <https://wwwn.cdc.gov/nchs/nhanes/nhefs/>`__
+     - Unknown
+     - Unknown
+     - "How do nutrition habits affect long-term health outcomes?"
+     - No
+   * - Wages (french version)
+     - `Link <https://www.insee.fr/fr/statistiques/7651654#dictionnaire>`__
+     - 2403775
+     - 31
+     - "What factors affect wage disparities?"
+     - No
+   * - Diabetes 130-US hospitals
+     - `Link <http://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008>`__
+     - 101766
+     - 47 
+     - "What is the effect of HbA1c measurement on hospital readmission rates at 30 days?"
+     - No  
+   * - Student's dropout and academic success
+     - `Link <http://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success>`__
+     - 4424
+     - 36
+     - "What factor influence the dropout of students?"
+     - No
+   * - Obesity levels in Mexico
+     - `Link <http://archive.ics.uci.edu/dataset/544/estimation+of+obesity+levels+based+on+eating+habits+and+physical+condition>`__
+     - 2111
+     - 16
+     - "What action is the most effective to prevent obesity?"
+     - No
+
+
+Other potential sources for Datasets:
+
+- `causal data, mixtape course <https://cran.r-project.org/web/packages/causaldata/causaldata.pdf@>`__
+
+- `Aller explorer <https://www.data.gouv.fr/fr/pages/donnees_apprentissage-automatique/>`__
+
+- `The Welfare experiment <https://gssdataexplorer.norc.org/variables/vfilter>`__
+
+- `UC Irvine ML repository <http://archive.ics.uci.edu/datasets?skip=10&take=10&sort=desc&orderBy=NumHits&search=&NumInstances=572&NumInstances=114237&NumFeatures=12&NumFeatures=3231961>`__
+
+----------------------
+Criteria for notations 
+----------------------
+
+- 30 %: General form of the notebook, clarity of the text, and the structure of the notebook.
+
+- 50 %: Multiple concepts seen during the course are present and appropriately used. Are the results correctly interpreted?
+
+- 15 %: Presence and intelligibility of figures (during the exploration and presenting the results).
+
+- 15 %: Do the analysis and its conclusion make sense? Is it convincing?
