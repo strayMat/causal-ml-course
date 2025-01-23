@@ -2,9 +2,9 @@
 Evaluation 
 ==========
 
-The evaluation is based on a small project on real data making use of some important concepts seen in course. Run through the different steps of causal inference with machine learning on a dataset of your choice (see below for some propositions of dataset).
+The evaluation is based on a small project on real data making use of some important concepts seen in course. Run through the different steps of causal or predictive inference with machine learning on a dataset of your choice (see below for some propositions of dataset).
 
-You will hand over a notebook detailing both the formalization of your problem, the chosen methods to address the question of interest, and the results of your analysis. The notebook should be clear and well-structured, with a good balance between text and code. You can use either R or python.
+You will hand over a notebook detailing both the formalization of your problem, the chosen methods to address the question of interest, and the results of your analysis. The notebook should be clear and well-structured, with a good balance between text and code. You can use either R or python. For causal inference, you can use the `Double ML package <https://docs.doubleml.org/stable/>`__.
 
 ----------------------------
 Details plan of the analysis 
@@ -43,51 +43,45 @@ Here are some datasets that you can use for the project. You can also use your o
      - Interventional
    * - Marketing
      - `Link <http://archive.ics.uci.edu/dataset/222/bank+marketing>`__
-     - 45211
+     - 45,211
      - 16
      - "What is the effect of multiple phone call on the term deposit subscription?"
      - No
-   * - Nutritional Followup
-     - `Link <https://wwwn.cdc.gov/nchs/nhanes/nhefs/>`__
-     - Unknown
-     - Unknown
-     - "How do nutrition habits affect long-term health outcomes?"
-     - No
    * - Wages (french version)
      - `Link <https://www.insee.fr/fr/statistiques/7651654#dictionnaire>`__
-     - 2403775
+     - 2,403,775
      - 31
      - "What factors affect wage disparities?"
      - No
    * - Diabetes 130-US hospitals
      - `Link <http://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008>`__
-     - 101766
+     - 101,766
      - 47 
      - "What is the effect of HbA1c measurement on hospital readmission rates at 30 days?"
      - No  
    * - Student's dropout and academic success
      - `Link <http://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success>`__
-     - 4424
+     - 4,424
      - 36
      - "What factor influence the dropout of students?"
      - No
    * - Obesity levels in Mexico
      - `Link <http://archive.ics.uci.edu/dataset/544/estimation+of+obesity+levels+based+on+eating+habits+and+physical+condition>`__
-     - 2111
+     - 2,111
      - 16
      - "What action is the most effective to prevent obesity?"
+     - No
+   * - Nutritional Followup (hard)
+     - `Link <https://github.com/NickCH-K/causaldata/tree/main/Python/causaldata/nhefs>`__ 
+     - 1,629
+     - 67
+     - "How do nutrition habits affect long-term health outcomes?"
      - No
 
 
 Other potential sources for Datasets:
 
-- `causal data, mixtape course <https://cran.r-project.org/web/packages/causaldata/causaldata.pdf@>`__
-
-- `Aller explorer <https://www.data.gouv.fr/fr/pages/donnees_apprentissage-automatique/>`__
-
-- `The Welfare experiment <https://gssdataexplorer.norc.org/variables/vfilter>`__
-
-- `UC Irvine ML repository <http://archive.ics.uci.edu/datasets?skip=10&take=10&sort=desc&orderBy=NumHits&search=&NumInstances=572&NumInstances=114237&NumFeatures=12&NumFeatures=3231961>`__
+- `Causal data package: data for the causal mixtape, Huntington-Klein or Hernàn courses <https://github.com/NickCH-K/causaldata/tree/main/Python>`__
 
 ----------------------
 Criteria for notations 
