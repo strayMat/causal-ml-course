@@ -644,23 +644,27 @@
 
 #slide(title: "Synthetic controls: A failure of synthetic controls")[
   == If there exists common causes of outcome and for only part of the controls. 
+  TODO
 ]
 
 #slide(title: "Synthetic controls: Take-away")[
   == Pros
   - More convincing for parallel trends assumption.
-  - Simple for multiple time periods.
-  - Gives confidence intervals.
+  - Handle multiple time periods.
+  - Data driven.
+  - Gives confidence intervals thanks to placebo test.
   
   #pause
   == Cons
   - Requires many control units to yield good pre-treatment fits.
   - Might be prone to overfitting during the pre-treatment period.
+  #pause
   - Still requires a strong assumption: the weights should also balance the post-treatment unexposed outcomes ie. conditional ignorability. See @arkhangelsky2021synthetic for discussions.
+  #pause
   - Still requires the no-anticipation assumption.
 ]
 
-#new-section-slide("Time-series modelisation: methods without a control group")
+#new-section-slide("Interrupted time-series: methods without a control group")
 
 #slide(title: "Interrupted Time Series: intuition")[
   == Setup
@@ -695,39 +699,59 @@
 
   - ARIMA models: AutoRegressive Integrated Moving Average
 
-  #my_box(
-    "Motivation of ARIMA",
-    rgb("#57b4d3"),
-    [
-      Take into account:
-      - the structure of autodependance between observation,
-      - linear trends,
-      - seasonality.
-    ],
-  )
+  
+  == Motivation of ARIMA
+  
+  - Structure of autodependance between observation (auto-regression, moving average),
+  - Linear trends, 
+  - Seasonality.
 
-  A good reference for ARIMA: #link("https://otexts.com/fpp3/","Forecasting: Principles and Practice, chapter 8")
+  === Good reference
+  
+  #link("https://otexts.com/fpp3/","Forecasting (fpp3): Principles and Practice, chapter 8")
 ]
 
 #slide(title: [ARIMA are State Space Models (SSM) #text("says the machine learning community",size: 18pt)])[
+
+  #pause
+  == What is a state space model?
+
+  - The time series has two components: the state $mu_t$ and the observation $y_t$.
+
+  - The state is a latent variable that evolves over time.
+
+  - The observation is a noisy version of the state: $y_t = mu_t + epsilon_t$
+
+  #only(2)[
+    #align(center)[
+       #diagram(
+          cell-size: 20mm,
+          node-stroke: 0.6pt,
+          node-shape: circle,
+          spacing: 1em,
+          let mu_t = ((0, 0)),
+          let y_t = ((0, 1)),
+          let epsilon_t = ((0, 2)),
+          node(mu_t, radius: 8mm, [$mu_t$]),
+          node(y_t, radius: 8mm, [$y_(t)$]),
+          node(epsilon_t, radius: 8mm, [$epsilon_(t)$]),
+          edge(mu_t, y_t, "->"),
+          edge(epsilon_t, y_t, "->")
+        )
+      ]
+  ]
+
+  #pause
   == Why showing this formulation ?
 
   - I better understand ARIMA formulated as state space models.
 
   - SSM are more general than ARIMA models.
 
-  - ARIMA are (almost always) fitted with SSM optimization algorithms.
+  - ARIMA are (often) fitted with SSM optimization algorithms.
 
-  #pause
-  == What is a state space model?
-
-  - The time series has two components: the state and the observation.
-
-  - The state is a latent variable that evolves over time.
-
-  - The observation is a noisy version of the state.
-
-  #alert[Good reference:] @murphy2022probabilistic[book 2, chap 29]
+  === #alert[Good reference] 
+  @murphy2022probabilistic[book 2, chap 29]
 ]
 
 
