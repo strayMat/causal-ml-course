@@ -377,13 +377,13 @@
 #slide(title: "Examples of application of synthetic controls to epidemiology")[
 
   - Literature review of the usage of SCM in healthcare (up to 2016): @bouttell2018synthetic
-  
+
   == Some use cases
-   
+
   - What is the effect of UK pay-for-performance program in primary care on mortality? @ryan2016long
 
   - What is the effect of soda taxes on sugar-based product consumption? @puig2021impact
-  
+
   - What is the effect of Ohio vaccine lottery on covid-19 vaccination? @brehm2022ohio
 
   - What is the effect of wildfire storm on respiratory hospitalizations? @sheridan2022using
@@ -448,9 +448,9 @@
     ]
 
     #only(4)[
-      🤓 This is called a balancing estimator: kind of Inverse Probability Weighting. 
-      
-      Cf.  @wager2024causal[chapter 7] for details on balancing estimators.
+      🤓 This is called a balancing estimator: kind of Inverse Probability Weighting.
+
+      Cf. @wager2024causal[chapter 7] for details on balancing estimators.
     ]
   ][
     #figure(image("img/event_studies/scm_weighted_average.png", width: 100%))
@@ -643,19 +643,19 @@
 ]
 
 #slide(title: [Synthetic controls failure: confounding event for some controls])[
-  === Common causes of outcome and for only part of the controls and the treated unit 
+  === Common causes of outcome and for only part of the controls and the treated unit
   #side-by-side(
     [TODO: explain setup @degli2020can],
-    [#figure(image("img/event_studies/scm_failure_map.png", width: 70%))]
+    [#figure(image("img/event_studies/scm_failure_map.png", width: 70%))],
   )
-  
+
   #pause
   === Suppose that this other event have an impact on the outcome after the treatment.
   For state in [KS, MD, AL, CT, FL], there is a step change in the outcome after the treatment: $bb(1)[t>T_0]$
 ]
 
 #slide(title: [Synthetic controls failure: appropriate controls])[
-  === Focus only on states affected by the confounding events 
+  === Focus only on states affected by the confounding events
 
   #figure(image("img/event_studies/scm_failure_appropriate_control.png", width: 50%))
 
@@ -665,7 +665,7 @@
 ]
 
 #slide(title: [Synthetic controls failure: data-driven controls])[
- === Focus on all comparison states 
+  === Focus on all comparison states
 
   #figure(image("img/event_studies/scm_failure_data_driven_controls.png", width: 50%))
 
@@ -680,7 +680,7 @@
   - Handle multiple time periods.
   - Data driven.
   - Gives confidence intervals thanks to placebo test.
-  
+
   #pause
   == Cons
   - Requires many control units to yield good pre-treatment fits.
@@ -726,16 +726,16 @@
 
   - ARIMA models: AutoRegressive Integrated Moving Average
 
-  
+
   == Motivation of ARIMA
-  
+
   - Structure of autodependance between observation (auto-regression, moving average),
-  - Linear trends, 
+  - Linear trends,
   - Seasonality.
 
   === Good reference
-  
-  #link("https://otexts.com/fpp3/","Forecasting (fpp3): Principles and Practice, chapter 8")
+
+  #link("https://otexts.com/fpp3/", "Forecasting (fpp3): Principles and Practice, chapter 8")
 ]
 
 #slide(title: [ARIMA are State Space Models (SSM) #text("says the machine learning community",size: 18pt)])[
@@ -751,21 +751,21 @@
 
   #only(2)[
     #align(center)[
-       #diagram(
-          cell-size: 20mm,
-          node-stroke: 0.6pt,
-          node-shape: circle,
-          spacing: 1em,
-          let mu_t = ((0, 0)),
-          let y_t = ((0, 1)),
-          let epsilon_t = ((0, 2)),
-          node(mu_t, radius: 8mm, [$mu_t$]),
-          node(y_t, radius: 8mm, [$y_(t)$]),
-          node(epsilon_t, radius: 8mm, [$epsilon_(t)$]),
-          edge(mu_t, y_t, "->"),
-          edge(epsilon_t, y_t, "->")
-        )
-      ]
+      #diagram(
+        cell-size: 20mm,
+        node-stroke: 0.6pt,
+        node-shape: circle,
+        spacing: 1em,
+        let mu_t = (0, 0),
+        let y_t = (0, 1),
+        let epsilon_t = (0, 2),
+        node(mu_t, radius: 8mm, [$mu_t$]),
+        node(y_t, radius: 8mm, [$y_(t)$]),
+        node(epsilon_t, radius: 8mm, [$epsilon_(t)$]),
+        edge(mu_t, y_t, "->"),
+        edge(epsilon_t, y_t, "->"),
+      )
+    ]
   ]
 
   #pause
@@ -777,7 +777,7 @@
 
   - ARIMA are (often) fitted with SSM optimization algorithms.
 
-  === #alert[Good reference] 
+  === #alert[Good reference]
   @murphy2022probabilistic[book 2, chap 29]
 ]
 
@@ -786,9 +786,9 @@
   == AR(1)
   #set align(horizon)
   #side-by-side(
-    [ 
-  #align(center)[
-      == DAG 
+    [
+      #align(center)[
+        == DAG
         #diagram(
           cell-size: 30mm,
           node-stroke: 0.6pt,
@@ -799,29 +799,28 @@
           node(y_2, radius: 8mm, [$y_t$]),
           node(y_3, radius: 8mm, [$y_(t+1)$]),
           edge(y_1, y_2, "->"),
-          edge(y_2, y_3, "->")
+          edge(y_2, y_3, "->"),
         )
-    ]
+      ]
     ],
-  [
-  == Formalization 
-  Observation: $y_t = rho  y_(t-1) + epsilon_(y, t)$ 
-  
-  $"with" &epsilon_(y, t) ~ N(0, sigma_y^2)\
-  &|rho|< 1
-  $
-  ]
+    [
+      == Formalization
+      Observation: $y_t = rho  y_(t-1) + epsilon_(y, t)$
+
+      $"with" &epsilon_(y, t) ~ N(0, sigma_y^2)\
+        &|rho|< 1$
+    ],
   )
   #only(1)[
-    Auto-regression time series model an outcome as a linear regression of its prior values. 
+    Auto-regression time series model an outcome as a linear regression of its prior values.
   ]
   #pause
   == AR(2)
   #set align(horizon)
   #side-by-side(
     [
-  #align(center)[
-      == DAG 
+      #align(center)[
+        == DAG
         #diagram(
           cell-size: 30mm,
           node-stroke: 0.6pt,
@@ -834,66 +833,62 @@
           edge(y_1, y_2, "->"),
           edge(y_2, y_3, "->"),
           edge(y_1, y_3, "->", bend: 30deg),
-          edge(y_2, y_4, "->", bend: 30deg)
+          edge(y_2, y_4, "->", bend: 30deg),
         )
-    ]
+      ]
     ],
-  [
-  == Formalization
-  Observation: $y_t = rho_1  y_(t-1) + rho_2  y_(t-2) + epsilon_(y, t)$
+    [
+      == Formalization
+      Observation: $y_t = rho_1  y_(t-1) + rho_2  y_(t-2) + epsilon_(y, t)$
 
-  $"with" &epsilon_(y, t) ~ N(0, sigma_y^2)\
-  &|rho_1|< 1, |rho_2|< 1
-  $
-  ]
+      $"with" &epsilon_(y, t) ~ N(0, sigma_y^2)\
+        &|rho_1|< 1, |rho_2|< 1$
+    ],
   )
 ]
 
 #slide(title: "State space models: MA(1) ie. ARIMA(0,0,1) model example")[
   #side-by-side(
-    [ 
+    [
       #align(center)[
-      == DAG
-      #diagram(
-        cell-size: 20mm,
-        node-stroke: 0.6pt,
-        node-shape: circle,
-        spacing: 1em,
-        let (y_1, y_2, y_3) = ((0, 1), (1, 1), (2, 1)),
-        let (mu_1, mu_2, mu_3) = ((0, 0), (1, 0), (2, 0)),
-        let (delta_1, delta_2, delta_3) = ((0, -1), (1, -1), (2, -1)),
-        node(y_1, radius: 8mm, [$y_(t-1)$]),
-        node(y_2, radius: 8mm, [$y_t$]),
-        node(y_3, radius: 8mm, [$y_(t+1)$]),
-        node(delta_1, radius: 8mm, [$delta_(t-1)$]),
-        node(delta_2, radius: 8mm, [$delta_t$]),
-        node(delta_3, radius: 8mm, [$delta_(t+1)$]),
-        node(mu_1, radius: 8mm, [$mu_(t-1)$]),
-        node(mu_2, radius: 8mm, [$mu_t$]),
-        node(mu_3, radius: 8mm, [$mu_(t+1)$]),
-        edge(delta_1, mu_1, "->"),
-        edge(delta_1, mu_2, "->"),
-        edge(delta_2, mu_2, "->"),
-        edge(delta_2, mu_3, "->"),
-        edge(delta_3, mu_3, "->"),
-         edge(mu_1, y_1, "->"),
-        edge(mu_2, y_2, "->"),
-        edge(mu_3, y_3, "->")
-      )
-    
-    ]
+        == DAG
+        #diagram(
+          cell-size: 20mm,
+          node-stroke: 0.6pt,
+          node-shape: circle,
+          spacing: 1em,
+          let (y_1, y_2, y_3) = ((0, 1), (1, 1), (2, 1)),
+          let (mu_1, mu_2, mu_3) = ((0, 0), (1, 0), (2, 0)),
+          let (delta_1, delta_2, delta_3) = ((0, -1), (1, -1), (2, -1)),
+          node(y_1, radius: 8mm, [$y_(t-1)$]),
+          node(y_2, radius: 8mm, [$y_t$]),
+          node(y_3, radius: 8mm, [$y_(t+1)$]),
+          node(delta_1, radius: 8mm, [$delta_(t-1)$]),
+          node(delta_2, radius: 8mm, [$delta_t$]),
+          node(delta_3, radius: 8mm, [$delta_(t+1)$]),
+          node(mu_1, radius: 8mm, [$mu_(t-1)$]),
+          node(mu_2, radius: 8mm, [$mu_t$]),
+          node(mu_3, radius: 8mm, [$mu_(t+1)$]),
+          edge(delta_1, mu_1, "->"),
+          edge(delta_1, mu_2, "->"),
+          edge(delta_2, mu_2, "->"),
+          edge(delta_2, mu_3, "->"),
+          edge(delta_3, mu_3, "->"),
+          edge(mu_1, y_1, "->"),
+          edge(mu_2, y_2, "->"),
+          edge(mu_3, y_3, "->"),
+        )
+      ]
     ],
     [
-    == Formalization 
-    Observation: $y_t = mu_t + theta mu_(t-1) + epsilon_(y, t)$ 
+      == Formalization
+      Observation: $y_t = mu_t + theta mu_(t-1) + epsilon_(y, t)$
 
-    Latent: $mu_t = delta_(t)$ 
-    
-     $"with" &epsilon_(y, t) ~ N(0, sigma_y^2)\
-    &delta_(t) ~ N(0, sigma_delta^2)\
-     $
+      Latent: $mu_t = delta_(t)$
 
-    ]
+      $"with" &epsilon_(y, t) ~ N(0, sigma_y^2)\
+        &delta_(t) ~ N(0, sigma_delta^2)$
+    ],
   )
   #pause
   The MA time series models the residual of the regression of $y_t$ on its previous values as a linear combination of the previous residuals : ie. vanishing shocks.
@@ -901,78 +896,77 @@
 
 #slide(title: "State space models: ARMA(p, q) ie. ARIMA(p,0,q) model example")[
   TODO: check the SSM formulation
-    == Formalization 
-    Observation: $y_t = mu_t + epsilon_(y, t)$ 
+  == Formalization
+  Observation: $y_t = mu_t + epsilon_(y, t)$
 
-    Latent: $mu_t = delta_(t) + theta delta_(t-1) + epsilon_(mu, t)$ 
-    
-     $"with" &epsilon_(y, t) ~ N(0, sigma_y^2)\
+  Latent: $mu_t = delta_(t) + theta delta_(t-1) + epsilon_(mu, t)$
+
+  $"with" &epsilon_(y, t) ~ N(0, sigma_y^2)\
     &epsilon_(mu, t) ~ N(0, sigma_mu^2)\
-    &delta_(mu, t) ~ N(0, sigma_delta^2)\
-     $
+    &delta_(mu, t) ~ N(0, sigma_delta^2)$
 
-    == Unfolding the state space equations
-    $y_t = sum_(i=1)^(p) rho_i y_(t-i) + sum_(j=1)^(q) theta_j delta_(t-j) + epsilon_(y, t)$
+  == Unfolding the state space equations
+  $y_t = sum_(i=1)^(p) rho_i y_(t-i) + sum_(j=1)^(q) theta_j delta_(t-j) + epsilon_(y, t)$
 ]
 
 
 #slide(title: "State space models: Adding a seasonnality and a covariate component")[
-#side-by-side(
-    [ 
+  #side-by-side(
+    [
       #align(center)[
-      == DAG
-      #diagram(
-        cell-size: 15mm,
-        node-stroke: 0.6pt,
-        node-shape: circle,
-        spacing: 1em,
-        let (s_11, s_12, s_13) = ((0, 0), (0, -1), (0, -2)),
-        let (s_1, s_2, s_3) = ((1, 0), (1, -1), (1, -2)),
-        let (mu_1, mu_2) = ((1, -3), (0, -3)),
-        let y = ((1, 1)),
-        let x = ((1, 2)),
-        node(s_11, radius: 7mm, [$s_(t-1)$]),
-        node(s_12, radius: 7mm, [$s_(t-2)$]),
-        node(s_13, radius: 7mm, [$s_(t-3)$]),
-        node(s_1, radius: 7mm, [$s_(t)$]),
-        node(s_2, radius: 7mm, [$s_(t-1)$]),
-        node(s_3, radius: 7mm, [$s_(t-2)$]),
-        node(mu_1, radius: 7mm, [$mu_(t)$]),
-        node(mu_2, radius: 7mm, [$mu_(t-1)$]),
-        node(y, radius: 7mm, [$y_t$]),        
-        node(x, radius: 7mm, [$x_t$]),
-        edge(s_11, s_1, "->"),
-        edge(s_11, s_2, "->"),
-        edge(s_12, s_1, "->"),
-        edge(s_12, s_3, "->"),
-        edge(s_13, s_1, "->"),
-        edge(s_1, y, "->"),
-        edge(mu_2, mu_1, "->"),
-        edge(mu_1, y, "->", bend: 40deg),
-        edge(x, y, "->"),
-      )
-    
-    ]
+        == DAG
+        #diagram(
+          cell-size: 15mm,
+          node-stroke: 0.6pt,
+          node-shape: circle,
+          spacing: 1em,
+          let (s_11, s_12, s_13) = ((0, 0), (0, -1), (0, -2)),
+          let (s_1, s_2, s_3) = ((1, 0), (1, -1), (1, -2)),
+          let (mu_1, mu_2) = ((1, -3), (0, -3)),
+          let y = (1, 1),
+          let x = (1, 2),
+          node(s_11, radius: 7mm, [$s_(t-1)$]),
+          node(s_12, radius: 7mm, [$s_(t-2)$]),
+          node(s_13, radius: 7mm, [$s_(t-3)$]),
+          node(s_1, radius: 7mm, [$s_(t)$]),
+          node(s_2, radius: 7mm, [$s_(t-1)$]),
+          node(s_3, radius: 7mm, [$s_(t-2)$]),
+          node(mu_1, radius: 7mm, [$mu_(t)$]),
+          node(mu_2, radius: 7mm, [$mu_(t-1)$]),
+          node(y, radius: 7mm, [$y_t$]),
+          node(x, radius: 7mm, [$x_t$]),
+          edge(s_11, s_1, "->"),
+          edge(s_11, s_2, "->"),
+          edge(s_12, s_1, "->"),
+          edge(s_12, s_3, "->"),
+          edge(s_13, s_1, "->"),
+          edge(s_1, y, "->"),
+          edge(mu_2, mu_1, "->"),
+          edge(mu_1, y, "->", bend: 40deg),
+          edge(x, y, "->"),
+        )
+
+      ]
     ],
     [
-    == Formalization
+      == Formalization
 
-    Observation with covariates and seasonality: 
-    
-    $y_t = mu_t + beta x_t + s_t + epsilon_(y,t)$ 
-    
-    #v(1em)
-    Where seasonality:
+      Observation with covariates and seasonality:
 
-    $s_t &= - sum^(S-1)_(k=1) s_(t-k) + epsilon_(s,t)\
-    &"with" epsilon_s,t ~ N(0, sigma^2_s)$
-    ]
+      $y_t = mu_t + beta x_t + s_t + epsilon_(y,t)$
+
+      #v(1em)
+      Where seasonality:
+
+      $s_t &= - sum^(S-1)_(k=1) s_(t-k) + epsilon_(s,t)\
+        &"with" epsilon_s,t ~ N(0, sigma^2_s)$
+    ],
   )
 ]
 
 #slide(title: [State space models: General formulation])[
   == SSM have a more general formulation than ARIMA models
-  
+
   - State equation: $alpha_t = T_t alpha_(t-1) + c_t R_t eta_t$ with $eta_t ~ N(0, Q_t)$
 
   - Observation equation: $y_t = Z_t alpha_t + beta^T x_t + H_t epsilon_t$ with $epsilon_t ~ N(0, V_t)$
@@ -986,19 +980,18 @@
       Complex SSM DAG from the Causal Impact paper @brodersen2015inferring
     ],
     [
-  #figure(image("img/event_studies/complex_ssm.png", width: 90%))
-    ]
-  
+      #figure(image("img/event_studies/complex_ssm.png", width: 90%))
+    ],
   )
 ]
 
 #slide(title: [State space models: a brief word on fitting (ie. learning the parameters)])[
   === When the error terms are gaussians
 
-  These modeles are called linear Gaussian state space model (LG-SSM) or linear dynamical system (LDS). 
+  These modeles are called linear Gaussian state space model (LG-SSM) or linear dynamical system (LDS).
 
-  === The likelihood is jointly gaussian 
-  
+  === The likelihood is jointly gaussian
+
   #alert[Closed form formula] for the likelihood of the data under the model.
 
   #pause
@@ -1007,7 +1000,7 @@
 
   - Expectaction: Compute the joint likelihood of the data and the parameters (observed outcome, unknown state) given the parameters.
 
-  - Maximization: find parameters maximizing the likelihood: analytically since gaussian. 
+  - Maximization: find parameters maximizing the likelihood: analytically since gaussian.
 
   - Iter until convergence to a (local) maximum of likelihood.
 ]
@@ -1021,7 +1014,7 @@
 
 
 #slide(title: "Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007")[
-  == Context 
+  == Context
 
   In 2001, compared to the European Union countries, France was a country where:
   - the population consumed the most antibiotics in town
@@ -1030,21 +1023,21 @@
 
   == Campaign (october 2002)
 
-  France implemented a national plan to “preserve the effectiveness of antibiotics and improve their use” with the main action undertaken by the National Health Insurance. 
+  France implemented a national plan to “preserve the effectiveness of antibiotics and improve their use” with the main action undertaken by the National Health Insurance.
 
-  The campaign was reactivated every year until from october to march. 
+  The campaign was reactivated every year until from october to march.
 
   == Question
-  
+
   What has been the effect of the campaign on the consumption of antibiotics? @sabuncu2009significant
 ]
 
 #slide(title: "Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007")[
   == Weekly reimbursed prescription of antibiotics in town
 
- #figure(image("img/event_studies/sabuncu2009_fig1.png", width: 70%))
+  #figure(image("img/event_studies/sabuncu2009_fig1.png", width: 70%))
 
- Interventions during the months of october to march: $"month"(t) in M_0$.
+  Interventions during the months of october to march: $"month"(t) in M_0$.
 ]
 
 
@@ -1060,19 +1053,19 @@
 ]
 
 #slide(title: "Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007")[
-  
-   #figure(image("img/event_studies/sabuncu2009_fig4.png", width: 68%))
+
+  #figure(image("img/event_studies/sabuncu2009_fig4.png", width: 68%))
   #set text(size: 18pt)
   - #text(red)[Red curve: arima fitted with intervention]
   - #text(red)[Red Horizontal line: intervention effect fitted during intervention]
-  
+
   - Black curve: arima fitted without intervention
   - Black horizontal line: intervention effect fitted pre-intervention
-  
+
 ]
 
 #slide(title: "Example of ITS with more general SSM: Causal impact")[
-TODO
+  TODO
 ]
 
 
@@ -1107,19 +1100,19 @@ TODO
 #slide(title: "Main threat to validity for an ITS: historical bias")[
   #side-by-side()[
     ⚠ If there is a co-intervention, it will impact the outcome trend and bias the treatment effect estimation.
-    
+
     #uncover(2)[
-      💡 Adding a control series of predictors can help to mitigate this bias.  
+      💡 Adding a control series of predictors can help to mitigate this bias.
     ]
   ][
     #only(1)[
       #figure(image("img/event_studies/its_cofounding_event.png", width: 100%))
-      ]
+    ]
     #only(2)[
       #figure(image("img/event_studies/its_cofounding_event_controlled.png", width: 100%))
     ]
     #text(size: 18pt)[Illustration from @degli2020can[Fig. 1]]
-  ]  
+  ]
 ]
 
 
@@ -1251,7 +1244,7 @@ TODO
 
 
 #slide(title: "Final word -- What methods to chose: some guides")[
-  
+
   #set text(size: 18pt)
   == DID-family methods
 
@@ -1285,18 +1278,18 @@ TODO
 
 #slide(title: [Synthetic controls: conformal prediction inference])[
   == Introduced by @chernozhukov2021exact
-  
-  - Recast the problem as #alert[counterfactual inference], ie. predict:  $Y_(i t)(0) "for" t>T_0 $ 
+
+  - Recast the problem as #alert[counterfactual inference], ie. predict: $Y_(i t)(0) "for" t>T_0 $
 
   - Test hypothesis: $H_0$ eg. $H_0 = (0, 0, .., 0)$ ie no effect for $t > T_0$
-  
+
   - This imply the generation of a hypothesis counterfactual trajectory $Y_t (0)$
 
   == Question
 
   Are the post-treatment residuals of a model fitted on the hypothesis counterfactual trajectory an outlier of the distribution of the residuals pre-treatment?
 
-  == Why does this works? 
+  == Why does this works?
 
   Syntehtic controls estimation are invariant under the time series dimension so we can resample under this dimension to introduce data variability.
 
@@ -1315,7 +1308,7 @@ TODO
 ]
 
 #slide(title: [Conformal inference: test statistic and resampling])[
-  Summarize the residuals in a statistic: $S(hat(u)) = big("(") 1 / sqrt(T-T_0 + 1) sum_(t=T_0 + 1)^(T) |hat(u)_t|^q big(")")^(1/q)$ 
+  Summarize the residuals in a statistic: $S(hat(u)) = big("(") 1 / sqrt(T-T_0 + 1) sum_(t=T_0 + 1)^(T) |hat(u)_t|^q big(")")^(1/q)$
 
 ]
 
@@ -1324,16 +1317,16 @@ TODO
   == Resample this statistic by block permutation $pi$ of the time periods
 
   Same as permutting the data since SCM are invariant under the time series dimension.
-    
+
   #figure(image("img/event_studies/block-perm.png", width: 60%))
-    
-  #align(center)[#text(size:12pt)[Image from: Causal Inference for the Brave and True]]
+
+  #align(center)[#text(size: 12pt)[Image from: Causal Inference for the Brave and True]]
 ]
 
 #slide(title: [Conformal inference: P-value])[
- - Assess if the post-treatment statistics is an outlier of this distribution. 
-  
-- P-value: $hat(F) (x) = 1/(|Pi|) sum_(pi in Pi) bb(1) [S(hat(u)_(pi_(0))) <= S(hat(u)_(pi))]$ where $pi_(0)$ is the original data.
+  - Assess if the post-treatment statistics is an outlier of this distribution.
+
+  - P-value: $hat(F) (x) = 1/(|Pi|) sum_(pi in Pi) bb(1) [S(hat(u)_(pi_(0))) <= S(hat(u)_(pi))]$ where $pi_(0)$ is the original data.
 
 ]
 #slide(title: "Conformal inference: confidence intervals")[

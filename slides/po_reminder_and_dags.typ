@@ -64,7 +64,7 @@
   )
 
   let content = {
-    show: align.with(top)
+    show: align.with(horizon)
     show: pad.with(
       left: 1em,
       top: 0em,
@@ -121,27 +121,6 @@
 
 
 
-/*
-#let imp_block(body) = {
-  block(
-    fill: aqua,
-    inset: 6pt,
-    radius: 4pt,
-    body
-  )
-}
- */
-// Use #polylux-slide to create a slide and style it using your favourite Typst functions
-// #polylux-slide[
-//   #align(horizon + center)[
-//     = Very minimalist slides
-
-//     A lazy author
-
-//     July 23, 2023
-//   ]
-// ]
-
 #title-slide(
   author: [Matthieu Doutreligne],
   title: "Machine Learning for econometrics",
@@ -182,54 +161,50 @@
 
   - Economics: How does supply and demand (causally) depend on price?
 
-  #uncover((2, 3, 4, 5, 6))[
-    - Policy: Are job training programmes actually effective?
-  ]
-  #uncover((3, 4, 5, 6))[
-    - Epidemiology: How does this threatment affect the patient's health?
-  ]
-  #uncover((4, 5, 6))[
-    - Public health : Is this prevention campaign effective?
-  ]
-  #uncover((5, 6))[
-    - Psychology: What is the effect of family structure on children's outcome?
-  ]
-  #uncover(6)[
-    - Sociology: What is the effect of social media on political opinions?
-  ]
+  #pause
+  - Policy: Are job training programmes actually effective?
+
+  #pause
+  - Epidemiology: How does this threatment affect the patient's health?
+
+  #pause
+  - Public health : Is this prevention campaign effective?
+
+  #pause
+  - Psychology: What is the effect of family structure on children's outcome?
+
+  #pause
+  - Sociology: What is the effect of social media on political opinions?
 ]
 
 #slide(title: "This is different from predictive questions")[
 
   == Prediction (ML): What usually happens in a given situation?
 
+  #side-by-side(gutter: 3mm, columns: (1fr, 1fr))[
+    #figure(image("img/po_reminder_and_dags/dag_x_to_y.svg", width: 40%))
+  ][
+    Prediction models $(X, Y)$
+  ]
 
-  #uncover((1, 2, 3, 4, 5, 6, 7))[
-    - What will be the weather tomorrow?
-  ]
-  #uncover((2, 3, 4, 5, 6, 7))[
-    - What will be the outcome of the next election?
-  ]
-  #uncover((3, 4, 5, 6, 7))[
-    - How many people will get infected by flue next season?
-  ]
-  #uncover((4, 5, 6, 7))[
-    - What is the cardio-vacular risk of this patient?
-  ]
-  #uncover((5, 6, 7))[
-    - How much will the price of a stock be tomorrow?
-  ]
-  #h(4em)
-  #uncover((6, 7))[
-    #side-by-side(gutter: 3mm, columns: (1fr, 1fr))[
-      #figure(image("img/po_reminder_and_dags/dag_x_to_y.svg", width: 40%))
-    ][
-      Prediction models $(X, Y)$
-    ]
-  ]
-  #uncover(7)[
-    #alert([Assumption]) Train and test data are drawn from the same distribution.
-  ]
+  #pause
+  - What will be the weather tomorrow?
+
+  #pause
+  - What will be the outcome of the next election?
+
+  #pause
+  - How many people will get infected by flue next season?
+
+  #pause
+  - What is the cardio-vacular risk of this patient?
+
+  #pause
+  - How much will the price of a stock be tomorrow?
+
+  #pause
+  #align(center)[#alert([Assumption]) Train and test data are drawn from the same distribution.]
+
 ]
 
 #slide(title: "Machine learning is pattern matching")[
@@ -329,16 +304,17 @@
   == Example from epidemiology
 
   - Population: patients experiencing a stroke
-  #uncover((2, 3, 4))[
-    - #c_treated[Intervention $A = 1$: patients had access to a MRI scan #text(weight: "extrabold")[in less than 3 hours] after the first symptoms]
-    - #c_control[Comparator $A = 0$: patients had access to a MRI scan #text(weight: "extrabold")[in more than 3 hours] after the first symptoms]
-  ]
-  #uncover((3, 4))[
-    - $Y = PP[text("Mortality")]$: the mortality at 7 days
-  ]
-  #uncover(4)[
-    - $X = PP[text("Charlson score")]$: a comorbidity index summarizing the overall health state of the patient. Higher is bad for the patient.
-  ]
+
+  #pause
+  - #c_treated[Intervention $A = 1$: patients had access to a MRI scan #text(weight: "extrabold")[in less than 3 hours] after the first symptoms]
+  - #c_control[Comparator $A = 0$: patients had access to a MRI scan #text(weight: "extrabold")[in more than 3 hours] after the first symptoms]
+
+  #pause
+  - $Y = PP[text("Mortality")]$: the mortality at 7 days
+
+  #pause
+  - $X = PP[text("Charlson score")]$: a comorbidity index summarizing the overall health state of the patient. Higher is bad for the patient.
+
 ]
 
 
@@ -523,10 +499,9 @@
 
 #slide(title: [Identification: Build the causal model])[
 
-  #quote(
-    attribution: [@elwert2014endogenous],
-  )[A causal effect is said to be identified if it is possible, with ideal data (infinite sample size and no measurement error), to purge an observed association of all noncausal components such that only the causal effect of interest remains.]
-
+  #quote(attribution: [@elwert2014endogenous], block: true)[
+    A causal effect is said to be identified if it is possible, with ideal data (infinite sample size and no measurement error), to purge an observed association of all noncausal components such that only the causal effect of interest remains.
+  ]
 
   == Steps
   - Potential outcome framework : mathematical tool to reason about causality
@@ -544,9 +519,9 @@
   For each individual, we have two potential outcomes: $Y(1)$ and $Y(0)$. But only
   one is observed, depending on the treatment assignment: $Y(A)$.
 
-  #uncover(2)[
-    #figure(image("img/po_reminder_and_dags/sample_po.png", width: 60%))
-  ]
+  #pause
+  #figure(image("img/po_reminder_and_dags/sample_po.png", width: 60%))
+
 ]
 
 
@@ -554,9 +529,9 @@
   - Average treatment effect (ATE): #text(size: 1.3em)[$EE[Y(1) - Y(0)]$]
   - Conditional average treatment effect (CATE): #text(size: 1.3em)[$EE[Y(1) - Y(0) | X]$]
 
-  #uncover(2)[
-    #figure(image("img/po_reminder_and_dags/po_sample_estimand.png", width: 80%))
-  ]
+  #pause
+  #figure(image("img/po_reminder_and_dags/po_sample_estimand.png", width: 80%))
+
 ]
 
 #slide(title: "Causal estimand: What is the targeted quantity (with potential outcomes)?")[
@@ -565,13 +540,13 @@
   - Average treatment effect on the treated (ATT): $EE[Y(1) - Y(0) | A = 1]$
   - Conditional average treatment effect on the treated (CATT): #linebreak() #align(right)[$EE[Y(1) - Y(0) | A = 1, X]$]
 
-  #uncover(2)[
-    == Other estimands more used in epidemiology
+  #pause
+  == Other estimands more used in epidemiology
 
-    - Risk ratio (RR): $EE[Y(1)] / EE[Y(0)]$
-    - Odd ratio (OR) for binary outcome: $big(paren.l) PP[Y(1)=1] / PP[Y(1)=0] Big(paren.r) big(slash) big(paren.l)PP[Y(0)=1] / PP[Y(0)=0]big(paren.r)$
+  - Risk ratio (RR): $EE[Y(1)] / EE[Y(0)]$
+  - Odd ratio (OR) for binary outcome: $big(paren.l) PP[Y(1)=1] / PP[Y(1)=0] Big(paren.r) big(slash) big(paren.l)PP[Y(0)=1] / PP[Y(0)=0]big(paren.r)$
 
-    See @colnet2023risk for a review of the different estimands and the impact on generalization.]
+  See @colnet2023risk for a review of the different estimands and the impact on generalization.
 ]
 
 #slide(title: "PICO framework, link to the potential outcomes")[
@@ -622,11 +597,11 @@
 
   #eq[${Y(1), Y(0)} A | e(X)$]
 
-  #uncover(2)[- Knowledge based ie. cannot be validated with data //Still, there is some work on causal discovery, mostly based on conditional independence tests @glymour2019review.
+  #pause
+  - Knowledge based ie. cannot be validated with data //Still, there is some work on causal discovery, mostly based on conditional independence tests @glymour2019review.
     - Because of possibly unmeasured confounders
 
     - In practice : ask yourself if you have measured all the relevant variables that could influence both the treatment and the outcome.
-  ]
 ]
 
 
@@ -984,11 +959,11 @@
 
   Paths from $X_5$ to $X_2$? Which of them are opened/blocked?
 
-  #uncover(2)[
-    $X_5 arrow X_1 arrow X_2$ (blocked by conditionning on $X_1$)
+  #pause
+  $X_5 arrow X_1 arrow X_2$ (blocked by conditionning on $X_1$)
 
-    $X_5 arrow X_1 arrow X_2 arrow X_4$ (opened by conditionning $X_4$)
-  ]
+  $X_5 arrow X_1 arrow X_2 arrow X_4$ (opened by conditionning $X_4$)
+
 ]
 
 
@@ -1065,11 +1040,11 @@
 
   What are the backdoor paths from $X_1$ to $X_4$? from $X_2$ tot $X_4$?
 
-  #uncover(2)[
-    $X_1 arrow.l X_5 arrow X_4$
+  #pause
+  $X_1 arrow.l X_5 arrow X_4$
 
-    $X_2 arrow.l arrow.l X_5 arrow X_4$
-  ]
+  $X_2 arrow.l arrow.l X_5 arrow X_4$
+
 
 ]
 
@@ -1109,30 +1084,30 @@
   - Condition on variables that block non-causal backdoor paths
   - Don’t condition on colliders! Eg. don't condition on post-treatment variables.
 
-  #uncover(2)[
-    In the following example, to estimate the effect of T on Y, we should:
-    - Condition on X
-    - NOT condition on M because it is a descendant of T
+  #pause
+  In the following example, to estimate the effect of T on Y, we should:
+  - Condition on X
+  - NOT condition on M because it is a descendant of T
 
-    #align(center)[
-      #diagram(
-        cell-size: 5mm,
-        node-stroke: 0.6pt,
-        spacing: 1em,
-        node-shape: circle,
-        let (A, X, Y, C) = ((-1, 1), (0, 0), (1, 1), (0, 2)),
-        node(A, $A$),
-        node(X, $X$),
-        node(Y, $Y$),
-        node(C, $C$),
-        edge(X, A, "->"),
-        edge(X, Y, "->"),
-        edge(A, Y, "->"),
-        edge(A, C, "->"),
-        edge(Y, C, "->"),
-      )
-    ]
+  #align(center)[
+    #diagram(
+      cell-size: 5mm,
+      node-stroke: 0.6pt,
+      spacing: 1em,
+      node-shape: circle,
+      let (A, X, Y, C) = ((-1, 1), (0, 0), (1, 1), (0, 2)),
+      node(A, $A$),
+      node(X, $X$),
+      node(Y, $Y$),
+      node(C, $C$),
+      edge(X, A, "->"),
+      edge(X, Y, "->"),
+      edge(A, Y, "->"),
+      edge(A, C, "->"),
+      edge(Y, C, "->"),
+    )
   ]
+
 ]
 
 
@@ -1285,21 +1260,43 @@
   === Effect modifier: influences the treatment effect on the outcome.
 
   #figure(image("img/po_reminder_and_dags/effect_modifier.svg", width: 20%))
-
-  #uncover(2)[
-
-    Examples :
-    -
-  ]
 ]
 
-#slide(title: "A word on structural equation models")[ ]
 
+#slide(title: "Take away on DAGs")[
+  - DAGs are a powerful tool to reason about causality
+  - Useful to identify the variables to condition on / to include into the analysis
+  - NB: Drawing the true DAG is often hard / not feasable
+]
+
+
+#slide(title: [Take away on covariate selection])[
+
+  === What is the most important part to insure validity?
+
+  - The covariate included (an appropriate DAG)?
+
+  - The design of the study?
+
+  - The causal estimator (IPW, G-formula, AIPW...)
+
+  - The statistical estimator (Linear regression, Logistic regression...)
+]
+
+#slide(title: [Comparing different choices for the study steps @doutreligne2024causalthinking])[
+  == Question of interest
+  #figure(image("img/po_reminder_and_dags/applied_inference_flow.png", width: 100%))
+]
+
+
+#slide(title: "Results of the sensitivity analysis")[
+  #figure(image("img/po_reminder_and_dags/tutorial_ci_results.png", width: 50%))
+]
 
 #new-section-slide("Practical session")
 
 #slide(title: "To your notebooks! 👩‍💻")[
-  - url:
+  - url: https://straymat.github.io/causal-ml-course/practical_sessions.html
 ]
 
 #let bibliography = bibliography("biblio.bib", style: "apa")
@@ -1308,4 +1305,12 @@
 #set text(size: 20pt, style: "italic")
 #slide[
   #bibliography
+]
+
+
+#new-section-slide("Supplementary material")
+
+
+#slide(title: "A word on structural equation models")[
+  TODO
 ]
