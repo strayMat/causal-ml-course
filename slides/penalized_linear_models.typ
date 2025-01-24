@@ -117,6 +117,8 @@
   logic.polylux-slide(content)
 }
 
+#show link: set text(fill: rgb("#3788d3"))
+
 #title-slide(
   author: [Matthieu Doutreligne],
   title: "Machine Learning for econometrics",
@@ -126,19 +128,93 @@
 )
 
 
+#slide(title: "Introduction of the course")[
+  == Objectives
+
+  Important #alert[concepts and methods] of machine learning
+
+  Useful for #alert[empirical work] in economics
+
+  #pause
+  == Philosophy
+
+  - #alert[Intutions] rather than equations
+
+  - Basics and #alert[references for formal understanding]
+
+  - Be able to use the method in practice: #alert[Coding] 👩‍💻
+]
+
+#slide(title: "About me 👋")[
+  == Matthieu Doutreligne
+
+  - Master degree in ML and Artificial Intelligence
+
+  - PhD in statistics and informatics (Social Data / scikit-learn team): #linebreak()
+  _Causal methods with machine learning applied to clinical data_
+
+  - Statistian since 4 years at French High Authority of Health
+
+  - Moving at Insee next year
+
+  === More from the #alert[machine learning] than #alert[economics] culture
+]
+
+#slide(title: "Course syllabus")[
+  8 sessions, two teachers: Matthieu Doutreligne (MD), Bruno Crépon (BC)
+
+  == Sessions
+
+  - Statistical learning and regularized linear models (MD)
+  - Double-lasso for statistical inference (BC)
+  - Flexible models for tabular data (MD)
+  - Reminders of potential outcomes and Directed Acyclic Graphs (MD)
+  - Event studies: Causal methods for pannel data (MD)
+  - Double machine learning: Neyman-orthogonality (BC)
+  - Heterogeneous treatment effect (BC)
+  - Heterogeneous treatment effect (BC)
+]
+#slide(title: "Course ressources")[
+
+  == Website
+
+  === Detailed syllabus: #link("https://straymat.github.io/causal-ml-course/syllabus.html")
+
+  === Slides: #link("https://straymat.github.io/causal-ml-course/slides.html")
+
+  === Practical sessions: #link("https://straymat.github.io/causal-ml-course/practical_sessions.html")
+
+]
+
+#slide(title: "Evaluation of the course")[
+  == Coding project on data
+
+  - Causal inference on a small dataset of your choice: several datasets provided.
+  - Objective: ask a sound causal question, discuss hypotheseses and estimate a causal effect with a machine learning method, discuss the design and the results.
+
+  == Details
+
+  - Handing over a notebook with code and comments
+  - Language: R or python
+  - Details on the course website: #link("https://straymat.github.io/causal-ml-course/evaluation.html")
+  - Inscription on the website: #link("https://straymat.github.io/causal-ml-course/evaluation.html")
+]
+
 #slide(title: "Today's program")[
 
-  - Last session: importance of causal variable status
-  - Today: #alert[predictive inference] in high dimensions
-    - Statistical learning basics
-    - Regularized linear models for predictive inference
-    - Hands-on with scikit-learn
+  == #alert[Predictive inference] in high dimensions
+  - Statistical learning basics
+  - Regularized linear models for predictive inference
+  - Putting it into practice with scikit-learn
 
-  #uncover(2)[
-    - Next session:
-      - Flexible models: Trees, Random Forests, Gradient Boosting
-      - Practical scikit-learn
-  ]
+  #pause
+
+  == Next two sessions
+
+  - Double-Lasso: using penalized linear models for causal inference (Bruno Crépon)
+
+  - Flexible models: Trees, Random Forests, Gradient Boosting and more scikit-learn
+
 ]
 
 
@@ -353,9 +429,11 @@
 
 #slide(title: "Empirical Risk Minimization")[
 
-  - Define a loss function $ell$ that defines proximity between the predicted value $hat(y) = f(x)$ and the true value $y$: $ell(f(x), y)$
+  - Define a #alert[loss function $ell$] that defines proximity between the predicted value $hat(y) = f(x)$ and the true value $y$: $ell(f(x), y)$
+  #pause
 
-  - Usually, for continuous outcomes, the squared loss is used: $ell(f(x), y) = (f(x) - y)^2$
+  - Usually, for continuous outcomes, the #alert[squared loss] is used: $ell(f(x), y) = (f(x) - y)^2$
+  #pause
 
   - We choose among a (finite) family of functions $f in cal(F)$, the best possible function $f^star$ minimizes the #alert[risk or expected loss] $cal(E)(f) = EE[(f(x) - y)^2]$:
 
@@ -363,12 +441,14 @@
 ]
 
 #slide(title: "Empirical risk minimization: estimation error")[
-  - In finite sample regimes, the expectation is not accessible since we only have access to a finite number of data pairs
+  - In finite sample regimes, #alert[the expectation $EE$ is not accessible] since we only have access to a finite number of data pairs
 
+  #pause
   - In practice, we minimize the #alert[empirical risk] or average loss $R_(text("emp"))= sum_(i=1)^n (f(x_i) - y_i)^2$:
 
   #eq[$hat(f) = text("argmin")_(f in cal(F)) sum_(i=1)^n (f(x_i) - y_i)^2$]
 
+  #pause
   - This creates the #highlight(fill:c_variance)[estimation error], related to sampling noise:
   #eq[$cal(E)(hat(f)) - cal(E)(f^(star)) = EE[(hat(f)(x) - y)^2] - EE[(f^(star)(x) - y)^2] >= 0$]
 ]
@@ -386,30 +466,39 @@
       == Model is too complex
       - The model is able to recover the true generative process
       - But its flexibility captures noise
+
+      #pause
       == Too much noise
       == Not enough data
     ],
   )
-
 ]
 
 #slide(title: "Bayes error rate: Randomness of the problem")[
 
-  - Interesting problems exhibit randomness #linebreak()
+  == Interesting problems exhibit randomness
+
   $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 
-  - The best possible estimator is $g(dot)$, yielding the #highlight(fill:c_bayes)[Bayes error], the unavoidable error:
-    #eq[$cal(E)(g) = EE[(g(x) + e - g(x))^2] = EE[e^2]$]
+  == Best possible estimator, $g(dot)$
+
+  $g(dot)$ induces the #highlight(fill:c_bayes)[Bayes error], the unavoidable error:
+  #eq[$cal(E)(g) = EE[(g(x) + e - g(x))^2] = EE[e^2]$]
 
 ]
 
 #slide(title: "Empirical risk minimization: approximation error")[
 
-  - In practice you don't know the class of function in which the true function lies : $y approx g(x)$ : Every model is wrong !
+  === In practice, the class of function in which the true function lies is unknown:
+  $y approx g(x)$ : Every model is wrong !
 
-  - You are choosing the best possible function in the class of functions you have access to: $f^star in cal(F)$ eg. linear models, polynomials, trees, ...
+  #pause
+  === One chooses the best possible function in the class of functions we have access to:
+  $f^star in cal(F)$ eg. linear models, polynomials, trees, ...
 
-  - This creates the #highlight(fill:c_bias)[approximation error]:
+  #pause
+  === This creates the #highlight(fill:c_bias)[approximation error]:
+  #v(1em)
   #eq[$cal(E)(f(star)) - cal(E)(g) = EE[(f^(star)(x) - y)^2] - EE[(g(x) - y)^2] >= 0$]
 ]
 
@@ -563,7 +652,7 @@
 
 
 
-#slide(title: "Remaining of this session (and the next)")[
+#slide(title: "Remaining of this session (and the next on predictive inference)")[
 
   = Common model families suited to tabular data
 
@@ -598,6 +687,7 @@
 
     - $beta_0 in RR^(p times 1)$ the _true_ coefficients.
 
+    #pause
     Usually, we assume that the errors are normally distributed and independent of $X_i$ :
 
     $epsilon_i tilde cal(N)(0, sigma^2)$ and $epsilon_i tack.t.double X_i$
@@ -615,10 +705,12 @@
 
   - Mean Squared Error: $text("MSE") = 1/n sum_(i=1)^n (Y_i - hat(Y_i))^2$
 
+  #pause
   - R-squared, : $R^2 = 1 - (sum_(i=1)^(n)(Y_i - hat(Y_i))^2) / (sum_(i=1)^(n)(Y_i - dash(Y))^2)$ where $dash(Y) = 1/n sum_(i=1)^(n) Y_i$
 
   The proportion of variance explained by the model (perfect fit: $R^2=1$)
 
+  #pause
   - Mean absolute error: $text("MAE") = 1/n sum_(i=1)^n |Y_i - hat(Y_i)|$
 ]
 
@@ -674,6 +766,7 @@
       Logistic regression in one dimension.
     ],
     [
+      #pause
       #image("img/penalized_linear_models/logistic_2D.svg", width: 80%)
       Logistic regression in two dimensions.
     ],
@@ -690,6 +783,7 @@
     ],
 
     [
+      #pause
       #image("img/penalized_linear_models/lin_not_separable.svg", width: 80%)
       Data not linearly separable.
     ],

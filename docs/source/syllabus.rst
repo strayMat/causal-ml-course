@@ -26,7 +26,7 @@ Motivation
 High dimension: sparsity in confounders (lasso, double lasso), nonlinearities in confounders (double ML), heterogeneities of effects (generic ML).
 
 =========================================================================
-Session 1 - Statistical learning and regularized linear models
+Session 1 -- Statistical learning and regularized linear models
 =========================================================================
 
 - Reminder of statistical learning: Bias variance tradeoff, appropriate representation, over/under-fitting
@@ -46,7 +46,7 @@ Session 1 - Statistical learning and regularized linear models
   - :cite:t:`hastie2017elements`
 
 ==================================================
-Session 2: Double-lasso for statistical inference
+Session 2 -- Double-lasso for statistical inference
 ==================================================
 
 - Partial linear model 
@@ -64,7 +64,7 @@ Session 2: Double-lasso for statistical inference
   - :cite:t:`gaillac2019machine`, Chapter 2
 
 ============================================
-Session 3 - Flexible models for tabular data
+Session 3 -- Flexible models for tabular data
 ============================================
 
 - Trees, random forests, boosting
