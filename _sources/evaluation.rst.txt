@@ -6,6 +6,13 @@ The evaluation is based on a small project on real data making use of some impor
 
 You will hand over a notebook detailing both the formalization of your problem, the chosen methods to address the question of interest, and the results of your analysis. The notebook should be clear and well-structured, with a good balance between text and code. You can use either R or python. For causal inference, you can use the `Double ML package <https://docs.doubleml.org/stable/>`__.
 
+----------
+Enrollment
+----------
+
+Group: From 2 to 4 students
+url for enrollment : https://docs.getgrist.com/ekBqW5wWgBSQ/Class-Enrollment-ENSAE-ML-for-econometrics/p/5
+
 ----------------------------
 Details plan of the analysis 
 ----------------------------
