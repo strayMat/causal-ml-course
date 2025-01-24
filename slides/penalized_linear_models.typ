@@ -131,9 +131,9 @@
 #slide(title: "Introduction of the course")[
   == Objectives
 
-  Important #alert[concepts and methods] of machine learning
+  Important #alert[concepts and methods] of machine learning...
 
-  Useful for #alert[empirical work] in economics
+  that can be useful for #alert[empirical work] in economics.
 
   #pause
   == Philosophy
@@ -142,20 +142,20 @@
 
   - Basics and #alert[references for formal understanding]
 
-  - Be able to use the method in practice: #alert[Coding] 👩‍💻
+  - Focus on practical skills: #alert[Coding] 👩‍💻
 ]
 
 #slide(title: "About me 👋")[
   == Matthieu Doutreligne
 
-  - Master degree in ML and Artificial Intelligence
+  - Master degree in statistical learning and artificial intelligence (Ensae/MVA)
 
-  - PhD in statistics and informatics (Social Data / scikit-learn team): #linebreak()
-  _Causal methods with machine learning applied to clinical data_
+  - PhD in statistics and informatics (SOcial DAta (soda) / scikit-learn team): #linebreak()
+  #align(center)[_Causal inference with machine learning applied to clinical data_]
 
-  - Statistian since 4 years at French High Authority of Health
+  - Statistician since 4 years at Haute Autorité de santé (HAS)
 
-  - Moving at Insee next year
+  - Moving to Insee next year
 
   === More from the #alert[machine learning] than #alert[economics] culture
 ]
@@ -174,7 +174,7 @@
   - Heterogeneous treatment effect (BC)
   - Heterogeneous treatment effect (BC)
 ]
-#slide(title: "Course ressources")[
+#slide(title: "Course ressources for my four sessions")[
 
   == Website
 
@@ -187,17 +187,17 @@
 ]
 
 #slide(title: "Evaluation of the course")[
-  == Coding project on data
+  == Coding project
 
   - Causal inference on a small dataset of your choice: several datasets provided.
   - Objective: ask a sound causal question, discuss hypotheseses and estimate a causal effect with a machine learning method, discuss the design and the results.
 
   == Details
 
-  - Handing over a notebook with code and comments
+  - Handing over a notebook with code and comments on a github.
   - Language: R or python
-  - Details on the course website: #link("https://straymat.github.io/causal-ml-course/evaluation.html")
-  - Inscription on the website: #link("https://straymat.github.io/causal-ml-course/evaluation.html")
+  - Details and datasets: #link("https://straymat.github.io/causal-ml-course/evaluation.html")
+  - Inscription: #link("https://docs.getgrist.com/ekBqW5wWgBSQ/Class-Enrollment-ENSAE-ML-for-econometrics/p/5")
 ]
 
 #slide(title: "Today's program")[
@@ -967,13 +967,12 @@
   The lasso puts a constrainst of amplitude $t$ on the $L_1$ norm of the coefficients:
   #eq($min_(beta) sum_i^(n)((y_i - beta^T x_i)^2) text("st.") sum_1^(p)|beta_j| <= t$)
 
-  #uncover(2)[
-    This is equivalent to the following optimization problem (using lagrangian multiplier):
-    #eq($min_(beta) sum((y_i - beta^T x_i)^2) + alpha sum(|beta_j|)$)
-  ]
-  #uncover(3)[
-    This penalty discourages large weights and can shrink certain weights to exactly _zero_ (not clear yet why).
-  ]
+  #pause
+  This is equivalent to the following optimization problem (using lagrangian multiplier):
+  #eq($min_(beta) sum((y_i - beta^T x_i)^2) + alpha sum(|beta_j|)$)
+
+  #pause
+  This penalty discourages large weights and can shrink certain weights to exactly _zero_ (not clear yet why).
 ]
 
 #slide(title: "Why does Lasso shrink some coefficients to zero?")[
@@ -996,7 +995,7 @@
     [
       #set align(left)
       - Plot the MSE of the model as a function of the coefficients.
-      #uncover(2)[
+      #uncover((2, 3, 4))[
         - The MSE surface is an ellispoid in $beta$.
       ]
       #uncover(4)[
@@ -1029,14 +1028,13 @@
 
   - The coefficients of the model will be biased towards the features with the largest scale.
 
+  #pause
   == How to rescale?
 
   - Gaussian hypothesis? Standard scaling: $X = (X - text("mean")(X)) / (text("std")(X))$
 
   - Non Gaussian? MinMax scaling: $X = (X - min(X)) / (max(X) - min(X))$
 ]
-
-#slide(title: "Importance of rescaling: illustration")[ ]
 
 #slide(title: "Statistical model behind the Lasso")[
 
@@ -1045,7 +1043,6 @@
   #hyp_box(title: [Assumption 1: Linear model with high dimension])[
 
     $Y = X beta_0 + epsilon$, #h(1em) $epsilon tack.t.double X$ and $X in RR^(n times p)$ with $n << p$
-
   ]
 
   #hyp_box(title: [Assumption 2: (approximate) sparsity])[
@@ -1058,7 +1055,7 @@
 
   === Log likelihood for Lasso classification
 
-  #uncover(2)[
+  #uncover((2, 3))[
     $L(beta) = 1 / N sum_(i=1)^N [(y_i beta^T X_i - log[1 + exp(beta^T X_i)]] -lambda sum_(j=1)^(p)|beta_j|)$
   ]
 
@@ -1094,20 +1091,20 @@
   ]
 ]
 
-#slide(title: "OLS Post-Lasso")[
+#slide(title: "OLS Post-Lasso: fixing excessive shrunkage of coefficients")[
 
-  === Lasso coefficients are shrunk to zero
-
-  #only(2)[
+  #only(1)[
     #figure(image("img/pyfigures/approximate_sparse_true_coeffs.svg", width: 55%))
   ]
-  #only(3)[
+  #only(2)[
     #figure(image("img/pyfigures/approximate_sparse_ols_coeffs.svg", width: 55%))
   ]
 
-  #only(4)[
+  #only(3)[
     #figure(image("img/pyfigures/approximate_sparse_lasso_coeffs.svg", width: 55%))
-    This is good for true zero coefficients but not so good for true non-zeros coefficients.
+    Lasso is good for true zero coefficients (on the right)
+
+    But not so good for true non-zeros coefficients (on the left)
   ]
 ]
 
@@ -1125,23 +1122,17 @@
 
 
 #slide(title: [Short introduction to scikit-learn])[
-  - url: https://github.com/strayMat/causal-ml-course/tree/main/notebooks
-]
-
-#new-section-slide("Python hands-on: Common pitfalls in the interpretation of coefficients of linear models")
-
-#slide(title: [To your notebooks 🧑‍💻!])[
-  - url: https://github.com/strayMat/causal-ml-course/tree/main/notebooks
+  - url: https://straymat.github.io/causal-ml-course/practical_sessions.html
 ]
 
 #slide(title: "Take home messages: Bias-variance trade-off")[
-  == High bias == underfitting
+  == High bias = underfitting
 
   - systematic prediction errors
   - the model prefers to ignore some aspects of the data
   - mispecified models
 
-  == High variance == overfitting:
+  == High variance = overfitting
 
   - prediction errors without obvious structure
   - small change in the training set, large change in model
@@ -1161,8 +1152,15 @@
   - L2 penalty: shrinkage
   - No feature selection
   - Stable for correlated features
-
 ]
+
+
+#new-section-slide("Python hands-on: Common pitfalls in the interpretation of coefficients of linear models")
+
+#slide(title: [To your notebooks 🧑‍💻!])[
+  - url: https://straymat.github.io/causal-ml-course/practical_sessions.html
+]
+
 
 #let bibliography = bibliography("biblio.bib", style: "apa")
 
@@ -1172,8 +1170,9 @@
   #bibliography
 ]
 
+#set text(size: 20pt, style: "normal")
 
-#new-section-slide("Theory supplements")
+#new-section-slide("Supplementary materials")
 
 #slide(title: "Statistical model for lasso: approximate sparsity")[
   #def_box(title: [Definition: Approximate sparsity])[
