@@ -11,7 +11,7 @@ Enrollment
 ----------
 
 Group: From 2 to 4 students
-url for enrollment : https://docs.getgrist.com/ekBqW5wWgBSQ/Class-Enrollment-ENSAE-ML-for-econometrics/p/5
+url for enrollment : https://docs.getgrist.com/forms/p3Q8SAcebEFLSuo3zegKrL/26
 
 ----------------------------
 Details plan of the analysis 
