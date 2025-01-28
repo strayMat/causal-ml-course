@@ -395,30 +395,31 @@ document.write(`
   <section id="evaluation">
 <h1>Evaluation<a class="headerlink" href="#evaluation" title="Link to this heading">#</a></h1>
 <p>The evaluation is based on a small project on real data making use of some important concepts seen in course. Run through the different steps of causal or predictive inference with machine learning on a dataset of your choice (see below for some propositions of dataset).</p>
-<p>You will hand over a notebook detailing both the formalization of your problem, the chosen methods to address the question of interest, and the results of your analysis. The notebook should be clear and well-structured, with a good balance between text and code. You can use either R or python. For causal inference, you can use the <a class="reference external" href="https://docs.doubleml.org/stable/">Double ML package</a>.</p>
+<p>You will be evaluated on two deliverables:</p>
+<ul class="simple">
+<li><p><strong>Handing over a notebook</strong> detailing both the formalization of your problem, the chosen methods to address the question of interest, and the results of your analysis. The notebook should be clear and well-structured, with a good balance between text and code. You can use either R or python or stata. For causal inference, you can use the <a class="reference external" href="https://docs.doubleml.org/stable/">Double ML package</a>.</p></li>
+<li><p>During the last session (April 1st), you will <strong>present your work</strong> to the class. The presentation should be clear and concise, with a focus on the main results and the methodological choices you made. The presentation should be between 20 and 30 min. You can use a slide deck or a live demo of your notebook.</p></li>
+</ul>
 <section id="enrollment">
 <h2>Enrollment<a class="headerlink" href="#enrollment" title="Link to this heading">#</a></h2>
-<p>Group: From 2 to 4 students
-url for enrollment : <a class="reference external" href="https://docs.getgrist.com/forms/p3Q8SAcebEFLSuo3zegKrL/26">https://docs.getgrist.com/forms/p3Q8SAcebEFLSuo3zegKrL/26</a></p>
+<p>Group: From 4 to 5 students. We will send you by mail a link to register your groups and choice of dataset.</p>
 </section>
 <section id="details-plan-of-the-analysis">
 <h2>Details plan of the analysis<a class="headerlink" href="#details-plan-of-the-analysis" title="Link to this heading">#</a></h2>
-<p>Important concepts that should appear are shown in parentheses.</p>
+<p>The following is a typical plan that you should follow for your analysis.
+The excepted steps or concepts are highlighted by a 🧐 emoticon.</p>
 <ul class="simple">
-<li><p>PICO formulation</p></li>
-<li><p>Data exploration (EDA)</p></li>
-<li><p>Identification (Causal Graph)</p></li>
-<li><p>Choice of the covariate to include</p></li>
-<li><p>Estimation with a statistical model: appropriate causal estimator and regressor</p></li>
-<li><p>Parameter/model selection</p></li>
-<li><p>Conclusion and discussion</p></li>
-</ul>
-<p>If time allows, you are encouraged to explore the following. This is not necessary to obtain the maximum note.</p>
-<ul class="simple">
+<li><p>PICO formulation 🧐</p></li>
+<li><p>Exploratory data analysis: descritive analysis, association and vizualisation 🧐</p></li>
+<li><p>Identification with causal graph and choice of covariates to include 🧐</p></li>
 <li><p>Discussion on the assumptions chosen for identification of the effect</p></li>
-<li><p>sensitivity analysis : placebo check, different models, different covariate sets</p></li>
-<li><p>heterogeneous treatment effects</p></li>
+<li><p>Estimation with an appropriate causal estimator (double post lasso, double machine learning, generic machine learning, inverse propensity score, augmented propensity score) and regressor (lasso, ridge, random forest, boosting). It is not expected that you test or use every method.🧐</p></li>
+<li><p>Parameter/model selection for the statistical estimator (cross-validation) 🧐</p></li>
+<li><p>Heterogeneous treatment effects: study the effect of the treatment on different subgroups of the population</p></li>
+<li><p>Sensitivity analysis: placebo check, different models, different covariate sets</p></li>
+<li><p>Conclusion and discussion of the results 🧐</p></li>
 </ul>
+<p>NB: Concluding a valid causal inference study with non-randomized data is not always possible. Crucial confounders could be missing, or other bias could be present in the data production process. The goal of the project is to conduct the most rigorous analysis possible with the data that we are providing you and to discuss the limitations of the study (even if the limits are related to the data). We are not expecting you to be able to robustly conclude on a causal effect in all cases.</p>
 </section>
 <section id="datasets">
 <h2>Datasets<a class="headerlink" href="#datasets" title="Link to this heading">#</a></h2>
