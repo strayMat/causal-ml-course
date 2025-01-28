@@ -197,7 +197,7 @@
   - Handing over a notebook with code and comments on a github.
   - Language: R or python
   - Details and datasets: #link("https://straymat.github.io/causal-ml-course/evaluation.html")
-  - Inscription: #link("https://docs.getgrist.com/ekBqW5wWgBSQ/Class-Enrollment-ENSAE-ML-for-econometrics/p/5")
+  - Inscription: email sent to every students.
 ]
 
 #slide(title: "Today's program")[
@@ -228,6 +228,7 @@
 
   - Predict the value of an outcome based on one or more input variables.
 
+  #pause
   == Setting
 
   - Data: n pairs of (features, outcome), $(x_i, y_i) in cal(X) times cal(Y)$ identically and independently distributed (i.i.d.) from an unknown distribution $P$.
@@ -235,6 +236,7 @@
 
   #eq[$hat(y)=hat(f)(x) approx y$]
 
+  #pause
   == Vocabulary
 
   Finding the appropriate model $hat(f)$ is called learning, training or fitting the model.
@@ -297,6 +299,7 @@
 
   - No non-linearities, no or few interactions between features
 
+  #pause
   == Maybe yes
 
   - High-dimensional data: ie. $p >> n$
@@ -429,13 +432,17 @@
 
 #slide(title: "Empirical Risk Minimization")[
 
-  - Define a #alert[loss function $ell$] that defines proximity between the predicted value $hat(y) = f(x)$ and the true value $y$: $ell(f(x), y)$
-  #pause
+  === Loss function
 
-  - Usually, for continuous outcomes, the #alert[squared loss] is used: $ell(f(x), y) = (f(x) - y)^2$
+  Define a #alert[loss function $ell$] that defines proximity between the predicted value $hat(y) = f(x)$ and the true value $y$: $ell(f(x), y)$
+  
   #pause
-
-  - We choose among a (finite) family of functions $f in cal(F)$, the best possible function $f^star$ minimizes the #alert[risk or expected loss] $cal(E)(f) = EE[(f(x) - y)^2]$:
+  === For continuous outcomes (usually)
+  Using a #alert[squared loss] is used: $ell(f(x), y) = (f(x) - y)^2$
+  
+  #pause
+  === Family of candidate functions
+  We choose among a (finite) family of functions $f in cal(F)$, the best possible function $f^star$ minimizes the #alert[risk or expected loss] $cal(E)(f) = EE[(f(x) - y)^2]$:
 
   #eq[$f^star = text("argmin")_(f in cal(F)) EE[(f(x)- y)^2]$]
 ]

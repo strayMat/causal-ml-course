@@ -159,22 +159,22 @@
 
 #slide(title: "What is a \"why question\"?")[
 
-  - Economics: How does supply and demand (causally) depend on price?
+  === Economics: How does supply and demand (causally) depend on price?
 
   #pause
-  - Policy: Are job training programmes actually effective?
+  === Policy: Are job training programmes actually effective?
 
   #pause
-  - Epidemiology: How does this threatment affect the patient's health?
+  === Epidemiology: How does this threatment affect the patient's health?
 
   #pause
-  - Public health : Is this prevention campaign effective?
+  === Public health : Is this prevention campaign effective?
 
   #pause
-  - Psychology: What is the effect of family structure on children's outcome?
+  === Psychology: What is the effect of family structure on children's outcome?
 
   #pause
-  - Sociology: What is the effect of social media on political opinions?
+  === Sociology: What is the effect of social media on political opinions?
 ]
 
 #slide(title: "This is different from predictive questions")[
@@ -188,19 +188,19 @@
   ]
 
   #pause
-  - What will be the weather tomorrow?
+  === What will be the weather tomorrow?
 
   #pause
-  - What will be the outcome of the next election?
+  === What will be the outcome of the next election?
 
   #pause
-  - How many people will get infected by flue next season?
+  === How many people will get infected by flue next season?
 
   #pause
-  - What is the cardio-vacular risk of this patient?
+  === What is the cardio-vacular risk of this patient?
 
   #pause
-  - How much will the price of a stock be tomorrow?
+  === How much will the price of a stock be tomorrow?
 
   #pause
   #align(center)[#alert([Assumption]) Train and test data are drawn from the same distribution.]
@@ -300,21 +300,22 @@
 ]
 
 
-#slide(title: [Illustration of the fundamental problem of causal inference])[
-  == Example from epidemiology
+#slide(title: [Illustration of the fundamental problem of causal inference (epidemiology)])[
+  
 
-  - Population: patients experiencing a stroke
-
-  #pause
-  - #c_treated[Intervention $A = 1$: patients had access to a MRI scan #text(weight: "extrabold")[in less than 3 hours] after the first symptoms]
-  - #c_control[Comparator $A = 0$: patients had access to a MRI scan #text(weight: "extrabold")[in more than 3 hours] after the first symptoms]
+  === Population: patients experiencing a stroke
 
   #pause
-  - $Y = PP[text("Mortality")]$: the mortality at 7 days
+  === #c_treated[Intervention $A = 1$:
+  Patients had access to a MRI scan #text(weight: "extrabold")[in less than 3 hours] after the first symptoms]
+  
+  === #c_control[Comparator $A = 0$: Patients had access to a MRI scan #text(weight: "extrabold")[in more than 3 hours] after the first symptoms]
 
   #pause
-  - $X = PP[text("Charlson score")]$: a comorbidity index summarizing the overall health state of the patient. Higher is bad for the patient.
+  === $Y = PP[text("Mortality")]$: the mortality at 7 days
 
+  #pause
+  === $X = PP[text("Charlson score")]$: a comorbidity index summarizing the overall health state of the patient. Higher is bad for the patient.
 ]
 
 

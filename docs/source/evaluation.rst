@@ -4,34 +4,36 @@ Evaluation
 
 The evaluation is based on a small project on real data making use of some important concepts seen in course. Run through the different steps of causal or predictive inference with machine learning on a dataset of your choice (see below for some propositions of dataset).
 
-You will hand over a notebook detailing both the formalization of your problem, the chosen methods to address the question of interest, and the results of your analysis. The notebook should be clear and well-structured, with a good balance between text and code. You can use either R or python. For causal inference, you can use the `Double ML package <https://docs.doubleml.org/stable/>`__.
+You will be evaluated on two deliverables: 
+
+- **Handing over a notebook** detailing both the formalization of your problem, the chosen methods to address the question of interest, and the results of your analysis. The notebook should be clear and well-structured, with a good balance between text and code. You can use either R or python or stata. For causal inference, you can use the `Double ML package <https://docs.doubleml.org/stable/>`__.
+
+- During the last session (April 1st), you will **present your work** to the class. The presentation should be clear and concise, with a focus on the main results and the methodological choices you made. The presentation should be between 20 and 30 min. You can use a slide deck or a live demo of your notebook.
 
 ----------
 Enrollment
 ----------
 
-Group: From 2 to 4 students
-url for enrollment : https://docs.getgrist.com/forms/p3Q8SAcebEFLSuo3zegKrL/26
+Group: From 4 to 5 students. We will send you by mail a link to register your groups and choice of dataset.
 
 ----------------------------
 Details plan of the analysis 
 ----------------------------
 
-Important concepts that should appear are shown in parentheses.
+The following is a typical plan that you should follow for your analysis. 
+The excepted steps or concepts are highlighted by a 🧐 emoticon.
 
-- PICO formulation
-- Data exploration (EDA)
-- Identification (Causal Graph)
-- Choice of the covariate to include
-- Estimation with a statistical model: appropriate causal estimator and regressor 
-- Parameter/model selection
-- Conclusion and discussion 
-
-If time allows, you are encouraged to explore the following. This is not necessary to obtain the maximum note. 
-
+- PICO formulation 🧐
+- Exploratory data analysis: descritive analysis, association and vizualisation 🧐 
+- Identification with causal graph and choice of covariates to include 🧐
 - Discussion on the assumptions chosen for identification of the effect
-- sensitivity analysis : placebo check, different models, different covariate sets
-- heterogeneous treatment effects
+- Estimation with an appropriate causal estimator (double post lasso, double machine learning, generic machine learning, inverse propensity score, augmented propensity score) and regressor (lasso, ridge, random forest, boosting). It is not expected that you test or use every method.🧐 
+- Parameter/model selection for the statistical estimator (cross-validation) 🧐
+- Heterogeneous treatment effects: study the effect of the treatment on different subgroups of the population 
+- Sensitivity analysis: placebo check, different models, different covariate sets
+- Conclusion and discussion of the results 🧐 
+
+NB: Concluding a valid causal inference study with non-randomized data is not always possible. Crucial confounders could be missing, or other bias could be present in the data production process. The goal of the project is to conduct the most rigorous analysis possible with the data that we are providing you and to discuss the limitations of the study (even if the limits are related to the data). We are not expecting you to be able to robustly conclude on a causal effect in all cases.
 
 ---------
 Datasets 
