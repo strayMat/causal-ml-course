@@ -127,37 +127,36 @@
   date: "January 10, 2025",
 )
 
+#slide(title: "About me 👋")[
+  == Matthieu Doutreligne
+
+  - 2018: Master degree in statistical learning and artificial intelligence (Ensae/MVA)
+  - 2018-2020: Data scientist at the French Ministry of Health (Drees)
+  - 2020-2023: PhD in statistics and informatics (SODA / scikit-learn inria team): #linebreak()
+  #align(center)[_Causal inference with machine learning applied to clinical data_]
+
+  - Same time: Statistician since 4 years at Haute Autorité de santé (HAS)
+
+  - First course at ENSAE
+
+  === More from the #alert[machine learning] than #alert[economics] culture
+]
 
 #slide(title: "Introduction of the course")[
   == Objectives
 
   Important #alert[concepts and methods] of machine learning...
 
-  that can be useful for #alert[empirical work] in economics.
+  Useful for #alert[empirical work] in economics.
 
   #pause
   == Philosophy
 
-  - #alert[Intutions] rather than equations
+  - More #alert[Intutions] than equations
 
   - Basics and #alert[references for formal understanding]
 
   - Focus on practical skills: #alert[Coding] 👩‍💻
-]
-
-#slide(title: "About me 👋")[
-  == Matthieu Doutreligne
-
-  - Master degree in statistical learning and artificial intelligence (Ensae/MVA)
-
-  - PhD in statistics and informatics (SOcial DAta (soda) / scikit-learn team): #linebreak()
-  #align(center)[_Causal inference with machine learning applied to clinical data_]
-
-  - Statistician since 4 years at Haute Autorité de santé (HAS)
-
-  - Moving to Insee next year
-
-  === More from the #alert[machine learning] than #alert[economics] culture
 ]
 
 #slide(title: "Course syllabus")[
@@ -172,8 +171,23 @@
   - Event studies: Causal methods for pannel data (MD)
   - Double machine learning: Neyman-orthogonality (BC)
   - Heterogeneous treatment effect (BC)
-  - Heterogeneous treatment effect (BC)
+  - Oral presentations of the evaluation projects (MD + BC)
 ]
+
+#slide(title: "Evaluation of the course")[
+  == Coding project
+
+  - Causal inference on a small dataset of your choice: several datasets provided.
+  - Objective: ask a sound causal question, discuss hypotheses and estimate a causal effect with a machine learning method, discuss the design and the results.
+
+  == Details
+
+  - #alert[Handing over] a notebook with code and comments on a github: (Python, R or stata)
+  - #alert[Presenting] your work in a 20-30 minutes oral during the last session.
+  - Details and datasets: #link("https://straymat.github.io/causal-ml-course/evaluation.html")
+  - Inscription: email sent to every students.
+]
+
 #slide(title: "Course ressources for my four sessions")[
 
   == Website
@@ -184,20 +198,6 @@
 
   === Practical sessions: #link("https://straymat.github.io/causal-ml-course/practical_sessions.html")
 
-]
-
-#slide(title: "Evaluation of the course")[
-  == Coding project
-
-  - Causal inference on a small dataset of your choice: several datasets provided.
-  - Objective: ask a sound causal question, discuss hypotheseses and estimate a causal effect with a machine learning method, discuss the design and the results.
-
-  == Details
-
-  - Handing over a notebook with code and comments on a github.
-  - Language: R or python
-  - Details and datasets: #link("https://straymat.github.io/causal-ml-course/evaluation.html")
-  - Inscription: email sent to every students.
 ]
 
 #slide(title: "Today's program")[
@@ -213,7 +213,7 @@
 
   - Double-Lasso: using penalized linear models for causal inference (Bruno Crépon)
 
-  - Flexible models: Trees, Random Forests, Gradient Boosting and more scikit-learn
+  - Flexible models: Trees, Random Forests, Gradient Boosting and more scikit-learn (Me)
 
 ]
 
@@ -237,7 +237,7 @@
   #eq[$hat(y)=hat(f)(x) approx y$]
 
   #pause
-  == Vocabulary
+  == Vocabulary: Fitting the model
 
   Finding the appropriate model $hat(f)$ is called learning, training or fitting the model.
 ]
@@ -276,15 +276,16 @@
 
 #slide(title: "Why do we need prediction for ?")[
 
-  == Statistical inference
-
-  - Goal: infer some intervention effect with a causal interpretation
-  - Require to regress "away" the relationship between the treatment or the outcome and the confounders #alert[-> more on this in sessions on Double machine learning.]
-
   == Predictive inference
 
-  - Some problems in economics requires accurate prediction without a causal interpretation @kleinberg2015prediction
-  - Eg. Stratisfying on a risk score (loan, preventive care, ...)
+  - Some problems in economics requires accurate prediction without a causal interpretation @kleinberg2015prediction, only knowledge of y (eg. stratifying on a risk score for loan, preventive care, ...)
+  - Reconstruct missing data: eg. imputation of missing values between two waves of a survey (eg. house prices, production of cultivation plots,...)
+
+  #pause
+  == Statistical/causal inference
+
+  - Infer the effect of an intervention with a causal interpretation
+  - Powerful predictive models are used to regress "away" the relationship between the treatment/outcome and the confounders #linebreak() #alert[-> More on this in sessions on Double machine learning and Directed Acyclic Graphs.]
 ]
 
 #slide(title: "Do we need more than linear models?")[
@@ -309,7 +310,9 @@
 
 #slide(title: "What high-dimension means: Is p >> n common in economics?")[
 
-  == Characteristics of the dataset that can lead to high-dimensionality
+  == ⚠️ $p$ can be greater than the number of columns in the dataset
+
+  == Characteristics leading to high-dimensionality
 
   - Categorical variables with high cardinality, eg. job title, diagnoses...
 
@@ -320,7 +323,7 @@
 
 #slide(title: "What high-dimension means, concrete example")[
 
-  - #link("https://ssphub.netlify.app/post/parquetrp/", "Population referencement dataset"), individual file (INSEE): n=19 735 576; p=88 #emoji.fingers
+  - #link("https://ssphub.netlify.app/post/parquetrp/", "Population referencing individual files") (INSEE): $n=19, 735, 576$; $n_("cols")=88$ #emoji.fingers
 
   - But many variables with cardinality: more than 555 pairs of (variable, category).
 
@@ -340,11 +343,11 @@
 
 ]
 
-#slide(title: "Some examples from area with high dimensional data")[
+#slide(title: "Some problems where high dimensional data is common")[
 
   == Some examples
 
-  - The #link("https://www.census.gov/data/datasets/time-series/demo/cps/cps-basic.html", "Current Population Survey (CPS)") dataset has hundreds of variables, many of which are categorical
+  - The US #link("https://www.census.gov/data/datasets/time-series/demo/cps/cps-basic.html", "Current Population Survey (CPS)") dataset has hundreds of variables, many of which are categorical
 
   - The #link("https://health-data-hub.shinyapps.io/dico-snds/", "Système National des Données de Santé (SNDS)") in France = healthcare claims : many hundreds of variables, many of which are categorical.
 
@@ -391,13 +394,17 @@
 
 #slide(title: "Train vs test error: simple models")[
   #side-by-side[
-    === Measure the errors on the training data = fitting
+    === Measure the errors on the training data => fitting
     #figure(image("img/pyfigures/ols_simple_w_r2.svg", width: 80%))
   ][
-    === Measure the performances on test data = generalization
-    #figure(image("img/pyfigures/ols_test_w_r2.svg", width: 80%))
+    #only((2, 3))[
+      === Measure the performances on test data => generalization
+      #figure(image("img/pyfigures/ols_test_w_r2.svg", width: 80%))
+    ]
   ]
-  #emoji.party Here, no problem of overfitting: train vs test error are similar.
+  #only(3)[
+    #emoji.party Here, no problem of overfitting: train vs test error are similar.
+  ]
 ]
 
 
@@ -434,16 +441,19 @@
 
   === Loss function
 
-  Define a #alert[loss function $ell$] that defines proximity between the predicted value $hat(y) = f(x)$ and the true value $y$: $ell(f(x), y)$
-  
-  #pause
-  === For continuous outcomes (usually)
-  Using a #alert[squared loss] is used: $ell(f(x), y) = (f(x) - y)^2$
-  
-  #pause
-  === Family of candidate functions
-  We choose among a (finite) family of functions $f in cal(F)$, the best possible function $f^star$ minimizes the #alert[risk or expected loss] $cal(E)(f) = EE[(f(x) - y)^2]$:
+  A #alert[loss function $ell$] defines the proximity between the predicted value $hat(y) = f(x)$ and the true value $y$: $ell(f(x), y)$
 
+  #pause
+  === Example, for continuous outcomes, the #alert[squared loss]
+  #align(center)[$ell(f(x), y) = (f(x) - y)^2$]
+
+  #pause
+  === Risk minimization
+  We look into a (finite) family of candidate functions $f in cal(F)$,\
+  For the best possible function $f^star$, ie $f$ minimizing the #alert[risk or expected loss]\
+  $cal(E)(f) = EE[(f(x) - y)^2]$:
+
+  #pause
   #eq[$f^star = text("argmin")_(f in cal(F)) EE[(f(x)- y)^2]$]
 ]
 
@@ -483,15 +493,15 @@
 
 #slide(title: "Bayes error rate: Randomness of the problem")[
 
-  == Interesting problems exhibit randomness
+  == 🪙 Interesting problems exhibit randomness
 
   $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
 
-  == Best possible estimator, $g(dot)$
+  #pause
+  == 🥇 $g(dot)$ is the best possible estimator
 
   $g(dot)$ induces the #highlight(fill:c_bayes)[Bayes error], the unavoidable error:
-  #eq[$cal(E)(g) = EE[(g(x) + e - g(x))^2] = EE[e^2]$]
-
+  #eq[$cal(E)(g) = EE[(g(x) + e - g(x))^2] = EE[e^2] = sigma^2$]
 ]
 
 #slide(title: "Empirical risk minimization: approximation error")[
@@ -500,13 +510,13 @@
   $y approx g(x)$ : Every model is wrong !
 
   #pause
-  === One chooses the best possible function in the class of functions we have access to:
-  $f^star in cal(F)$ eg. linear models, polynomials, trees, ...
+  === One chooses the best possible function in the candidate family $cal(F)$
+  $f^star in cal(F)$ eg. linear models, polynomials, trees, neural networks...
 
   #pause
   === This creates the #highlight(fill:c_bias)[approximation error]:
   #v(1em)
-  #eq[$cal(E)(f(star)) - cal(E)(g) = EE[(f^(star)(x) - y)^2] - EE[(g(x) - y)^2] >= 0$]
+  #eq[$cal(E)(f^(star)) - cal(E)(g) = EE[(f^(star)(x) - y)^2] - EE[(g(x) - y)^2] >= 0$]
 ]
 
 
@@ -532,7 +542,7 @@
 
 
 #slide(title: "Bias variance trade-off: Putting the pieces together")[
-  == Decomposition of the empirical risk of a fitted model $hat(f)$
+  === Decomposition of the empirical risk of a fitted model $hat(f)$
 
   #h(1em)
   #eq[
@@ -543,11 +553,13 @@
   ]
 
   #only(2)[
-    == Controls on this trade-off
+    === Controls on this trade-off
 
-    - Increase/decrease the size of the hypothesis family : $cal(F)$ ie. more or less complex models.
+    - Bigger candidate family (more complex models) $cal(F)$: increases the estimation errors but decreases the approximation error.
 
-    - Increase your sample size: $n$ ie. more observations.
+    - Smaller candidate family (simpler models): decreases the estimation error but increases the approximation error.
+
+    - Bigger sample size $n$: reduces estimation error and allows more complex models.
   ]
 ]
 
@@ -592,7 +604,7 @@
   ]
 ]
 
-#slide(title: "Varying sample size")[
+#slide(title: [Varying sample size with a candidate family ($cal(F)$ polynoms of degree 9)])[
 
   #set align(center)
   #set text(size: 2em)
@@ -690,7 +702,7 @@
   #eq[$Y_i = X_i^T beta_0 + epsilon_i$]
 
   #only(1)[
-    - $epsilon$ the random variable of the error term.
+    - $epsilon$ the random error term (noise), often assumed $epsilon_i  | X tilde cal(N)(0, sigma^2)$
 
     - $beta_0 in RR^(p times 1)$ the _true_ coefficients.
 
@@ -834,8 +846,8 @@
         #figure(image("img/pyfigures/2_linear_regression_non_linear_link.svg", width: 80%))
       ],
       [
-        Non-linear relationship between the features and the outcome:
-
+        ==== Non-linear relationship between the features and the outcome
+        True data generating process:\
         $Y = X^3 - 0.5 times X^2 + epsilon$
       ],
     )
@@ -848,7 +860,7 @@
       ],
       [
 
-        Vanilla Linear regression fails to capture the relationship.
+        Vanilla linear regression fails to capture the relationship.
 
       ],
     )
@@ -880,20 +892,31 @@
 
   == Feature expansion increase the family of models
 
-  - Linear model can underfeat : when n_features small or the problem is not linearly separable.
+  - Linear model can underfit : when n_features small or the problem is not linearly separable.
 
   - Feature expansion is an easy way to capture non-linear relationships.
 
   - Different feature expansions exists: polynomial, log, splines, embeddings, kernels, ...
+]
+#slide(title: [KEN @cvetkov2023relational: Relational Data Embeddings])[
+  #side-by-side(
+    [Easy to use with #link("https://skrub-data.org/stable/auto_examples/06_ken_embeddings.html#sphx-glr-auto-examples-06-ken-embeddings-py")[skrub library]],
+    [#figure(image("img/penalized_linear_models/ken_embeddings.png", width: 120%))],
+  )
+]
 
-  #uncover(2)[
-    == But...
-    - Linear models can also overfit !
+#slide(title: "But Linear models can also overfit!")[
 
-    - When:
-      - n_features is large
-      - Many uninformative features
-  ]
+  == When
+  - p is large
+  - Many uninformative features
+
+  #pause
+  == Solution
+
+  - Used regularized linear models: penalize extreme weights
+  - Statistically, this allows biased models but with lower variance.
+  - We will see: Lasso and Ridge but this is a general principle in machine learning.
 ]
 
 #slide(title: "Many features, few observations: illustration in 1D")[
@@ -970,13 +993,29 @@
   )
 ]
 
+
+#slide(title: "Statistical model behind the Lasso")[
+
+  = Many features, few observations
+
+  #hyp_box(title: [Assumption 1: Linear model with high dimension])[
+
+    $Y = X beta_0 + epsilon$, #h(1em) $epsilon tack.t.double X$ and $X in RR^(n times p)$ with $n << p$
+  ]
+
+  #hyp_box(title: [Assumption 2: (approximate) sparsity])[
+
+    - The true $beta_0$ is sparse: ie. many coefficients are zero or very close to zero.
+  ]
+]
+
 #slide(title: "Objective function of the Lasso")[
   The lasso puts a constrainst of amplitude $t$ on the $L_1$ norm of the coefficients:
-  #eq($min_(beta) sum_i^(n)((y_i - beta^T x_i)^2) text("st.") sum_1^(p)|beta_j| <= t$)
+  #eq($min_(beta) sum_(i=1)^(n)((y_i - beta^T x_i)^2) text("st.") sum_(j=1)^(p)|beta_j| <= t$)
 
   #pause
   This is equivalent to the following optimization problem (using lagrangian multiplier):
-  #eq($min_(beta) sum((y_i - beta^T x_i)^2) + alpha sum(|beta_j|)$)
+  #eq($min_(beta) sum_(i=1)^(n)((y_i - beta^T x_i)^2) + lambda sum_(j=1)^(p)|beta_j|$)
 
   #pause
   This penalty discourages large weights and can shrink certain weights to exactly _zero_ (not clear yet why).
@@ -1015,11 +1054,11 @@
 #slide(title: "Another regularized linear model: Ridge")[
 
   Ridge puts a constrainst of amplitude $t$ on the $L_2$ norm of the coefficients:
-  #eq($min_(beta) sum_i^(n)((y_i - beta^T x_i)^2) text("st.") sum_1^(p)beta_j^2 <= t$)
+  #eq($min_(beta) sum_(i=1)^(n)((y_i - beta^T x_i)^2) text("st.") sum_(j=1)^(p)beta_j^2 <= t$)
 
   #uncover((2, 3))[
     This is equivalent to the following optimization problem (using lagrangian multiplier):
-    #eq($min_(beta) sum((y_i - beta^T x_i)^2) + alpha sum(beta_j^2)$)
+    #eq($min_(beta) sum_(i=1)^(n)((y_i - beta^T x_i)^2) + lambda sum_(j=1)^(p)(beta_j^2)$)
   ]
   #uncover(3)[
     This penalty shrinks the coefficients towards zero and each other.
@@ -1043,20 +1082,6 @@
   - Non Gaussian? MinMax scaling: $X = (X - min(X)) / (max(X) - min(X))$
 ]
 
-#slide(title: "Statistical model behind the Lasso")[
-
-  = Many features, few observations
-
-  #hyp_box(title: [Assumption 1: Linear model with high dimension])[
-
-    $Y = X beta_0 + epsilon$, #h(1em) $epsilon tack.t.double X$ and $X in RR^(n times p)$ with $n << p$
-  ]
-
-  #hyp_box(title: [Assumption 2: (approximate) sparsity])[
-
-    - The true $beta_0$ is sparse: ie. many coefficients are zero or very close to zero.
-  ]
-]
 
 #slide(title: "Regularized linear models for classification")[
 
@@ -1127,11 +1152,6 @@
 
 ]
 
-
-#slide(title: [Short introduction to scikit-learn])[
-  - url: https://straymat.github.io/causal-ml-course/practical_sessions.html
-]
-
 #slide(title: "Take home messages: Bias-variance trade-off")[
   == High bias = underfitting
 
@@ -1159,6 +1179,12 @@
   - L2 penalty: shrinkage
   - No feature selection
   - Stable for correlated features
+]
+
+
+
+#slide(title: [Short introduction to scikit-learn])[
+  - url: https://straymat.github.io/causal-ml-course/practical_sessions.html
 ]
 
 
