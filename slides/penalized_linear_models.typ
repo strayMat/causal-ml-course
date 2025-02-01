@@ -1026,26 +1026,36 @@
   #side-by-side(
     [
       #only(1)[
-        #figure(image("img/pyfigures/lasso_intuition_inner.svg", width: 150%))
+        #figure(image("img/pyfigures/lasso_intuition_ols_cross.svg", width: 150%))
       ]
       #only(2)[
-        #figure(image("img/pyfigures/lasso_intuition_middle.svg", width: 150%))
+        #figure(image("img/pyfigures/lasso_intuition_inner.svg", width: 150%))
       ]
       #only(3)[
-        #figure(image("img/pyfigures/lasso_intuition_outer.svg", width: 150%))
+        #figure(image("img/pyfigures/lasso_intuition_middle.svg", width: 150%))
       ]
       #only(4)[
+        #figure(image("img/pyfigures/lasso_intuition_outer.svg", width: 150%))
+      ]
+      #only(5)[
         #figure(image("img/pyfigures/lasso_intuition_penalty.svg", width: 150%))
       ]
     ],
     [
       #set align(left)
-      - Plot the MSE of the model as a function of the coefficients.
-      #uncover((2, 3, 4))[
-        - The MSE surface is an ellispoid in $beta$.
+      MSE as a function of the coefficients.
+
+      #uncover((2, 3, 4, 5))[
+        The MSE surface is an ellipsoid in $beta$:\
+        Every point on the ellipsoid edge has the same MSE.
       ]
-      #uncover(4)[
-        - The lasso objective function is a diamond.
+
+      #uncover((4, 5))[
+        Moving away from OLS solution
+      ]
+
+      #uncover(5)[
+        Until the ellipsoid respects the lasso penalty (green diamond).
       ]
     ],
   )
@@ -1064,6 +1074,30 @@
     This penalty shrinks the coefficients towards zero and each other.
   ]
 ]
+
+#slide(title: "Illustration of Ridge penalty")[
+  #set align(center)
+  #side-by-side(
+    [
+
+      #figure(image("img/pyfigures/ridge_intuition_penalty.svg", width: 150%))
+
+    ],
+    [
+      #set align(left)
+      The first contact between the ellipsoid and the circle is the solution of Ridge.
+
+      #uncover((2, 3))[
+        Few chances than lasso to cross an axis.
+      ]
+
+      #uncover(3)[
+        Ridge insure smaller coefficients, but no exact zeros.
+      ]
+    ],
+  )
+]
+
 
 #slide(title: "Importance of rescaling")[
   == Why rescale?

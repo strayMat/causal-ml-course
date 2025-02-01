@@ -83,20 +83,27 @@ _ = adult_census.hist(figsize=(20, 14))
 
 # %%
 adult_census["sex"].value_counts()
-# %% [mardown]
+# %% [markdown]
 # Quite unbalanced!
 # %%
 adult_census["education"].value_counts()
 # %% [markdown]
-# s noted above, "education-num" distribution has two clear peaks around 10 and 13. It would be reasonable to expect that "education-num" is the number of years of education.
+# As noted above, "education-num" distribution has two clear peaks around 10 and 13. It would be reasonable to expect that "education-num" is the number of years of education.
 
 # Let’s look at the relationship between "education" and "education-num".
 # %%
 pd.crosstab(index=adult_census["education"], columns=adult_census["education-num"])
 # %% [markdown]
+# One-liner dataset inspection:
+# %%
+!pip install skrub
+# %%
+from skrub import TableReport
+report = TableReport(adult_census)
+report
+# %% [markdown]
 # Build the predictive model
 ## Separate the target variable from the data
-# %%
 # %%
 data = adult_census.drop(columns=[target_name])
 data
@@ -137,7 +144,7 @@ y_train_predicted = model.predict(data_numeric_train)
 # %%
 # model evaluation (by hand):
 print(
-    "Number of correct prediction: "
+    "Number of correct prediction for the five first rows: "
     f"{(y_train[:5] == y_train_predicted[:5]).sum()} / 5"
 )
 # %% [markdown]
@@ -156,3 +163,7 @@ print(f"The test accuracy using a {model_name} is {accuracy:.3f}")
 # We use the generic term model for objects whose goodness of fit can be measured using the score method. Let’s check the underlying mechanism when calling score:
 # # ![Predictor score diagram](../slides/img/ML_1/api_diagram-predictor.score.svg)
 # %%
+# More detailed evaluation of the model
+from sklearn.metrics import classification_report
+
+print(classification_report(y_test, model.predict(data_numeric_test)))

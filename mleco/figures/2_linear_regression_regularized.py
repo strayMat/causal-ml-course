@@ -1,4 +1,4 @@
-w  # %%
+# %%
 import numpy as np
 from scipy.datasets import face
 from sklearn.model_selection import train_test_split
@@ -119,8 +119,8 @@ ax.plot([-300, 350], [0, 0], color="black", linewidth=2)  # Horizontal axis
 ax.plot([0, 0], [-250, 300], color="black", linewidth=2)  # Vertical axis
 
 # Add axis labels
-ax.text(290, 10, r"$\beta_1$", fontsize=16, color="black")
-ax.text(10, 230, r"$\beta_2$", fontsize=16, color="black")
+ax.text(290, 10, r"$\beta_0$", fontsize=16, color="black")
+ax.text(10, 230, r"$\beta_1$", fontsize=16, color="black")
 
 
 # Function to draw ellipses with a rotation and center shift
@@ -158,12 +158,16 @@ ax.text(
 edge_color = "black"
 # Origin marker
 ax.plot(0, 0, "o", color="black")  # Origin marker
-ax.text(-40, 10, "(0,0)", fontsize=12, color="black", ha="left")
+ax.text(-40, -20, "(0,0)", fontsize=12, color="black", ha="left")
 # Hide axes ticks
 ax.axis("off")
 
 ## draw a cross at the center
 ax.plot(center[0], center[1], "x", color="black")
+plt.savefig(
+    DIR2FIG / "lasso_intuition_ols_cross.svg", facecolor="none", edgecolor="none"
+)
+
 draw_ellipse(
     ax, center, 180, 120, angle, edge_color, facecolor=mcolors.CSS4_COLORS["lightcoral"]
 )  # Inner ellipse (dotted)
@@ -214,10 +218,22 @@ diamond = patches.Polygon(
     alpha=0.5,
 )
 diamond = ax.add_patch(diamond)
+ax.text(
+    diamond_diagonal / 10, 4 * diamond_diagonal / 10, r"$t$", fontsize=16, color="black"
+)
+
 
 label_lasso = ax.text(
-    50, -50, r"Lasso penalty: $|\beta_0|+|\beta_1| \leq t$", fontsize=12, color="black"
+    50,
+    -80,
+    r"""
+    Lasso penalty: $|\beta_0|+|\beta_1| \leq t$
+    Yields: $\beta_0 = 0 \quad \beta_1 = 1$
+    """,
+    fontsize=14,
+    color="black",
 )
+
 plt.savefig(DIR2FIG / "lasso_intuition_penalty.svg", facecolor="none", edgecolor="none")
 # Remove the diamond
 diamond.remove()
@@ -234,7 +250,14 @@ circle = patches.Circle(
 )
 ax.add_patch(circle)
 ax.text(
-    50, -50, r"Ridge penalty: $\beta_0^2+\beta_1^2 \leq t$", fontsize=12, color="black"
+    50,
+    -80,
+    r"""
+    Ridge penalty: $\beta_0^2+\beta_1^2 \leq t$
+    Yields: Neither $\beta_0$ or $\beta_1$ are 0
+    """,
+    fontsize=14,
+    color="black",
 )
 plt.savefig(DIR2FIG / "ridge_intuition_penalty.svg", facecolor="none", edgecolor="none")
 # %%
