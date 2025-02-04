@@ -667,9 +667,9 @@
 
   #figure(image("img/event_studies/scm_failure_appropriate_control.png", width: 50%))
 
-  Here, the comparison states are: KS, MD, AL, CT : also affected by the counfounding event.
+  Comparison states: KS, MD, AL, CT -> also affected by the counfounding event.
 
-  === No problem: we would conclude to no effect of the treatment.
+  === 🤩 We would conclude to no effect of the treatment.
 ]
 
 #slide(title: [Synthetic controls failure: data-driven controls])[
@@ -679,7 +679,7 @@
 
   SCM matches pre-treatment trends, without taking into account the confounding event.
 
-  === Problem: we would falsely conclude to a positive treatment effect.
+  === 😥 We would falsely conclude to a positive treatment effect.
 ]
 
 #slide(title: "Synthetic controls: Take-away")[
@@ -693,9 +693,8 @@
   == Cons
   - Requires many control units to yield good pre-treatment fits.
   - Might be prone to overfitting during the pre-treatment period.
-  #pause
+  
   - Still requires a strong assumption: the weights should also balance the post-treatment unexposed outcomes ie. conditional ignorability. See @arkhangelsky2021synthetic for discussions.
-  #pause
   - Still requires the no-anticipation assumption.
 ]
 
@@ -856,6 +855,7 @@
 ]
 
 #slide(title: "State space models: MA(1) ie. ARIMA(0,0,1) model example")[
+  TODO: simplify 
   #side-by-side(
     [
       #align(center)[
@@ -903,18 +903,23 @@
 ]
 
 #slide(title: "State space models: ARMA(p, q) ie. ARIMA(p,0,q) model example")[
-  TODO: check the SSM formulation
-  == Formalization
-  Observation: $y_t = mu_t + epsilon_(y, t)$
+  
+  == Formalization (Hamilton form)
+  Let $r = max(p, q+1)$
 
-  Latent: $mu_t = delta_(t) + theta delta_(t-1) + epsilon_(mu, t)$
+  Observation: $y_t = vec(1, rho_1, rho_2, rho_(r-1))^T mu_t$
 
-  $"with" &epsilon_(y, t) ~ N(0, sigma_y^2)\
-    &epsilon_(mu, t) ~ N(0, sigma_mu^2)\
-    &delta_(mu, t) ~ N(0, sigma_delta^2)$
+  Latent: $mu_t = mat(
+    1, rho_1, rho_2, ..., rho_(r-1);
+    1, 0, 0, ..., 0;
+    0,1, 0, ..., 0;
+    dots.v, dots.down, dots.v, dots.v, dots.v;
+    0, ..., 0, 1, 0;
+    ) mu_(t-1) + vec(epsilon_(t), 0, ..., 0)$ with $epsilon_(t) ~ N(0, sigma^2)$
+    
 
   == Unfolding the state space equations
-  $y_t = sum_(i=1)^(p) rho_i y_(t-i) + sum_(j=1)^(q) theta_j delta_(t-j) + epsilon_(y, t)$
+  $y_t = sum_(i=1)^(p) rho_i y_(t-i) + sum_(j=1)^(q) theta_j epsilon_(t-j)$
 ]
 
 
@@ -1015,9 +1020,17 @@
 
 #slide(title: "Modern state space models")[
 
-  - Long Short Term Memory (LSTM) networks @graves2012long: a type of Recurrent Neural Network (RNN) that can learn long-term dependencies. Was state of the art for language tasks before transformers.
+  === Long Short Term Memory (LSTM) networks @graves2012long
+  A type of Recurrent Neural Network (RNN) that can learn long-term dependencies. 
+  
+  It was state of the art for language tasks before transformers.
 
-  - Mamba @gu2023mamba: A recent proposition to mitigate the main limitations of transfomers which is high complexity relative to the length of the sequence. Good blog-style introduction in @Ayonrinde2024mamba.
+  It is notably hard to train due to vanishing gradient through the time dimension.
+
+  === Mamba @gu2023mamba 
+  A recent proposition to mitigate one of the main limitations of the transformer architecture: high complexity relative to the length of the sequence. 
+  
+  Good blog-style introduction in @Ayonrinde2024mamba.
 ]
 
 
