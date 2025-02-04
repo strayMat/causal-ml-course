@@ -1011,11 +1011,11 @@
 
 #slide(title: "Objective function of the Lasso")[
   The lasso puts a constrainst of amplitude $t$ on the $L_1$ norm of the coefficients:
-  #eq($min_(beta) sum_(i=1)^(n)((y_i - beta^T x_i)^2) text("st.") sum_(j=1)^(p)|beta_j| <= t$)
+  #eq($min_(beta) 1/n sum_i^(n)((y_i - beta^T x_i)^2) text("st.") sum_1^(p)|beta_j| <= t$)
 
   #pause
   This is equivalent to the following optimization problem (using lagrangian multiplier):
-  #eq($min_(beta) sum_(i=1)^(n)((y_i - beta^T x_i)^2) + lambda sum_(j=1)^(p)|beta_j|$)
+  #eq($min_(beta)  1/n  sum((y_i - beta^T x_i)^2) + alpha sum(|beta_j|)$)
 
   #pause
   This penalty discourages large weights and can shrink certain weights to exactly _zero_ (not clear yet why).
@@ -1064,11 +1064,11 @@
 #slide(title: "Another regularized linear model: Ridge")[
 
   Ridge puts a constrainst of amplitude $t$ on the $L_2$ norm of the coefficients:
-  #eq($min_(beta) sum_(i=1)^(n)((y_i - beta^T x_i)^2) text("st.") sum_(j=1)^(p)beta_j^2 <= t$)
+  #eq($min_(beta)  1/n sum_i^(n)((y_i - beta^T x_i)^2) text("st.") sum_1^(p)beta_j^2 <= t$)
 
   #uncover((2, 3))[
     This is equivalent to the following optimization problem (using lagrangian multiplier):
-    #eq($min_(beta) sum_(i=1)^(n)((y_i - beta^T x_i)^2) + lambda sum_(j=1)^(p)(beta_j^2)$)
+    #eq($min_(beta)  1/n  sum((y_i - beta^T x_i)^2) + alpha sum(beta_j^2)$)
   ]
   #uncover(3)[
     This penalty shrinks the coefficients towards zero and each other.
@@ -1122,20 +1122,20 @@
   === Log likelihood for Lasso classification
 
   #uncover((2, 3))[
-    $L(beta) = 1 / N sum_(i=1)^N [(y_i beta^T X_i - log[1 + exp(beta^T X_i)]] -lambda sum_(j=1)^(p)|beta_j|)$
+    $L(beta) = 1 / n sum_(i=1)^n [(y_i beta^T X_i - log[1 + exp(beta^T X_i)]] -lambda sum_(j=1)^(p)|beta_j|)$
   ]
 
   #uncover(3)[
     === Log likelihood for Lasso classification
-    $L(beta) = 1 / N sum_(i=1)^N [(y_i beta^T X_i - log[1 + exp(beta^T X_i)]] -lambda sum_(j=1)^(p)|beta_j|)$
+    $L(beta) = 1 / n sum_(i=1)^n [(y_i beta^T X_i - log[1 + exp(beta^T X_i)]] -lambda sum_(j=1)^(p)|beta_j|)$
   ]
 
   #def_box(title: "🔔 Log likelihood for vanilla logistic regression")[
     $p_(i, beta) = PP[Y_i|X_i, beta] = 1 / (1 + exp(-beta^T X_i))$
 
-    $L(beta) = 1 / N sum_(i=1)^N log[p_(i, beta)^(y_i)(1-p_(i,beta))^(1-y_i)] #linebreak()
+    $L(beta) = 1 / n sum_(i=1)^n log[p_(i, beta)^(y_i)(1-p_(i,beta))^(1-y_i)] #linebreak()
 
-      = 1 / N sum_(i=1)^N [(y_i beta^T X_i - log[1 + exp(beta^T X_i)]$
+      = 1 / n sum_(i=1)^n [(y_i beta^T X_i - log[1 + exp(beta^T X_i)]$
   ]
 ]
 

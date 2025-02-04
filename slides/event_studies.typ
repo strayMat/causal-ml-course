@@ -220,7 +220,8 @@
   - First documented example (though not formalized): John Snow showing how cholera spread through the water in London @snow1855mode #footnote[#text(size: 15pt)[Good description: #link("https://mixtape.scunning.com/09-difference_in_differences#john-snows-cholera-hypothesis")]]
 
   - Modern usage introduced formally by @ashenfelter1978estimating, applied to labor economics
-
+  
+  #pause 
   == Idea
   - Contrast the temporal effect of the treated unit with the control unit temporal effect.
 
@@ -341,6 +342,7 @@
     - more than two time periods: exact same formulation
     - staggered adoption of the treatment: a bit more complex
 
+  #pause
   == Cons
   - Strong assumptions: parallel trends and no anticipation.
   - Does not account for heterogeneity of treatment effect over time @de2020two.
@@ -352,10 +354,9 @@
 
 #new-section-slide("Synthetic controls")
 
-#slide(title: "Synthetic controls")[
+#slide(title: "Synthetic Control Methods (SCM)")[
 
-  === References
-
+  
   Introduced by @abadie2003economic and @abadie2010synthetic.
 
   Quick introduction in @bonander2021synthetic, technical overiew in @abadie2021using,
@@ -643,9 +644,16 @@
 ]
 
 #slide(title: [Synthetic controls failure: confounding event for some controls])[
-  === Common causes of outcome and for only part of the controls and the treated unit
+  === An event affecting the outcome for the treated unit and only part of the controls 
   #side-by-side(
-    [TODO: explain setup @degli2020can],
+    [
+      ==== Setup @degli2020can:
+
+      - Population: US states
+      - Intervention: Stand Your Ground law in Florida (october 2005)
+      - Comparator: Other states without SYG laws
+      - Outcome: homicide rate
+      ],
     [#figure(image("img/event_studies/scm_failure_map.png", width: 70%))],
   )
 
