@@ -28,8 +28,9 @@ target *= 100  # rescale the target in k$
 # %%
 # CODE HERE
 # %% [markdown]
-# ### 📝 TODO: Use `RandomizedSearchCV` with `n_iter=20` to find the best set of
-# hyperparameters by tuning the following parameters of the `model`:
+# ### 📝 TODO: Find appropriate hyperparameters. 
+# 
+# Use `RandomizedSearchCV` with `n_iter=20` to find the best set of hyperparameters by tuning the following parameters of the `model`:
 # - max_depth: [3, 8];
 # - max_leaf_nodes: [15, 31];
 # - learning_rate: [0.1, 1].
