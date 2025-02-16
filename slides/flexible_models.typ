@@ -136,7 +136,7 @@
 
   - Transformation of variables: polynomial regression
 
-  #uncover(2)[- 🤔 But... How to select the best model? the best hyper-parameters?]
+  #uncover(2)[🤔 But... How to select the best model? the best hyper-parameters?]
 ]
 
 
@@ -218,35 +218,54 @@
         width: 65%,
       ),
     )
-    == 🎉 Distribution of MAE: $3.71 plus.minus 0.26$ //TODO: find ref for proof (ex. Wager or Causal ML)
+    == 🎉 Distribution of MAE: $3.71 plus.minus 0.26$
   ]
 ]
 
-#slide(title: "Repeated train/test splits = Cross-validation")[
+#slide(title: "Repeated exclusive train/test splits = Cross-validation")[
 
-  = Cross-validation
-  - In sklearn, it can be instantiated with `cross_validate`.
+  Practical usage with sklearn: `cross_validate`.
 
-  #only(1)[
+  #only((1, 2))[
     ```python
     from sklearn.model_selection import cross_validate
-    from sklearn.model_selection import ShuffleSplit
-
-    cv = ShuffleSplit(n_splits=40, test_size=0.3, random_state=0)
     cv_results = cross_validate(
-        regressor, data, target, cv=cv, scoring="neg_mean_absolute_error"
+        regressor, data, target, cv=5, scoring="neg_mean_absolute_error"
     )
     ```
   ]
   #only(2)[
-    - 🙂 Robustly estimate generalization performance
-    - 🤩 Estimate variability of the performance: similar to bootstrapping (but different).
-    - 🚀 Let's use it to select the best models among several canditates!
+    - 🙂 Robustly estimate generalization performance.
+    - 🤩 Estimate data variability of the performance : bigger source of variation @bouthillier2021accounting.
+    - 🚀 Let's use it to select the best models among several candidates!
   ]
 ]
 
+// #slide(title: "Repeated non-exclusive train/test splits = Bootstrapping")[
+
+
+//   #only(1)[
+//     === Practical usage with sklearn: `cross_validate` and `ShuffleSplit`.
+//     ```python
+//     from sklearn.model_selection import cross_validate
+//     from sklearn.model_selection import ShuffleSplit
+
+//     cv = ShuffleSplit(n_splits=40, test_size=0.3, random_state=0)
+//     cv_results = cross_validate(
+//         regressor, data, target, cv=cv, scoring="neg_mean_absolute_error"
+//     )
+//     ```
+//   ]
+//   #only(2)[
+//     === Why?
+//     - ⚠️ Cross-validation underestimates the variability of the performance @bates2024cross
+//    - 🚀 Nested cross-validation helps increasing nominal coverage of the confidence intervals.
+//   ]
+// ]
+
 #slide(title: [Cross-validation for model selection: choose best $alpha$ for lasso])[
-  - Wage pipeline
+  === Wage pipeline
+
   #only(1)[
     #figure(
       image(
@@ -255,8 +274,9 @@
       ),
     )
   ]
-  #uncover((2, 3))[
-    - Random search over a distribution of $alpha$ values
+
+  #only((2, 3))[
+    === Random search over a distribution of $alpha$ values
   ]
 
   #only(2)[
@@ -273,8 +293,9 @@
     model_random_search.fit(X, y)
     ```
   ]
+
   #only(3)[
-    - Identify the best $alpha$ value(s)
+    === Goal: Identify the best $alpha$ value(s)
     #figure(
       image(
         "img/pyfigures/lasso_random_search_cv.svg",
@@ -286,35 +307,41 @@
 
 
 #slide(title: "What final model to use for new prediction?")[
-  - Either refit on full data the model with the best hyper-parameters on the full data: often used in pratice.
+  - Often used in practice: #alert[refit on the full data] the model with the best hyper-parameters.
 
-  - Or use the aggregation of outputs from the cross-validation of the best model:
-  #eq[$hat(y) = 1/K sum_(k=1)^K hat(y)_k$] #h(2em)where $hat(y)_k$ is the prediction of the model trained on the $k$-th fold.
-  - Proof that cross-validation selects the best model asymptotically among a family of models (averaging on the folds): @lecue2012oracle
-]
+  #uncover((2, 3))[
+    - Theorically motivated: Aggregate the outputs from the cross-validate estimators of the best model:
+    #eq[$hat(y) = 1/K sum_(k=1)^K hat(y)_k$] #h(2em)where $hat(y)_k$ is the prediction of the model trained on the $k$-th fold.
+  ]
 
-#slide(title: "Naive cross-validation to select AND estimate the best performances")[
-  == Hyper-parameters selection is a kind of model fitting
-
-  Using a single loop of cross-validation, the full dataset is used:
-  - to select the best hyper-parameters
-  - AND to estimate the generalization performance of the selected model
-
-  == ⚠️ Naive cross-validation can lead to overfitting
-
-  #uncover(2)[
-    🚀 Solution -> nested cross-validation @varoquaux2017assessing
+  #uncover(3)[
+    - #alert[Averaging cross-validate estimators selects the best model] asymptotically among a family of models @lecue2012oracle
   ]
 ]
 
-#slide(title: "Nested cross-validation to select AND estimate the best performances")[
+#slide(title: [Naive cross-validation to #alert[select and estimate] the best performances])[
+  == Hyper-parameters selection is a kind of model fitting
+
+  Using a single loop of cross-validation, the full dataset is used to:
+  - #alert[Select] the best hyper-parameters
+  - #alert[Estimate] the generalization performance of the selected model
+
+  #uncover((2, 3))[
+    == ⚠️ Naive cross-validation can lead to overfitting and over-optimistic performance estimation
+  ]
+  #uncover(3)[
+    == 🚀 Solution: Nested cross-validation @varoquaux2017assessing
+  ]
+]
+
+#slide(title: [Nested cross-validation to #alert[select and estimate] the best performances])[
   - Inner CV loop to select the best hyper-parameters
   - Outer loop to estimate the generalization performance of the selected model
   #figure(image("img/flexible_models/nested_cross_validation.png", width: 70%))
 ]
 
 
-#slide(title: "Over optimistic performance estimation: example")[
+#slide(title: "Over-optimistic performance estimation: example")[
   #side-by-side(
     [
       - Dataset: Breast cancer (N, p) = (569, 30)
@@ -396,34 +423,43 @@
 
 #slide(title: "How the best split is chosen?")[
   === The best split minimizes an impurity criteria
-  - for the next left and right nodes
-  - over all features
-  - and all possible splits
+  - For the next left and right nodes
+  - Over all features
+  - And all possible splits
 
+  #pause
   === Formally
 
-  Let the data at node $m$ be $Q_m$ with $n_m$ samples. For a candidate split on feature $j$ and threshold $t_m$ $theta=(j, t_m)$, the split yields: #linebreak()
-  $Q_m^("left")(theta)={(x,y)|x_j<=t_m}$ and $Q_m^("right")(theta)=Q_m backslash Q_m^("left")(theta)$
+  Let the data at node $m$ be $Q_m$ with $n_m$ samples. For a candidate split on feature $j$ and threshold $t_m$ $theta=(j, t_m)$, the split yields: \
 
-  Then $theta$ is chosen to minimize the impurity criteria averaged over the two children nodes:
+  #align(center)[$Q_m^("left")(theta)={(x,y)|x_j<=t_m}$ and $Q_m^("right")(theta)=Q_m backslash Q_m^("left")(theta)$]
+
+  #pause
+
+  Then $theta^(*)$ is chosen to minimize the impurity criteria averaged over the two children nodes:
 
   $theta^(*) = "argmin"_(j, t_m) [n_m^"left" / n_m H(Q_m^("left")(theta)) + n_m^"right" / n_m H(Q_m^("right")(theta))]$ with $H$ the impurity criteria.
 ]
 
 #slide(title: "Impurity criteria")[
 
-  == For classification
+  == Classification
   === Gini impurity
-
-  $H(Q_m) = sum_k p_(m k) (1 - p_(m k))$ with $p_(m k) = 1 / n_m sum_(y in Q_m) I(y = k)$
+  #align(center)[
+    $H(Q_m) = sum_k p_(m k) (1 - p_(m k))$ with $p_(m k) = 1 / n_m sum_(y in Q_m) I(y = k)$]
+  #pause
 
   === Cross-entropy
+  #align(center)[
+    $H(Q_m) = - sum_(k in K) p_(m k) log(p_(m k))$
+  ]
+  #pause
 
-  $H(Q_m) = - sum_(k in K) p_(m k) log(p_(m k))$
-
-  == For regression
+  == Regression
   === Mean squared error
-  $H(Q_m) = 1 / n_m sum_(y in Q_m) (y - dash(y_m))^2$ where $dash(y_m) = 1 / n_m sum_(y in Q_m) y$
+
+  #align(center)[$H(Q_m) = 1 / n_m sum_(y in Q_m) (y - dash(y_m))^2$ where $dash(y_m) = 1 / n_m sum_(y in Q_m) y$
+  ]
 ]
 
 #slide(title: "Chose the best split: example")[
@@ -471,20 +507,25 @@
     columns: (auto, auto, auto),
     gutter: 1pt,
     [
+
       #image("img/flexible_models/dt_underfit.svg", width: 90%)
-      Underfitting#linebreak()
-      max depth or#linebreak()
-      max_leaf_nodes#linebreak()
+      Underfitting\
+      `max_depth` or\
+      `max_leaf_nodes` \
       too small],
     [
-      #image("img/flexible_models/dt_fit.svg", width: 90%)
-      Best trade-off],
+      #uncover(3)[
+        #image("img/flexible_models/dt_fit.svg", width: 90%)
+        Best trade-off]
+    ],
     [
-      #image("img/flexible_models/dt_overfit.svg", width: 90%)
-      Overfitting#linebreak()
-      max depth or#linebreak()
-      max_leaf_nodes#linebreak()
-      too large],
+      #uncover((2, 3))[
+        #image("img/flexible_models/dt_overfit.svg", width: 90%)
+        Overfitting\
+        `max_depth` or\
+        `max_leaf_nodes`\
+        too large
+      ]],
   )
 ]
 
@@ -511,6 +552,7 @@
   - Handle interactions
   - Fast to fit
 
+  #pause
   = Cons
 
   - Prone to overfitting
@@ -519,16 +561,17 @@
 ]
 
 
-#slide(title: "Ensemble models")[
-  = Bagging: Bootstrap AGGregatING
+#slide(title: "Ensemble models: Bagging ie. Bootstrap AGGregatING")[
 
-  Bootstrap resampling (random sampling with replacement) proposed by @breiman1996bagging
 
-  Built upon Bootstrap, introduced by @efron1992bootstrap to estimate the variance of an estimator.
+  === Bootstrap resampling (random sampling with replacement) proposed by @breiman1996bagging
 
-  Bagging is used in machine learning to reduce the variance of a model prone to overfitting
+  === Built upon Bootstrap, introduced by @efron1992bootstrap to estimate the variance of an estimator.
 
-  Can be used with any model
+  #pause
+  === Bagging is used in machine learning to reduce the variance of a model prone to overfitting
+
+  === Can be used with any model!
 ]
 
 #slide(title: "Random forests: Bagging with classification trees
@@ -536,6 +579,7 @@
   #set align(top)
   #side-by-side(
     [
+      === Full dataset
       #only((1, 2))[
         #figure(image("img/flexible_models/bagging0.svg", width: 80%))
       ]
@@ -544,6 +588,7 @@
       ]
     ],
     [
+      === Three bootstrap samples
       #only(1)[
         #figure(image("img/flexible_models/bagging.svg", width: 90%))
       ]
@@ -552,9 +597,9 @@
         #figure(image("img/flexible_models/bagging_trees.svg", width: 90%))
       ]
       #only(3)[
-        #figure(image("img/flexible_models/bagging_cross.svg", width: 90%))
-        #figure(image("img/flexible_models/bagging_trees_predict.svg", width: 90%))
-        #figure(image("img/flexible_models/bagging_vote.svg", width: 90%))
+        #figure(image("img/flexible_models/bagging_cross.svg", width: 83%))
+        #figure(image("img/flexible_models/bagging_trees_predict.svg", width: 83%))
+        #figure(image("img/flexible_models/bagging_vote.svg", width: 83%))
       ]
     ],
   )
@@ -576,13 +621,13 @@
   #side-by-side(
     [
       #uncover((1, 2, 3))[
-        === - Select multiple subsets of the data
+        === Bootstrap multiple subsets
       ]
       #uncover((2, 3))[
-        === - Fit one model on each
+        === Fit one model to each subset
       ]
       #uncover(3)[
-        === - Average the predictions
+        === Average the predictions
       ]
     ],
     [
@@ -620,6 +665,7 @@
   - Feature randomization decorrelates the prediction errors
   - Uncorrelated errors make bagging work better
 
+  #pause
   = Take away
 
   - Bagging and random forests fit trees independently
@@ -634,6 +680,7 @@
 
   - Each model corrects the errors of the previous one
 
+  #pause
   == Two examples of boosting
 
   - Adaptive boosting (AdaBoost): reweight mispredicted samples at each step @friedman2000additive
@@ -676,22 +723,33 @@
 
 #slide(title: "Adaboost for classification: choice of the weight")[
 
-  == Algorithm for Adaboost
+  === 🔎 Motivation in @murphy2022probabilistic
 
-  - Initialize the observation weights $w_i = 1/N, i = 1..N$
-  - For m = 1 to M :
+  + Initialize the observation weights $w_i = 1/N, i = 1..N$
+  #uncover((2, 3, 4, 5, 6, 7, 8))[
 
-    - Fit a classifier $F_m (x)$ to the training data using weights $w_i$
+    + For m = 1 to M (iterate):
+  ]
+  #uncover((3, 4, 5, 6, 7, 8))[
 
-    - Compute $"err"_m = (sum_(i=1)^N w_i bb(1)[y_i != F_m (x_i)]) / (sum_(i=1) w_i)$
+    🔸Fit a classifier $F_m (x)$ to the training data using weights $w_i$\
+  ]
+  #uncover((4, 5, 6, 7, 8))[
 
-    - Compute $alpha_m = log((1 - "err"_m )/"err"_m )$
+    🔸 Compute $"err"_m = (sum_(i=1)^N w_i bb(1)[y_i != F_m (x_i)]) / (sum_(i=1) w_i)$\
+  ]
+  #uncover((5, 6, 7, 8))[
 
-    - Set $w_i arrow w_i exp[alpha_m bb(1)[y_i !=F_m (x_i )], i = 1..N$
+    🔸 Compute $alpha_m = log((1 - "err"_m )/"err"_m )$\
+  ]
+  #uncover((6, 7, 8))[
 
-  - Output $F(x) = "sign"(sum_(i=1)^M alpha_m G_m(x))$
+    🔸 Set $w_i arrow w_i exp[alpha_m bb(1)[y_i !=F_m (x_i )], i = 1..N$\
+  ]
+  #uncover((7, 8))[
 
-  🔎 See @murphy2022probabilistic for the motivation.
+    🔸 Output $F(x) = "sign"(sum_(i=1)^M alpha_m G_m(x))$\
+  ]
 ]
 
 #slide(title: "Adaboost: Take-away")[
@@ -718,7 +776,7 @@
 
   $h_m = argmin(h) (L_m)=argmin(h) sum_(i=1)^n l(y_i, F_(m-1)(x_i)+h(x_i))$
 
-  Rewrite inside the sum:#linebreak()
+  Expand the loss inside the sum using #alert[a Taylor expansion.]\
 
   #uncover((3, 4, 5))[
 
@@ -747,7 +805,7 @@
         == Regression
         - The loss is: $l(y, F(x)) = (y - F(x))^2$
         - The gradient is: $g_i = -2(y_i - F_(m-1)(x_i))$
-        💡The new trees should fit the residuals
+        💡The new tree should fit the residuals
       ],
       [
         #figure(image("img/pyfigures/gradient_boosting_data.svg", width: 110%))
@@ -826,15 +884,22 @@
 ]
 
 #slide(title: "Faster gradient boosting with binned features")[
-  == 😭 Gradient boosting is slow when N>10,000
-
+  === 😭 Gradient boosting is slow when N>10,000
   Fitting each tree is quite slow: $O(p N log(N))$ operations
 
-  == 🚀 HistGradientBoosting
+  #pause
+  === 🚀 XGBoost: eXtreme Gradient Boosting @chen2016xgboost
 
+  - Missing values support
+  - Parallelization
+  - Second order Taylor expansion
+
+  #pause
+  === 🚀 HistGradientBoosting: sklearn implementation of lightGBM @ke2017lightgbm
+  - Missing values support
+  - Parallelization
   - Discretize numerical features into 256 bins: less costly for tree splitting
-  - Multi core implementation
-  - Much much faster
+
 ]
 
 #slide(title: "Take away for ensemble models")[
@@ -842,8 +907,8 @@
   #table(
     columns: 2,
     table.header(
-      [*Bagging* (eg. *Random forests*)],
-      [*Boosting*],
+      [#alert[Bagging] (eg. *Random forests*)],
+      [#alert[Boosting]],
     ),
 
     "Fit trees independently", "Fit trees sequentially",
@@ -859,30 +924,47 @@
 
 #slide(title: "Other well known families of models")[
 
-  = Generalized linear models
+  == Generalized linear models
+  Link an OLS ($X beta$) to the parameters of various probability distributions.\
+  Examples: Poisson regression (for count data), logistic regression.
 
-  = Kernel methods: Support vector machines, Gaussian processes
+  #pause
+  == Kernels: support vector machines, gaussian processes
+  Local methods with appropriate basis functions (kernels)\
+  Kernels are often chosen with expert knowledge
 
-  = Deep neural networks
+  #pause
+  == Deep neural networks (deep learning)
+  Iterative layers of parametrized basis functions: eg. $bb(1)[w X + b >= 0] $\
+  Trainable by gradient descent: each layer should be differentiable\
+  Training is performed thanks to backpropagation ie.
 ]
 
 
-#slide(title: "Why not use deep learning everywhere?")[
+#slide(title: "A word on deep learning")[
 
-  - Success of deep learning (aka deep neural networks) in image, speech recognition and text
+  #side-by-side()[
+    === Success of deep learning
+    🔸 For images: Convolutional Neural Network (CNN) architecture @russakovsky2015imagenet,\
+    🔸 For text: transformer architecture @vaswani2017attention,\
+    🔸 For protein folding: also transformers @jumper2021highly\
 
-  - 🤔 Why not so used in econometrics?
+    #only(2)[
+      🤔 Why not so used in econometrics?
+    ]
+  ][
+    #figure(
+      image("img/flexible_models/imagenet.png", width: 90%),
+      caption: [Imagenet challenge @russakovsky2015imagenet],
+    )
 
-  #uncover(2)[
-    == Deep learning needs a lot of data (typically $N approx 1$ million)
-
-    == Do we have this much data in econometrics?
   ]
+
 ]
 
 
-#slide(title: "Answer 1: Limited data settings")[
-  - Typically #only(1)[in economics] (but also everywhere), we have a limited number of observations
+#slide(title: [Answer 1: Limited data settings (typically $N approx 1$ million)])[
+  - Typically #only(1)[in economics] (but also in industry), we have a limited number of observations
 
   #figure(
     image("img/flexible_models/2020_kdd_dataset_sizes.png", width: 65%),
@@ -892,22 +974,31 @@
 
 #slide(title: "Answer 2: Deep learning underperforms on data tables")[
 
-  === Tree-based methods outperform tailored deep learning architectures @grinsztajn2022tree
+  === Tailored deep learning architectures lack appropriate prior of tabular data @grinsztajn2022tree
 
   #figure(image("img/flexible_models/tree_outperforms_dl.png", width: 83%))
 ]
 
-#slide(title: "Nuance: LLM and pre-training for tabular learning")[
+#slide(title: "Nuance: it might be changing")[
 
-  == Recent work showing that tree-based models can be outperformed
+  == Overview of recent works on deep learning for tabular data
 
-  - #link("https://skrub-data.org/stable/", "Skrub python library"): data-wrangling and encoding (same people than sklearn)
+  === Using Large Language Models (LLM)
 
-  - @kim2024carte: CARTE: pretraining and transfer for tabular learning
+  - Fine-tuning existing LLM (Llama 3-8B) on tabular data @gardner2024large
 
-  - @grinsztajn2023vectorizing : Vectorizing string entries for data processing on tables: when are larger language models better?
+  #pause
+  === Learning appropriate representations (prior) of tabular data
+
+  - TabPFN: pretraining a transformer based model on synthetic tabular data @hollmann2025accurate
+  - Allows In-context Learning: learn with few examples.
+
+  #pause
+  === Transferable components tailored to tabular data
+
+  - @kim2024carte: Tailored components to table data (graph representation)
+  - @qu2025tabicl: Combining tailored components with synthetic pretraining
 ]
-
 
 
 #let bibliography = bibliography("biblio.bib", style: "apa")
