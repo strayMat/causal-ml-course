@@ -110,6 +110,7 @@ data
 # %% [markdown]
 ## Select only some numerical columns
 # For simplicity, we will select only the numerical columns in this dataset.
+# %%
 data_numeric = data[numerical_columns]
 data_numeric
 # %% [markdown]

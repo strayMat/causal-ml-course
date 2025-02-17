@@ -119,6 +119,8 @@
   my_box(title, rgb("#57b4d3"), body)
 }
 
+#show link: set text(fill: rgb("#3788d3"))
+
 
 #title-slide(
   author: [Matthieu Doutreligne],
@@ -947,7 +949,7 @@
     === Success of deep learning
     🔸 For images: Convolutional Neural Network (CNN) architecture @russakovsky2015imagenet,\
     🔸 For text: transformer architecture @vaswani2017attention,\
-    🔸 For protein folding: also transformers @jumper2021highly\
+    🔸 For protein folding: transformer architecture @jumper2021highly\
 
     #only(2)[
       🤔 Why not so used in econometrics?
@@ -979,25 +981,57 @@
   #figure(image("img/flexible_models/tree_outperforms_dl.png", width: 83%))
 ]
 
-#slide(title: "Nuance: it might be changing")[
-
-  == Overview of recent works on deep learning for tabular data
-
-  === Using Large Language Models (LLM)
-
-  - Fine-tuning existing LLM (Llama 3-8B) on tabular data @gardner2024large
-
-  #pause
+#slide(title: "Nuance: recent work using deep learning for tabular data")[
+  #side-by-side([
   === Learning appropriate representations (prior) of tabular data
 
-  - TabPFN: pretraining a transformer based model on synthetic tabular data @hollmann2025accurate
-  - Allows In-context Learning: learn with few examples.
+  - TabPFN: large scale pretraining a transformer based model on synthetic tabular data @hollmann2025accurate
+  
+  - Allows In-Context Learning (ICL): learn with few examples.
 
-  #pause
+  #uncover(2)[ 
+  - @hollmann2025accurate Figure 4a:\ Comparison on test benchmarks, 29 classification and 28 regression datasets, containing with up to 10,000 samples and 500 features. 
+  ]
+  ],
+  [  
+    #figure(image("img/flexible_models/tabpfn.png", width: 44%))
+  ]
+  )
+]
+
+#slide(title: "Nuance: recent work using deep learning for tabular data")[
+  #side-by-side([
+  == Using Large Language Models (LLM)
+  - #text(fill:oklab(45.46%, -0.026, -0.31))[Tabula 8B] Fine-tuning existing LLM (Llama 3-8B) on tabular data @gardner2024large
+  
+  #uncover(2)[
+    - Allow ICL with few examples.
+    - But requires large computational resources and is outperform rapidly when number of samples grows.
+  ]
+  ],
+  [
+    #figure(image("img/flexible_models/tabula8B.png", width: 80%))
+  ])
+]
+
+
+#slide(title: "Nuance: recent work using deep learning for tabular data")[
+  #side-by-side([
   === Transferable components tailored to tabular data
 
-  - @kim2024carte: Tailored components to table data (graph representation)
-  - @qu2025tabicl: Combining tailored components with synthetic pretraining
+  - CARTE: tailored learning components such as `{key:value}` representations  @kim2024carte
+  - TABICL: Combine tailored components and pretraining on synthetic data @qu2025tabicl
+  - @qu2025tabicl Figure 5:\ Benchmark accuracy results and train times on 200 classification datasets.
+  ],
+  [
+    #figure(image("img/flexible_models/tabicl.png", width: 80%))
+  ])
+]
+
+#new-section-slide("Python hands-on")
+
+#slide(title: [To your notebooks 🧑‍💻!])[
+  - url: https://github.com/strayMat/causal-ml-course/tree/main/notebooks
 ]
 
 

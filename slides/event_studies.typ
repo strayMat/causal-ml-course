@@ -123,6 +123,8 @@
   logic.polylux-slide(content)
 }
 
+#show link: set text(fill: rgb("#3788d3"))
+
 #title-slide(
   author: [Matthieu Doutreligne],
   title: "Machine Learning for econometrics",
