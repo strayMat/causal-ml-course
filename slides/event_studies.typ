@@ -197,7 +197,7 @@
 
   #def_box(title: "Quasi-experiment")[
     A situation where the treatment is not randomly assigned by the researcher but by nature or society. #linebreak()
-    It should introduce _some_ randomness in the treatment assignment: enforcing treatment exogeneity, ie. ignorability (ie. unconfoundedness).
+    It should introduce _some_ randomness in the treatment assignment: enforcing treatment exogeneity, i.e. ignorability (i.e. unconfoundedness).
   ]
 
   #pause
@@ -351,7 +351,7 @@
 
   #pause
 
-  == Can we do better: ie. robust to the parallel trend assumption?
+  == Can we do better: i.e. robust to the parallel trend assumption?
 ]
 
 #new-section-slide("Synthetic controls")
@@ -533,7 +533,7 @@
 
 #slide(title: [Synthetic controls: How to choose the predictor weights $V$?])[
 
-  1. Don't choose: set $V = I_(p)$, ie. $||X||_V = ||X||_2$.
+  1. Don't choose: set $V = I_(p)$, i.e. $||X||_V = ||X||_2$.
 
   #pause
   2. Rescale by the variance of the predictors: #linebreak() $V = "diag"("var"(Y_(j, 1))^(-1), .., "var"(Y_(j, T_0))^(-1), "var"(Z_(j, 1))^(-1), .., "var"(Z_(j, T_0))^(-1))$.
@@ -696,7 +696,7 @@
   - Requires many control units to yield good pre-treatment fits.
   - Might be prone to overfitting during the pre-treatment period.
   
-  - Still requires a strong assumption: the weights should also balance the post-treatment unexposed outcomes ie. conditional ignorability. See @arkhangelsky2021synthetic for discussions.
+  - Still requires a strong assumption: the weights should also balance the post-treatment unexposed outcomes i.e. conditional ignorability. See @arkhangelsky2021synthetic for discussions.
   - Still requires the no-anticipation assumption.
 ]
 
@@ -856,8 +856,8 @@
   )
 ]
 
-#slide(title: "State space models: MA(1) ie. ARIMA(0,0,1) model example")[
-  TODO: simplify 
+#slide(title: "State space models: MA(1) i.e. ARIMA(0,0,1) model example")[
+  
   #side-by-side(
     [
       #align(center)[
@@ -869,23 +869,16 @@
           spacing: 1em,
           let (y_1, y_2, y_3) = ((0, 1), (1, 1), (2, 1)),
           let (mu_1, mu_2, mu_3) = ((0, 0), (1, 0), (2, 0)),
-          let (delta_1, delta_2, delta_3) = ((0, -1), (1, -1), (2, -1)),
           node(y_1, radius: 8mm, [$y_(t-1)$]),
           node(y_2, radius: 8mm, [$y_t$]),
           node(y_3, radius: 8mm, [$y_(t+1)$]),
-          node(delta_1, radius: 8mm, [$delta_(t-1)$]),
-          node(delta_2, radius: 8mm, [$delta_t$]),
-          node(delta_3, radius: 8mm, [$delta_(t+1)$]),
           node(mu_1, radius: 8mm, [$mu_(t-1)$]),
           node(mu_2, radius: 8mm, [$mu_t$]),
           node(mu_3, radius: 8mm, [$mu_(t+1)$]),
-          edge(delta_1, mu_1, "->"),
-          edge(delta_1, mu_2, "->"),
-          edge(delta_2, mu_2, "->"),
-          edge(delta_2, mu_3, "->"),
-          edge(delta_3, mu_3, "->"),
           edge(mu_1, y_1, "->"),
+          edge(mu_1, y_2, "->"),
           edge(mu_2, y_2, "->"),
+          edge(mu_2, y_3, "->"),
           edge(mu_3, y_3, "->"),
         )
       ]
@@ -894,22 +887,22 @@
       == Formalization
       Observation: $y_t = mu_t + theta mu_(t-1) + epsilon_(y, t)$
 
-      Latent: $mu_t = delta_(t)$
+      Latent: $mu_t$
 
       $"with" &epsilon_(y, t) ~ N(0, sigma_y^2)\
-        &delta_(t) ~ N(0, sigma_delta^2)$
+        &mu_(t) ~ N(0, sigma_mu^2)$
     ],
   )
   #pause
-  The MA time series models the residual of the regression of $y_t$ on its previous values as a linear combination of the previous residuals : ie. vanishing shocks.
+  The MA time series models the residual of the regression of $y_t$ on its previous values as a linear combination of the previous residuals : i.e. vanishing shocks.
 ]
 
-#slide(title: "State space models: ARMA(p, q) ie. ARIMA(p,0,q) model example")[
+#slide(title: "State space models: ARMA(p, q) i.e. ARIMA(p,0,q) model example")[
   
   == Formalization (Hamilton form)
   Let $r = max(p, q+1)$
 
-  Observation: $y_t = vec(1, rho_1, rho_2, rho_(r-1))^T mu_t$
+  Observation: $y_t = (1, rho_1, rho_2, rho_(r-1)) \u{0020} mu_t$
 
   Latent: $mu_t = mat(
     1, rho_1, rho_2, ..., rho_(r-1);
@@ -1000,7 +993,7 @@
   )
 ]
 
-#slide(title: [State space models: a brief word on fitting (ie. learning the parameters)])[
+#slide(title: [State space models: a brief word on fitting (i.e. learning the parameters)])[
   === When the error terms are gaussians
 
   These modeles are called linear Gaussian state space model (LG-SSM) or linear dynamical system (LDS).
@@ -1302,7 +1295,7 @@
 #slide(title: [Synthetic controls: conformal prediction inference])[
   == Introduced by @chernozhukov2021exact
 
-  - Recast the problem as #alert[counterfactual inference], ie. predict: $Y_(i t)(0) "for" t>T_0 $
+  - Recast the problem as #alert[counterfactual inference], i.e. predict: $Y_(i t)(0) "for" t>T_0 $
 
   - Test hypothesis: $H_0$ eg. $H_0 = (0, 0, .., 0)$ ie no effect for $t > T_0$
 

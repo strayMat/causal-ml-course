@@ -932,14 +932,14 @@
 
   #pause
   == Kernels: support vector machines, gaussian processes
-  Local methods with appropriate basis functions (kernels)\
-  Kernels are often chosen with expert knowledge
+  Local methods with appropriate basis functions (kernels).\
+  Kernels are often chosen with expert knowledge.
 
   #pause
   == Deep neural networks (deep learning)
   Iterative layers of parametrized basis functions: eg. $bb(1)[w X + b >= 0] $\
-  Trainable by gradient descent: each layer should be differentiable\
-  Training is performed thanks to backpropagation ie.
+  Trainable by gradient descent: each layer should be differentiable.\
+  Training thanks to backpropagation ie. automatic differentiation and gradient methods.
 ]
 
 
