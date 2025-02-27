@@ -756,7 +756,7 @@
     - Two (sometimes multi-dimensional) components: the state $mu_t$ and the observation $y_t$.
 
     #pause
-    - State, ie. latent (unobserved) variable
+    - State, ie. latent (unobserved) variable:
     #align(center)[
       $mu_t = overbrace(T_t, "Transition matrix") mu_(t-1) + overbrace(R_t, "Transition matrix") underbrace(eta_t, "gaussian white noise")$
     ]
@@ -973,7 +973,7 @@
   == Formalization (Hamilton form)
   Let $r = max(p, q+1)$
 
-  Observation: $y_t = (1, rho_1, rho_2, rho_(r-1)) \u{0020} mu_t$
+  Observation: $y_t = (1, theta_1, theta_2, ..., theta_(r-1)) \u{0020} mu_t$
 
   Latent: $mu_t = mat(
     1, rho_1, rho_2, ..., rho_(r-1);
@@ -1001,17 +1001,20 @@
           spacing: 1em,
           let (s_11, s_12, s_13) = ((0, 0), (0, -1), (0, -2)),
           let (s_1, s_2, s_3) = ((1, 0), (1, -1), (1, -2)),
-          let (mu_1, mu_2) = ((1, -3), (0, -3)),
+          let (mu_1, mu_2) = ((0, -3), (1, -3)),
+          let (eta_1, eta_2) = ((0, -4), (1, -4)),
           let y = (1, 1),
-          let x = (1, 2),
+          let x = (2, 1),
           node(s_11, radius: 7mm, [$s_(t-1)$]),
           node(s_12, radius: 7mm, [$s_(t-2)$]),
           node(s_13, radius: 7mm, [$s_(t-3)$]),
           node(s_1, radius: 7mm, [$s_(t)$]),
           node(s_2, radius: 7mm, [$s_(t-1)$]),
           node(s_3, radius: 7mm, [$s_(t-2)$]),
-          node(mu_1, radius: 7mm, [$mu_(t)$]),
-          node(mu_2, radius: 7mm, [$mu_(t-1)$]),
+          node(mu_1, radius: 7mm, [$mu_(t-1)$]),
+          node(mu_2, radius: 7mm, [$mu_t$]),
+          node(eta_1, radius: 7mm, [$eta_(t-1)$]),
+          node(eta_2, radius: 7mm, [$eta_t$]),
           node(y, radius: 7mm, [$y_t$]),
           node(x, radius: 7mm, [$x_t$]),
           edge(s_11, s_1, "->"),
@@ -1020,8 +1023,11 @@
           edge(s_12, s_3, "->"),
           edge(s_13, s_1, "->"),
           edge(s_1, y, "->"),
-          edge(mu_2, mu_1, "->"),
-          edge(mu_1, y, "->", bend: 40deg),
+          edge(mu_1, mu_2, "->"),
+          edge(eta_1, mu_1, "->"),
+          edge(eta_1, mu_2, "->"),
+          edge(eta_2, mu_2, "->"),
+          edge(mu_2, y, "->", bend: 40deg),
           edge(x, y, "->"),
         )
 
@@ -1032,7 +1038,7 @@
 
       Observation with covariates and seasonality:
 
-      $y_t = mu_t + beta x_t + s_t + epsilon_(y,t)$
+      $y_t = beta x_t + s_t + underbrace(rho mu_(t-1), "AR(1)") + underbrace(theta eta_(t-1) + eta_t, "MA(1)")$
 
       #v(1em)
       Where seasonality:
@@ -1044,13 +1050,11 @@
 ]
 
 #slide(title: [State space models: General formulation])[
-  == SSM have a more general formulation than ARIMA models
+  Latent: $mu_t = T_t mu_(t-1) + R_t eta_t$\
 
-  - State equation: $alpha_t = T_t alpha_(t-1) + c_t R_t eta_t$ with $eta_t ~ N(0, Q_t)$
+  Observation: $y_t = Z_t mu_t + beta^T x_t + epsilon_t$
 
-  - Observation equation: $y_t = Z_t alpha_t + beta^T x_t + H_t epsilon_t$ with $epsilon_t ~ N(0, V_t)$
-
-  - $eta_t$ and $epsilon_t$ are white noise terms.
+  With $eta_t$ and $epsilon_t$ mean zero gaussian noise, sometimes with a specific covariance structure.
 
   #side-by-side(
     columns: (1fr, 2fr),
@@ -1151,9 +1155,9 @@
 
 ]
 
-#slide(title: "Example of ITS with more general SSM: Causal impact")[
-  TODO
-]
+// #slide(title: "Example of ITS with more general SSM: Causal impact")[
+//   TODO
+// ]
 
 
 #slide(title: "A word on model families for ITS")[
