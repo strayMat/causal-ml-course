@@ -222,8 +222,8 @@
   - First documented example (though not formalized): John Snow showing how cholera spread through the water in London @snow1855mode #footnote[#text(size: 15pt)[Good description: #link("https://mixtape.scunning.com/09-difference_in_differences#john-snows-cholera-hypothesis")]]
 
   - Modern usage introduced formally by @ashenfelter1978estimating, applied to labor economics
-  
-  #pause 
+
+  #pause
   == Idea
   - Contrast the temporal effect of the treated unit with the control unit temporal effect.
 
@@ -358,7 +358,7 @@
 
 #slide(title: "Synthetic Control Methods (SCM)")[
 
-  
+
   Introduced by @abadie2003economic and @abadie2010synthetic.
 
   Quick introduction in @bonander2021synthetic, technical overiew in @abadie2021using,
@@ -646,7 +646,7 @@
 ]
 
 #slide(title: [Synthetic controls failure: confounding event for some controls])[
-  === An event affecting the outcome for the treated unit and only part of the controls 
+  === An event affecting the outcome for the treated unit and only part of the controls
   #side-by-side(
     [
       ==== Setup @degli2020can:
@@ -655,7 +655,7 @@
       - Intervention: Stand Your Ground law in Florida (october 2005)
       - Comparator: Other states without SYG laws
       - Outcome: homicide rate
-      ],
+    ],
     [#figure(image("img/event_studies/scm_failure_map.png", width: 70%))],
   )
 
@@ -695,7 +695,7 @@
   == Cons
   - Requires many control units to yield good pre-treatment fits.
   - Might be prone to overfitting during the pre-treatment period.
-  
+
   - Still requires a strong assumption: the weights should also balance the post-treatment unexposed outcomes i.e. conditional ignorability. See @arkhangelsky2021synthetic for discussions.
   - Still requires the no-anticipation assumption.
 ]
@@ -749,36 +749,63 @@
 
 #slide(title: [ARIMA are State Space Models (SSM) #text("says the machine learning community",size: 18pt)])[
 
-  #pause
-  == What is a state space model?
+  == What is a (linear) state space model?
 
-  - The time series has two components: the state $mu_t$ and the observation $y_t$.
+  #side-by-side(columns: (2fr, 1fr))[
 
-  - The state is a latent variable that evolves over time.
+    - Two (sometimes multi-dimensional) components: the state $mu_t$ and the observation $y_t$.
 
-  - The observation is a noisy version of the state: $y_t = mu_t + epsilon_t$
+    #pause
+    - State, ie. latent (unobserved) variable
+    #align(center)[
+      $mu_t = overbrace(T_t, "Transition matrix") mu_(t-1) + overbrace(R_t, "Transition matrix") underbrace(eta_t, "gaussian white noise")$
+    ]
 
-  #only(2)[
+    #pause
+    - Observation is a noisy version of the state:
+    #align(center)[
+      $y_t = overbrace(Z_t, "design matrix") mu_t + epsilon_t$
+    ]
+  ][
+    #pause
     #align(center)[
       #diagram(
         cell-size: 20mm,
         node-stroke: 0.6pt,
         node-shape: circle,
         spacing: 1em,
+        let eta_t = (0, -1),
+        let eta_t1 = (-1, -1),
         let mu_t = (0, 0),
+        let mu_t1 = (-1, 0),
         let y_t = (0, 1),
+        let y_t1 = (-1, 1),
+        let epsilon_t1 = (-1, 2),
         let epsilon_t = (0, 2),
+        node(eta_t, radius: 8mm, [$eta_t$]),
+        node(eta_t1, radius: 8mm, [$eta_(t-1)$]),
         node(mu_t, radius: 8mm, [$mu_t$]),
+        node(mu_t1, radius: 8mm, [$mu_(t-1)$]),
         node(y_t, radius: 8mm, [$y_(t)$]),
+        node(y_t1, radius: 8mm, [$y_(t-1)$]),
         node(epsilon_t, radius: 8mm, [$epsilon_(t)$]),
+        node(epsilon_t1, radius: 8mm, [$epsilon_(t-1)$]),
+        edge(eta_t1, mu_t1, "->"),
+        edge(eta_t1, mu_t, "->"),
+        edge(eta_t, mu_t, "->"),
         edge(mu_t, y_t, "->"),
+        edge(mu_t1, mu_t, "->"),
+        edge(mu_t1, y_t1, "->"),
+        edge(mu_t1, y_t, "->"),
         edge(epsilon_t, y_t, "->"),
+        edge(epsilon_t1, y_t1, "->"),
       )
     ]
   ]
 
-  #pause
-  == Why showing this formulation ?
+]
+
+#slide(title: "Why showing the state space model formulation?")[
 
   - I better understand ARIMA formulated as state space models.
 
@@ -788,10 +815,11 @@
 
   === #alert[Good reference]
   @murphy2022probabilistic[book 2, chap 29]
+  s
 ]
 
 
-#slide(title: "State space models: AR(1) or AR(2) model example")[
+#slide(title: "State space models: AR(1) model example")[
   == AR(1)
   #set align(horizon)
   #side-by-side(
@@ -804,26 +832,45 @@
           node-shape: circle,
           spacing: 1em,
           let (y_1, y_2, y_3) = ((0, 0), (1, 0), (2, 0)),
+          let (mu_1, mu_2, mu_3) = ((0, -1), (1, -1), (2, -1)),
+          let (eta_1, eta_2, eta_3) = ((0, -2), (1, -2), (2, -2)),
           node(y_1, radius: 8mm, [$y_(t-1)$]),
           node(y_2, radius: 8mm, [$y_t$]),
           node(y_3, radius: 8mm, [$y_(t+1)$]),
-          edge(y_1, y_2, "->"),
-          edge(y_2, y_3, "->"),
+          node(mu_1, radius: 8mm, [$mu_(t-1)$]),
+          node(mu_2, radius: 8mm, [$mu_t$]),
+          node(mu_3, radius: 8mm, [$mu_(t+1)$]),
+          node(eta_1, radius: 8mm, [$eta_(t-1)$]),
+          node(eta_2, radius: 8mm, [$eta_t$]),
+          node(eta_3, radius: 8mm, [$eta_(t+1)$]),
+          edge(mu_1, y_1, "->"),
+          edge(mu_2, y_2, "->"),
+          edge(mu_3, y_3, "->"),
+          edge(mu_1, mu_2, "->"),
+          edge(mu_2, mu_3, "->"),
+          edge(eta_1, mu_1, "->"),
+          edge(eta_2, mu_2, "->"),
+          edge(eta_3, mu_3, "->"),
         )
       ]
     ],
     [
       == Formalization
-      Observation: $y_t = rho  y_(t-1) + epsilon_(y, t)$
+      Latent: $mu_t = rho mu_(t-1) + eta_t$\
+      Observation: $y_t =  mu_t $
 
-      $"with" &epsilon_(y, t) ~ N(0, sigma_y^2)\
+
+      $"with" &eta_t ~ N(0, sigma^2)\
         &|rho|< 1$
     ],
   )
   #only(1)[
     Auto-regression time series model an outcome as a linear regression of its prior values.
   ]
-  #pause
+]
+
+#slide(title: "State space models: AR(2) model example")[
+
   == AR(2)
   #set align(horizon)
   #side-by-side(
@@ -835,62 +882,86 @@
           node-stroke: 0.6pt,
           node-shape: circle,
           spacing: 1em,
-          let (y_1, y_2, y_3, y_4) = ((0, 0), (1, 0), (2, 0), (3, 0)),
-          node(y_1, radius: 8mm, [$y_(t-1)$]),
-          node(y_2, radius: 8mm, [$y_t$]),
-          node(y_3, radius: 8mm, [$y_(t+1)$]),
-          edge(y_1, y_2, "->"),
-          edge(y_2, y_3, "->"),
-          edge(y_1, y_3, "->", bend: 30deg),
-          edge(y_2, y_4, "->", bend: 30deg),
-        )
-      ]
-    ],
-    [
-      == Formalization
-      Observation: $y_t = rho_1  y_(t-1) + rho_2  y_(t-2) + epsilon_(y, t)$
-
-      $"with" &epsilon_(y, t) ~ N(0, sigma_y^2)\
-        &|rho_1|< 1, |rho_2|< 1$
-    ],
-  )
-]
-
-#slide(title: "State space models: MA(1) i.e. ARIMA(0,0,1) model example")[
-  
-  #side-by-side(
-    [
-      #align(center)[
-        == DAG
-        #diagram(
-          cell-size: 20mm,
-          node-stroke: 0.6pt,
-          node-shape: circle,
-          spacing: 1em,
-          let (y_1, y_2, y_3) = ((0, 1), (1, 1), (2, 1)),
-          let (mu_1, mu_2, mu_3) = ((0, 0), (1, 0), (2, 0)),
+          let (y_1, y_2, y_3) = ((0, 0), (1, 0), (2, 0)),
+          let (mu_1, mu_2, mu_3, mu_4) = ((0, -1), (1, -1), (2, -1), (3, -1)),
+          let (eta_1, eta_2, eta_3) = ((0, -2), (1, -2), (2, -2)),
           node(y_1, radius: 8mm, [$y_(t-1)$]),
           node(y_2, radius: 8mm, [$y_t$]),
           node(y_3, radius: 8mm, [$y_(t+1)$]),
           node(mu_1, radius: 8mm, [$mu_(t-1)$]),
           node(mu_2, radius: 8mm, [$mu_t$]),
           node(mu_3, radius: 8mm, [$mu_(t+1)$]),
+          node(eta_1, radius: 8mm, [$eta_(t-1)$]),
+          node(eta_2, radius: 8mm, [$eta_t$]),
+          node(eta_3, radius: 8mm, [$eta_(t+1)$]),
           edge(mu_1, y_1, "->"),
-          edge(mu_1, y_2, "->"),
           edge(mu_2, y_2, "->"),
-          edge(mu_2, y_3, "->"),
           edge(mu_3, y_3, "->"),
+          edge(mu_1, mu_2, "->"),
+          edge(mu_1, mu_3, "->", bend: 30deg),
+          edge(mu_2, mu_3, "->"),
+          edge(mu_2, mu_4, "->", bend: 30deg),
+          edge(eta_1, mu_1, "->"),
+          edge(eta_2, mu_2, "->"),
+          edge(eta_3, mu_3, "->"),
         )
       ]
     ],
     [
       == Formalization
-      Observation: $y_t = mu_t + theta mu_(t-1) + epsilon_(y, t)$
+      Latent: $mu_t = mat(rho_1, rho_2; 1, 0) mu_(t-1) + vec(1, 0) eta_t$\
+      Observation: $y_t =  [1, 0] mu_t $\
 
-      Latent: $mu_t$
+      $"with" &eta_t ~ N(0, sigma^2)\
+        &|rho_1|< 1, |rho_2|< 1$
 
-      $"with" &epsilon_(y, t) ~ N(0, sigma_y^2)\
-        &mu_(t) ~ N(0, sigma_mu^2)$
+      Observation unrolled:\
+      $y_t = rho_1 y_(t-1) + rho_2 y_(t-2) + eta_t$
+    ],
+  )
+]
+
+#slide(title: "State space models: MA(1) i.e. ARIMA(0,0,1) model example")[
+
+  #side-by-side(
+    [
+      #align(center)[
+        == DAG
+        #diagram(
+          cell-size: 30mm,
+          node-stroke: 0.6pt,
+          node-shape: circle,
+          spacing: 1em,
+          let (y_1, y_2, y_3) = ((0, 0), (1, 0), (2, 0)),
+          let (mu_1, mu_2, mu_3) = ((0, -1), (1, -1), (2, -1)),
+          let (eta_1, eta_2, eta_3) = ((0, -2), (1, -2), (2, -2)),
+          node(y_1, radius: 8mm, [$y_(t-1)$]),
+          node(y_2, radius: 8mm, [$y_t$]),
+          node(y_3, radius: 8mm, [$y_(t+1)$]),
+          node(mu_1, radius: 8mm, [$mu_(t-1)$]),
+          node(mu_2, radius: 8mm, [$mu_t$]),
+          node(mu_3, radius: 8mm, [$mu_(t+1)$]),
+          node(eta_1, radius: 8mm, [$eta_(t-1)$]),
+          node(eta_2, radius: 8mm, [$eta_t$]),
+          node(eta_3, radius: 8mm, [$eta_(t+1)$]),
+          edge(mu_1, y_1, "->"),
+          edge(mu_2, y_2, "->"),
+          edge(mu_3, y_3, "->"),
+          edge(eta_1, mu_1, "->"),
+          edge(eta_1, mu_2, "->"),
+          edge(eta_2, mu_2, "->"),
+          edge(eta_2, mu_3, "->"),
+          edge(eta_3, mu_3, "->"),
+        )
+      ]
+    ],
+    [
+      == Formalization
+
+      Latent: $mu_t= [1, theta] vec(eta_t, eta_(t-1))$\
+      Observation: $y_t = mu_t$
+
+      $"with" &eta_t ~ N(0, sigma^2)$
     ],
   )
   #pause
@@ -898,7 +969,7 @@
 ]
 
 #slide(title: "State space models: ARMA(p, q) i.e. ARIMA(p,0,q) model example")[
-  
+
   == Formalization (Hamilton form)
   Let $r = max(p, q+1)$
 
@@ -911,7 +982,7 @@
     dots.v, dots.down, dots.v, dots.v, dots.v;
     0, ..., 0, 1, 0;
     ) mu_(t-1) + vec(epsilon_(t), 0, ..., 0)$ with $epsilon_(t) ~ N(0, sigma^2)$
-    
+
 
   == Unfolding the state space equations
   $y_t = sum_(i=1)^(p) rho_i y_(t-i) + sum_(j=1)^(q) theta_j epsilon_(t-j)$
@@ -1016,15 +1087,15 @@
 #slide(title: "Modern state space models")[
 
   === Long Short Term Memory (LSTM) networks @graves2012long
-  A type of Recurrent Neural Network (RNN) that can learn long-term dependencies. 
-  
+  A type of Recurrent Neural Network (RNN) that can learn long-term dependencies.
+
   It was state of the art for language tasks before transformers.
 
   It is notably hard to train due to vanishing gradient through the time dimension.
 
-  === Mamba @gu2023mamba 
-  A recent proposition to mitigate one of the main limitations of the transformer architecture: high complexity relative to the length of the sequence. 
-  
+  === Mamba @gu2023mamba
+  A recent proposition to mitigate one of the main limitations of the transformer architecture: high complexity relative to the length of the sequence.
+
   Good blog-style introduction in @Ayonrinde2024mamba.
 ]
 
