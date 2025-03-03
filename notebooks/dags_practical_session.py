@@ -1,4 +1,9 @@
 # %%
+# We need to install two specific packages to handles graphs:
+!pip install networkx
+!pip install pgmpy
+# %%
+
 import networkx as nx
 from pgmpy.base.DAG import DAG
 import matplotlib.pyplot as plt

@@ -49,7 +49,7 @@ homicides["Month.string"] = homicides["Month.code"].apply(lambda x: f"{x:02d}")
 homicides["Date"] = pd.to_datetime(
     homicides["Year"].astype(str) + "-" + homicides["Month.string"], format="%Y-%m"
 )
-# %% [markdown]
+# %% 
 # plotting utils
 def plot_observed_data(
     data: pd.DataFrame,
@@ -173,6 +173,8 @@ homicides_subset =
 # The following code cell gives a simple implementation of the synthetic control method using a convex optimization library to solve the SCM objective (without the inner optimization problem on the covariates).
 # We will first do the data preparation work for the synthetic control method and pass it to this handmade version of SCM.
 # %%
+!pip install cvxpy
+# %%
 from sklearn.base import BaseEstimator, RegressorMixin
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 import cvxpy as cp
@@ -280,6 +282,8 @@ ax.plot(np.sort(homicides_subset["Date"].unique()), y_pred, color="black", lines
 # ### 📝 TODO: Prepare the data for the synthetic control method using the `pysyncon` package. Go to the [documentation](https://pysyncon.readthedocs.io/en/latest/) to see how to use the package.
 # - First, use only `HomicideRates` as the target variable.
 # %%
+!pip install pysyncon
+# %% 
 from pysyncon import Synth, Dataprep
 
 control_state_names = [state_name for state_name in homicides_subset["State"].unique() if state_name != "Florida"]
