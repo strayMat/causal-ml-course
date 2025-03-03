@@ -21,10 +21,10 @@ Details plan of the analysis
 ----------------------------
 
 The following is a typical plan that you should follow for your analysis. 
-The excepted steps or concepts are highlighted by a 🧐 emoticon.
+The expected steps or concepts are highlighted by a 🧐 emoticon.
 
 - PICO formulation 🧐
-- Exploratory data analysis: descritive analysis, association and vizualisation 🧐 
+- Exploratory data analysis: descriptive analysis, association and visualization 🧐 
 - Identification with causal graph and choice of covariates to include 🧐
 - Discussion on the assumptions chosen for identification of the effect
 - Estimation with an appropriate causal estimator (double post lasso, double machine learning, generic machine learning, inverse propensity score, augmented propensity score) and regressor (lasso, ridge, random forest, boosting). It is not expected that you test or use every method.🧐 
