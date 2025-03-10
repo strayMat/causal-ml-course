@@ -1,10 +1,8 @@
 # %%
-from turtle import color
 from matplotlib import style
 from matplotlib.patches import FancyArrowPatch
 import matplotlib.pyplot as plt
 import numpy as np
-from prometheus_client import h
 from mleco.constants import DIR2FIG
 from mleco.figures import style_figs
 
@@ -83,6 +81,16 @@ ax.plot([1, 2], [E_Y11_D1[1], E_Y21_D1[1]], "k-", color=style_figs.TREATED_COLOR
 ax.plot([1, 2], [E_Y10_D0[1], E_Y20_D0[1]], "k-", color=style_figs.CONTROL_COLOR)
 plt.savefig(DIR2FIG / "did_factual.svg", bbox_inches="tight")
 
+# no anticipation assumption
+label_treated_t1_no_anticipation = ax.text(
+    E_Y11_D1[0],
+    E_Y11_D1[1] + 0.15,
+    label_treated_t1 + "=$E[Y_1(0)|D=1]$",
+    fontsize=fontsize,
+    color=style_figs.TREATED_COLOR,
+)
+plt.savefig(DIR2FIG / "did_no_anticipation.svg", bbox_inches="tight")
+
 # Draw dashed lines for parallel trends assumption
 ax.plot(
     [1, 2],
@@ -147,14 +155,7 @@ counterfactual_trend_text.remove()
 counterfactual_trend_plot.remove()
 # no anticipation assumption
 plot_label_treated_t1_factual.remove()
-label_treated_t1_no_anticipation = ax.text(
-    E_Y11_D1[0],
-    E_Y11_D1[1] + 0.15,
-    label_treated_t1 + "=$E[Y_1(0)|D=1]$",
-    fontsize=fontsize,
-    color=style_figs.TREATED_COLOR,
-)
-plt.savefig(DIR2FIG / "did_no_anticipation.svg", bbox_inches="tight")
+
 label_treated_t1_no_anticipation.remove()
 ax.text(
     E_Y11_D1[0],
@@ -389,3 +390,4 @@ plt.savefig(DIR2FIG / "did_non_parallel_trends_last_periods.svg", bbox_inches="t
 plt.plot(x[:3], [120, 150, E_Y10_D0], color=style_figs.CONTROL_COLOR, lw=2)
 plt.plot(x[:3], [60, 50, E_Y11_D1], color=style_figs.TREATED_COLOR, lw=2)
 plt.savefig(DIR2FIG / "did_non_parallel_trends_all_periods.svg", bbox_inches="tight")
+# %%

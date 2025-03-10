@@ -230,41 +230,34 @@
   #only(5)[$tau_("ATT") = underbrace([Y_2 (1)| D = 1], #c_treated("treated outcome for t=2")) - underbrace(EE [Y_2(0)| D = 1], "unobserved counterfactual")$]
 
   #only(6)[
-    = Difference-in-differences
-
-    === First assumption, parallel trends
-
-    $EE[Y_2(0) - Y_1(0) | D = 1] = EE[Y_2(0) - Y_1(0) | D = 0]$
-    #figure(image("img/pyfigures/did_parallel_trends.svg", width: 50%))
-  ]
-  #only(7)[
-    === First assumption, parallel trends // #only(7)[#footnote[#text("⚠️ Strong assumption ! We will come back to it later.", size: 15pt)]
-    $underbrace([Y_2(0) - Y_1(0) | D = 1], #c_treated("Trend(1)")) = underbrace(EE[Y_2(0) - Y_1(0) | D = 0], #c_control("Trend(0)"))$
-    #figure(image("img/pyfigures/did_parallel_trends_w_coefs.svg", width: 50%))
-  ]
-
-  #only(8)[
-    === First assumption, parallel trends
-
-    $EE[Y_2(0) | D = 1]= EE[Y_1(0) | D = 1] + EE[Y_2(0) - Y_1(0) | D = 0]$
-    #figure(image("img/pyfigures/did_parallel_trends_w_coefs.svg", width: 50%))
-  ]
-  #only(8)[
-    = Difference-in-differences
-
-    === First assumption, parallel trends
-
-    $EE[Y_2(0) | D = 1]= underbrace(EE[Y_1(0) | D = 1], "unobserved counterfactual") + EE[Y_2(0) - Y_1(0) | D = 0]$
-    #figure(image("img/pyfigures/did_parallel_trends_w_coefs.svg", width: 50%))
-  ]
-
-  #only(9)[
-    === Second assumption, no anticipation of the treatment
+    === First assumption, no anticipation of the treatment
 
     $EE[Y_1(1)|D=1]=EE[Y_1(0)|D=1]$
 
     #figure(image("img/pyfigures/did_no_anticipation.svg", width: 50%))
   ]
+
+  #only((7,10))[=== Second assumption, parallel trends]
+  #only(7)[
+    $EE[Y_2(0) - Y_1(0) | D = 1] = EE[Y_2(0) - Y_1(0) | D = 0]$
+    #figure(image("img/pyfigures/did_parallel_trends.svg", width: 50%))
+  ]
+
+  #only(8)[
+    // #only(7)[#footnote[#text("⚠️ Strong assumption ! We will come back to it later.", size: 15pt)]
+    $underbrace([Y_2(0) - Y_1(0) | D = 1], #c_treated("Trend(1)")) = underbrace(EE[Y_2(0) - Y_1(0) | D = 0], #c_control("Trend(0)"))$
+    #figure(image("img/pyfigures/did_parallel_trends_w_coefs.svg", width: 50%))
+  ]
+
+  #only(9)[
+    $EE[Y_2(0) | D = 1]= EE[Y_1(0) | D = 1] + EE[Y_2(0) - Y_1(0) | D = 0]$
+    #figure(image("img/pyfigures/did_parallel_trends_w_coefs.svg", width: 50%))
+  ]
+  #only(10)[
+    $EE[Y_2(0) | D = 1]= underbrace(EE[Y_1(0) | D = 1], "unobserved counterfactual") + EE[Y_2(0) - Y_1(0) | D = 0]$
+    #figure(image("img/pyfigures/did_parallel_trends_w_coefs.svg", width: 50%))
+  ]
+
 ]
 
 #slide[
