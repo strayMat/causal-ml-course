@@ -110,7 +110,7 @@
 
 #set align(top)
 
-#new-section["Motivation"]
+#new-section[Motivation]
 
 #slide[
   = Setup - Estimation of the effect of a treatment when data is:
@@ -187,7 +187,7 @@
 ]
 
 
-#new-section["Reminder on difference-in-differences"]
+#new-section[Reminder on difference-in-differences]
 
 #slide[
   = Difference-in-differences
@@ -217,7 +217,7 @@
     #figure(image("img/pyfigures/did_t1_factual.svg", width: 50%))
   ]
   #only(3)[
-    ⚠️ $EE[Y_1(1)] = underbrace([EE[Y_1 (1) |D=0]], "counterfactural") PP(D=0) + underbrace([Y_1 (1) |D=1], "observed") PP(D=1)$
+    ⚠️ $EE[Y_t (0)] = underbrace(EE[Y_t (0) |D=0], "observed") PP(D=0) + underbrace([Y_t (0) |D=1], "counterfactual") PP(D=1)$
   ]
   #only((4, 5))[
     === Our target is the average treatment effect on the treated (ATT)
@@ -336,7 +336,7 @@
   == Can we do better: i.e. robust to the parallel trend assumption?
 ]
 
-#new-section["Synthetic controls"]
+#new-section[Synthetic controls]
 
 #slide[
   = Synthetic Control Methods (SCM)
@@ -711,7 +711,7 @@
   See @arkhangelsky2021synthetic for discussions.
 ]
 
-#new-section["Interrupted time-series: methods without a control group"]
+#new-section[Interrupted time-series: methods without a control group]
 
 #slide[
   = Interrupted Time Series: intuition
@@ -1407,14 +1407,14 @@
 ]
 
 
-#new-section["Python hands-on"]
+#new-section[Python hands-on]
 
 #slide[
   = To your notebooks 🧑‍💻!
   - url: https://github.com/strayMat/causal-ml-course/tree/main/notebooks
 ]
 
-#new-section["Supplementary materials"]
+#new-section[Supplementary materials]
 
 
 #slide[
