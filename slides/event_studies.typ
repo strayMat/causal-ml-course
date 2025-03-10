@@ -108,12 +108,13 @@
   body
 }
 
+#set align(top)
 
 #new-section["Motivation"]
 
 #slide[
-  = Setup
-  == Estimation of the effect of a treatment when data is:
+  = Setup - Estimation of the effect of a treatment when data is:
+
   - Aggregated: country-level data such as employment rate, GDP...
   #only(1)[
     #figure(image("img/event_studies/aggregation_units.svg", width: 50%))
@@ -131,7 +132,7 @@
   ]
   #only(3)[
     #figure(
-      image("img/event_studies/geographic_units.png", width: 40%),
+      image("img/event_studies/geographic_units.png", width: 50%),
       caption: [Figure from @degli2020can],
     )
   ]
@@ -140,7 +141,7 @@
     - Staggered adoption of the treatment: units adopt the policy/treatment at different times...
   ]
   #only(4)[
-    #figure(image("img/event_studies/staggered_adoption.svg", width: 37%))
+    #figure(image("img/event_studies/staggered_adoption.svg", width: 40%))
   ]
 
   #only(5)[
@@ -544,6 +545,7 @@
 
 #slide[
   = Synthetic controls: estimation without the outer optimization problem
+
   #toolbox.side-by-side(columns: (1.5fr, 2fr))[
 
     Same coviarates: $X_j= vec(Y_(j, 1), ...,Y_(j, T_0), Z_(j, 1), ..., Z_(j, T_0))^T$
@@ -559,7 +561,6 @@
       &sum_(j=2)^(n_0 + 1) w_j = 1$
 
   ][
-    #show: later
     #figure(image("img/pyfigures/scm_california_vs_synth_wo_v.svg", width: 100%))
   ]
 
@@ -588,13 +589,13 @@
 
   @abadie2010synthetic introduced the placebo test to assess the variability of the synthetic control.
 
-  There is also a modern approach on inference for SCM based on Conformal prediction @chernozhukov2021exact (see end of the slides for intuition).
+  There is also a modern approach on inference for SCM based on Conformal prediction @chernozhukov2021exact (cf. supplementary material slides for intuition).
 ]
 
 
 #slide[
   = Synthetic controls: inference with Placebo tests
-  === Idea of placebo tests, also called Fisher's Exact tests
+  == Idea of placebo tests, also called Fisher's Exact tests
 
   - Permute the treated and control exhaustively.
 
@@ -606,49 +607,50 @@
 
 
 #slide[
-  = Example
-  #only((1, 2))[
-    === Placebo estimation for all 38 control states
+  = Example of placebo test : For all 38 control states
 
-    #figure(image("img/pyfigures/scm_placebo_test.svg", width: 70%))
-  ]
-  #only(2)[
-    - More variance after the treatment for California than before.
-    - Some states have pre-treatment trends which are hard to predict.
-  ]
-  #only(3)[
-    === Placebo estimation for 34 control states with "good" pre-treatment fit
+  #figure(image("img/pyfigures/scm_placebo_test.svg", width: 70%))
+  
+  #show: later
 
-    #figure(image("img/pyfigures/scm_placebo_test_wo_outliers.svg", width: 70%))
-
-    I removed the states above the 90 percentiles of the distribution of the pre-treatment fit.
-
-  ]
+  - More variance after the treatment for California than before.
+  - Some states have pre-treatment trends which are hard to predict.
 ]
 
 #slide[
-  = Example
+    = Example of placebo test : For 34 control states with "good" pre-treatment fit
+  
+    #figure(image("img/pyfigures/scm_placebo_test_wo_outliers.svg", width: 70%))
+
+    I removed the states above the 90 percentiles of the distribution of the pre-treatment fit.
+]
+
+#slide[
+  = Example of placebo tests: distribution
 
   #toolbox.side-by-side()[
-    === California absolute cumulative effect
+    
+    #align(center)[
+      === California absolute cumulative effect
 
-    $hat(tau)_("scm, california")=-17.00$
+      $hat(tau)_("scm, california")=-17.00$
 
-    #only(2)[
       === Get a p-value
       #h(1em)
       $"PV" &= 1 / (n_0) sum_(j=2)^(n_0) bb(1) big("(") |hat(tau)_("scm, california")| > |hat(tau)_("scm", j)| big(")")\ &= 0.029$
     ]
-
+    
   ][
     #figure(image("img/pyfigures/scm_placebo_test_distribution.svg", width: 100%))
   ]
 ]
 
 #slide[
-  == An event affecting the outcome for the treated unit and only part of the controls
+  = Failure of synthetic controls: confounding events
+  
+  Confounding event : affecting the outcome for the treated unit and only part of the controls.
 
-  Setup @degli2020can:
+  @degli2020can setup:
 
   #toolbox.side-by-side(
     [
@@ -769,19 +771,20 @@
 
     - Two (sometimes multi-dimensional) components: the state $mu_t$ and the observation $y_t$.
 
-    #show: later
+    #only((2,3))[
     - State, ie. latent (unobserved) variable:
     #align(center)[
       $mu_t = overbrace(T_t, "Transition matrix") mu_(t-1) + overbrace(R_t, "Transition matrix") underbrace(eta_t, "gaussian white noise")$
     ]
+    ]
 
-    #show: later
+    #only((3))[
     - Observation is a noisy version of the state:
     #align(center)[
       $y_t = overbrace(Z_t, "design matrix") mu_t + epsilon_t$
     ]
+    ]
   ][
-    #show: later
     #align(center)[
       #diagram(
         cell-size: 20mm,
@@ -1176,6 +1179,7 @@
   = Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007
 
   #figure(image("img/event_studies/sabuncu2009_fig4.png", width: 64%))
+  
   #set text(size: 18pt)
   - #text(red)[Red curve: arima fitted with intervention]
   - #text(red)[Red Horizontal line: intervention effect fitted during intervention]
