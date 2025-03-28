@@ -96,7 +96,7 @@ Other potential sources for Datasets:
 Criteria for notations 
 ----------------------
 
-- 30 %: General form of the notebook, clarity of the text, and the structure of the notebook.
+- 20 %: General form of the notebook, clarity of the text, and the structure of the notebook.
 
 - 50 %: Multiple concepts seen during the course are present and appropriately used. Are the results correctly interpreted?
 
