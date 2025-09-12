@@ -1,13 +1,11 @@
-[tool.poetry]
+[project]
 name = "mleco"
 version = "0.0.0"
 description = "Mleco"
-authors = ["Matthieu Doutreligne <matt.dout@gmail.com>"]
-license = "EUPL-v1.2"
+authors = [{ name = "Matthieu Doutreligne", email = "matthieu.doutreligne@insee.fr" }]
+license = { text = "EUPL-v1.2" }
 readme = "README.md"
-repository = "https://github.com/straymat/causal-ml-course"
-homepage = "https://github.com/straymat/causal-ml-course"
-include = ["bin"]
+requires-python = ">=3.10,<3.13"
 keywords = []
 classifiers = [
     "Intended Audience :: Developers",
@@ -20,55 +18,39 @@ classifiers = [
     "Programming Language :: Python",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-
-# [tool.poetry.urls]
-# Changelog = "https://github.com/straymat/causal-ml-course/releases"
-
-[tool.poetry.dependencies]
-python = "^3.10,<3.13"
-
-# Project-Specific
-numpy = "1.26"
-networkx = "^3.4.1"
-pgmpy = "^0.1.26"
-tabulate = "^0.9.0"
-seaborn = "^0.13.2"
-matplotlib = "^3.5.1"
-pysyncon = "^1.5.1"
-cvxpy = "^1.6.0"
-statsmodels = "^0.14.4"
-skrub = "^0.4.1"
-pmdarima = "^2.0.4"
-tfcausalimpact = "^0.0.18"
-
-[tool.poetry.group.documentation.dependencies]
-sphinx = "^8.0.2"
-importlib-metadata = "^8.2.0"
-myst-parser = "^4.0.0"
-pygments = "^2.18.0"
-pydata-sphinx-theme = "^0.15.4"
-sphinxcontrib-bibtex = "^2.6.1"
-
-[tool.poetry.group.dev.dependencies]
-ipdb = "^0.13.13"
-ipython = "^8.29.0"
-jupytext = "^1.13.7"
-jupyter = "^1.0.0"
-python-dotenv = "^0.20.0"
-
-[tool.poetry.scripts]
-cli = "bin.cli:cli"
-
-#################################################################################
-# Tooling configs                                                               #
-#################################################################################
-
-[tool.cruft]
-skip = [
-    ".git",
-    "README.md",
+dependencies = [
+    "numpy==1.26",
+    "networkx>=3.4.1,<4.0.0",
+    "pgmpy>=0.1.26,<1.0.0",
+    "tabulate>=0.9.0,<1.0.0",
+    "seaborn>=0.13.2,<1.0.0",
+    "matplotlib>=3.5.1,<4.0.0",
+    "pysyncon>=1.5.1,<2.0.0",
+    "cvxpy>=1.6.0,<2.0.0",
+    "statsmodels>=0.14.4,<1.0.0",
+    "skrub>=0.4.1,<1.0.0",
+    "pmdarima>=2.0.4,<3.0.0",
+    "tfcausalimpact>=0.0.18,<1.0.0",
+    "sphinx>=8.0.2,<9.0.0",
+    "importlib-metadata>=8.2.0,<9.0.0",
+    "myst-parser>=4.0.0,<5.0.0",
+    "pygments>=2.18.0,<3.0.0",
+    "pydata-sphinx-theme>=0.15.4,<1.0.0",
+    "sphinxcontrib-bibtex>=2.6.1,<3.0.0",
+    "ipdb>=0.13.13,<1.0.0",
+    "ipython>=8.29.0,<9.0.0",
+    "jupytext>=1.13.7,<2.0.0",
+    "jupyter>=1.0.0,<2.0.0",
+    "python-dotenv>=0.20.0,<1.0.0"
 ]
 
+[project.urls]
+repository = "https://github.com/straymat/causal-ml-course"
+homepage = "https://github.com/straymat/causal-ml-course"
+
+[project.scripts]
+cli = "bin.cli:cli"
+
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"

@@ -41,7 +41,7 @@ except importlib_metadata.PackageNotFoundError as err:
 
 # -- Project information -----------------------------------------------------
 project = project_metadata["Name"]
-author = project_metadata["Author"]
+author = project_metadata["Author-email"]
 # pylint: disable=redefined-builtin
 copyright = f"{datetime.now().year}, {author}"
 version = release = project_metadata["Version"]
