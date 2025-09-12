@@ -9,15 +9,17 @@ Content
 Eight sessions of three hours presenting important concepts and methods on
 machine learning for econometrics. The course focuses on flexible models and causal inference in high dimensions. Most of the sessions will display a mix between theoretical considerations and practical application with hands-on in python or R. 
 
+The last session is a presentation of the course evaluation project by groups of students. 
+
 For now, the website covers only the contents for the following topics: 
 
 - 1) Statistical learning and regularized linear models
 
-- 3) Flexible models for tabular data
+- 2) Flexible models for tabular data
 
-- 4) Reminders of potential outcomes and Directed Acyclic Graphs
+- 3) Reminders of potential outcomes and Directed Acyclic Graphs
 
-- 5) Event studies: Causal methods for pannel data
+- 4a) Event studies: Causal methods for panel data
 
 ==========
 Motivation
@@ -45,26 +47,8 @@ Session 1 -- Statistical learning and regularized linear models
 
   - :cite:t:`hastie2017elements`
 
-==================================================
-Session 2 -- Double-lasso for statistical inference
-==================================================
-
-- Partial linear model 
-
-- Double-lasso, introduction to Neyman-orthogonality
-
-- Practical session: `Wage analysis from a statistical inference point of view <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/PM2/python_ml_for_wage_prediction.ipynb>`__
-
-- References:
- 
-  - :cite:t:`chernozhukov2024applied`, `chapter 4 <https://causalml-book.org/assets/chapters/CausalML_chap_4.pdf>`_
-
-  - :cite:t:`wager2020stats`, Chapter 4
-
-  - :cite:t:`gaillac2019machine`, Chapter 2
-
 ============================================
-Session 3 -- Flexible models for tabular data
+Session 2 -- Flexible models for tabular data
 ============================================
 
 - Trees, random forests, boosting
@@ -81,15 +65,15 @@ Session 3 -- Flexible models for tabular data
 
   - :cite:t:`murphy2022probabilistic`
 
-========================================================================
-Session 4 -- Reminders of potential outcomes and Directed Acyclic Graphs
-========================================================================
+==============================================================================
+Session 3 -- Potential outcomes, Directed Acyclic Graphs, confounder selection
+==============================================================================
 
 - Reminder on causal inference: prediction/causation, potential outcomes, asking a sound causal question (PICO)
  
 - Causal graph, front-door criteria, and valid adjustment sets.
 
-- Pratical Session: DAGs, valid and invalid adjustment sets, with simple linear models and simulations.
+- Practical Session: DAGs, valid and invalid adjustment sets, with simple linear models and simulations.
 
 - References:
   
@@ -100,7 +84,7 @@ Session 4 -- Reminders of potential outcomes and Directed Acyclic Graphs
   - :cite:t:`vanderweele2019principles`
 
 ===========================================================
-Session 5 -- Event studies: Causal methods for pannel data
+Session 4a -- Event studies: Causal methods for panel data
 ===========================================================
 
 - A causal approach to Difference-in-Differences
@@ -109,7 +93,7 @@ Session 5 -- Event studies: Causal methods for pannel data
 
 - Interrupted time series analysis and state space models
 
-- Pratical session: Comparison of different methods for pannel data
+- Practical session: Comparison of different methods for panel data
 
 - References:
 
@@ -117,15 +101,34 @@ Session 5 -- Event studies: Causal methods for pannel data
 
  - :cite:t:`gaillac2019machine`, Chapter 8
 
+==================================================
+Session 4b -- Double-lasso for statistical inference
+==================================================
+
+- Partial linear model 
+
+- Double-lasso, introduction to Neyman-orthogonality
+
+- Practical session: `Wage analysis from a statistical inference point of view <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/PM2/python_ml_for_wage_prediction.ipynb>`__
+
+- References:
+ 
+  - :cite:t:`chernozhukov2024applied`, `chapter 4 <https://causalml-book.org/assets/chapters/CausalML_chap_4.pdf>`_
+
+  - :cite:t:`wager2020stats`, Chapter 4
+
+  - :cite:t:`gaillac2019machine`, Chapter 2
+
+
 ==========================================================
-Session 6 -- Double machine learning: Neyman-orthogonality
+Session 5 -- Double machine learning: Neyman-orthogonality
 ==========================================================
 
 - Importance of sample splitting for double machine learning
 
 - Double-robust estimator approach (also known as augmented inverse propensity weighting)
 
-- Debiased (or double) machine learning, neyman-orthogonality, method-of-moments 
+- Debiased (or double) machine learning, Neyman-orthogonality, method-of-moments 
 
 - Practical session: `The Effect of Gun Ownership on Gun-Homicide Rates <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/PM4/python_dml_inference_for_gun_ownership.ipynb#scrollTo=hOcTlYfPi-5z>`__
 
@@ -138,14 +141,16 @@ Session 6 -- Double machine learning: Neyman-orthogonality
   - :cite:t:`abadie2021using`
 
 =============================================
-Session 7 -- Heterogeneous treatment effect
+Session 6 -- Heterogeneous treatment effect
 =============================================
 
 - Learners : S, T, X, R learners
 
+- Best linear approximation
+ 
 - Causal forests
 
-- Pratical session: `CATE estimation on 401(k) dataset <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/T/CATE-estimation.ipynb>`__
+- Practical session: `CATE estimation on 401(k) dataset <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/T/CATE-estimation.ipynb>`__
 
 - References:
   
@@ -156,21 +161,10 @@ Session 7 -- Heterogeneous treatment effect
   - :cite:t:`nie2021quasi`
   
 =============================================
-Session 8 -- Heterogeneous treatment effect
+Session 7 -- Heterogeneous treatment effect
 =============================================
 
-- Best linear approximation
- 
 - Practical session: 
-  
-  - `Heterogeneous Effect of Sex on Wage Using Double Lasso <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/PM2/python_heterogeneous_wage_effects.ipynb>`__ 
-  
-  - `CATE inference on 401(k) <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/T/CATE-inference.ipynb>`__ 
-
-- References:
-  
-  - :cite:t:`chernozhukov2024applied`, `chapter 14 <https://causalml-book.org/assets/chapters/CausalML_chap_14.pdf>`_ 
-  
   - :cite:t:`gaillac2019machine`, Chapter 6
   
   - :cite:t:`kitagawa2018should`

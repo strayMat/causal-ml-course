@@ -2,7 +2,7 @@
 Evaluation 
 ==========
 
-The evaluation is based on a small project on real data making use of some important concepts seen in course. Run through the different steps of causal or predictive inference with machine learning on a dataset of your choice (see below for some propositions of dataset).
+The evaluation is based on a group project on real data making use of some important concepts seen in course. Run through the different steps of causal or predictive inference with machine learning on a dataset of your choice (see below for some propositions of dataset).
 
 You will be evaluated on two deliverables: 
 
@@ -50,12 +50,6 @@ Here are some datasets that you can use for the project. You can also use your o
      - P
      - Question Example
      - Interventional
-   * - Marketing
-     - `Link <http://archive.ics.uci.edu/dataset/222/bank+marketing>`__
-     - 45,211
-     - 16
-     - "What is the effect of multiple phone call on the term deposit subscription?"
-     - No
    * - Wages (french version)
      - `Link <https://www.insee.fr/fr/statistiques/7651654#dictionnaire>`__
      - 2,403,775
