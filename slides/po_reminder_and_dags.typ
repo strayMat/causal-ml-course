@@ -1,15 +1,16 @@
-// Get Polylux from the official package repository
+// documentation link : https://typst.app/universe/package/touying
 
-// documentation link : https://typst.app/universe/package/polylux
-
-#import "@preview/polylux:0.3.1": *
+#import "@preview/touying:0.6.1": *
 #import "@preview/embiggen:0.0.1": *
-#import "@preview/showybox:2.0.1": showybox
-#import "@preview/fletcher:0.5.1" as fletcher: diagram, node, edge // for dags
+#import "@preview/showybox:2.0.4": showybox
+#import "@preview/fletcher:0.5.5" as fletcher: diagram, edge, node // for dags
 
 #import themes.metropolis: *
 
 #show: metropolis-theme//.with(footer: [ENSAE, Introduction course])
+
+// Fletcher bindings for touying
+#let fletcher-diagram = touying-reducer.with(reduce: fletcher.diagram, cover: fletcher.hide)
 
 // Make the paper dimensions fit for a presentation and the text larger
 //#set page(paper: "4:3")
@@ -36,49 +37,27 @@
   body
 }
 
-#let slide(title: none, body) = {
-  let header = {
-    set align(top)
-    if title != none {
-      show: m-cell.with(fill: m-dark-teal, inset: 1em)
-      set align(horizon)
-      set text(fill: m-extra-light-gray, size: 1.2em)
-      strong(title)
-    } else { [] }
-  }
-
-  let footer = {
-    set text(size: 0.8em)
-    show: pad.with(.5em)
-    set align(bottom)
-    text(fill: m-dark-teal.lighten(40%), m-footer.display())
-    h(1fr)
-    text(fill: m-dark-teal, logic.logical-slide.display())
-  }
-
-  set page(header: header, footer: footer, margin: (top: 3em, bottom: 1.5em), fill: m-extra-light-gray)
-
-  let content = {
-    show: align.with(top)
-    show: pad.with(
-      left: 1em,
-      top: 0em,
-      right: 1em,
-      bottom: 1em,
-    ) // super important to have a proper padding (not 1/3 of the slide blank...)
-    set text(fill: m-dark-teal)
-    body
-  }
-
-  logic.polylux-slide(content)
-}
 
 #let my_box(title, color, body) = {
   showybox(
-    title-style: (color: black, weight: "regular", boxed-style: (anchor: (x: left, y: horizon), radius: 8pt)),
-    frame: (border-color: color.darken(50%), title-color: color.lighten(60%), body-color: color.lighten(80%)),
-    title: text(title, size: 20pt),
-    align(horizon, body),
+    title-style: (
+      color: black,
+      weight: "regular",
+      boxed-style: (
+        anchor: (
+          x: left,
+          y: horizon,
+        ),
+        radius: 10pt,
+      ),
+    ),
+    frame: (
+      border-color: color.darken(50%),
+      title-color: color.lighten(60%),
+      body-color: color.lighten(80%),
+    ),
+    title: title,
+    align(center, body),
   )
 }
 
@@ -107,7 +86,7 @@
 )
 
 #slide(title: "Table of contents")[
-  #metropolis-outline
+  #outline(depth: 1)
 ]
 
 #new-section-slide("Introduction")
@@ -122,15 +101,14 @@
   )
   At the center of epidemiology @hernan2020causal, econometrics #cite(<chernozhukov2024applied>), social sciences, #only(2)[machine learning...]
 
-  #only(2)[
-    Now, bridging with machine learning @kaddour2022causal : Fairness, reinforcement learning, causal discovery, causal
-    inference for LLM, causal representations... //#footnote[Eg. #link("https://nips.cc/virtual/2024/events/workshop")[neurips 2024 workshops]]
-  ]
-  #only(3)[
-    #alert[This session:]
-    - Reminder on causal inference
-    - Importance of Directed Acyclic Graphs and causal status of covariates
-  ]
+  #pause
+  Now, bridging with machine learning @kaddour2022causal : Fairness, reinforcement learning, causal discovery, causal
+  inference for LLM, causal representations... //#footnote[Eg. #link("https://nips.cc/virtual/2024/events/workshop")[neurips 2024 workshops]]
+
+  // #pause
+  // #alert[This session:] Reminder on causal inference
+  // - Importance of Directed Acyclic Graphs and causal status of covariates
+
 ]
 
 #slide(title: "What is a \"why question\"?")[
@@ -157,7 +135,7 @@
 
   == Prediction (ML): What usually happens in a given situation?
 
-  #side-by-side(gutter: 3mm, columns: (1fr, 1fr))[
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
     #figure(image("img/po_reminder_and_dags/dag_x_to_y.svg", width: 40%))
   ][
     Prediction models $(X, Y)$
@@ -203,34 +181,28 @@
 
 #slide(title: "Machine learning is great for prediction on complex data")[
 
-  #side-by-side(
-    [
-      #uncover((1, 2, 3))[
-        === Images: Image classification with deep convolutional neural networks @krizhevsky2012imagenet
-      ]
+  #grid(columns: (1fr, 1fr))[
 
-      #uncover((2, 3))[
-        === Speech-to-text: Towards end-to-end speech recognition with recurrent neural networks @graves2014towards
-      ]
+    === Images: Image classification with deep convolutional neural networks @krizhevsky2012imagenet
+    #pause
+    === Speech-to-text: Towards end-to-end speech recognition with recurrent neural networks @graves2014towards
 
-      #uncover(3)[
-        === Text: Attention is all you need @vaswani2017attention
-      ]
-    ],
-    [
-      #set align(center)
-      #only(1)[
-        #figure(
-          image("img/po_reminder_and_dags/image_classification.png", width: 100%),
-          caption: "ImageNet 1K: 1.5 million images, 1000 classes",
-        )
-      ]
-      #only(3)[
-        #figure(image("img/po_reminder_and_dags/ner_edsnlp.png", width: 100%), caption: "Named entity recognition")
-      ]
-    ],
-  )
+    #pause
+    === Text: Attention is all you need @vaswani2017attention
+
+  ][
+    #set align(center)
+
+    #figure(
+      image("img/po_reminder_and_dags/image_classification.png", width: 100%),
+      caption: "ImageNet 1K: 1.5 million images, 1000 classes",
+    )
+  ]
+
+  #figure(image("img/po_reminder_and_dags/ner_edsnlp.png", width: 100%), caption: "Named entity recognition")
+
 ]
+
 
 #slide(title: "Machine learning might be less successful for what if questions")[
   == Machine learning is not driven by causal mechanisms
@@ -239,15 +211,14 @@
 
   - Naive data analysis might conclude that hospitals are bad for health.
 
-  #only(2)[
-    - The fallacy is that we are comparing different populations: people who go to the hospital typically have a worse
-      baseline health than people who do not.
+  #pause
+  - The fallacy is that we are comparing different populations: people who go to the hospital typically have a worse
+    baseline health than people who do not.
 
-    #def_box([
-      This is a #alert[confounding factor]: A variable that influences both the treatment and the outcome.
-    ])
+  #def_box([
+    This is a #alert[confounding factor]: A variable that influences both the treatment and the outcome.
+  ])
 
-  ]
 ]
 
 #slide(title: "Why is prediction different from causation? (2/2)")[
@@ -255,8 +226,8 @@
 
   #set align(center)
   #pause
-  #side-by-side(gutter: 3mm, columns: (1fr, 2fr))[
-    #diagram(
+  #grid(columns: (1fr, 2fr), gutter: 3mm)[
+    #fletcher-diagram(
       cell-size: 15mm,
       node-stroke: 1pt,
       spacing: 1.5em,
@@ -268,7 +239,6 @@
       edge(X, A, "->"),
       edge(A, Y, "->"),
     )
-
   ][
     #align(horizon)[
       Causal inference models
@@ -336,50 +306,50 @@
 
 #slide(title: [RCT case: No problem of confounding])[
 
-  #side-by-side(gutter: 10mm, columns: (1fr, 1fr))[
+  #grid(columns: (1fr, 1fr), gutter: 10mm)[
     #set align(center)
-    #uncover((1, 2))[
-      = Observational data
 
-      #diagram(
-        cell-size: 10mm,
-        node-stroke: 0.6pt,
-        spacing: 1.5em,
-        let (X, A, Y) = ((0, 0), (-1, 1), (1, 1)),
-        node(A, "A"),
-        node(Y, "Y"),
-        node(X, "X"),
-        edge(X, Y, "->"),
-        edge(X, A, "->"),
-        edge(A, Y, "->"),
-      )
+    = Observational data
 
-      = $Y(1), Y(0) #rotate(-90deg)[$tack.r.double.not$] A$
+    #fletcher-diagram(
+      cell-size: 10mm,
+      node-stroke: 0.6pt,
+      spacing: 1.5em,
+      let (X, A, Y) = ((0, 0), (-1, 1), (1, 1)),
+      node(A, "A"),
+      node(Y, "Y"),
+      node(X, "X"),
+      edge(X, Y, "->"),
+      edge(X, A, "->"),
+      edge(A, Y, "->"),
+    )
 
-      == Intervention is not random
-      (with respect to the confounders)
-    ]
+    = $Y(1), Y(0) #rotate(-90deg)[$tack.r.double.not$] A$
+
+    == Intervention is not random
+    (with respect to the confounders)
+
   ][
     #set align(center)
-    #uncover(2)[
-      = RCT data
-      #diagram(
-        cell-size: 10mm,
-        node-stroke: 0.6pt,
-        spacing: 1.5em,
-        let (X, A, Y) = ((0, 0), (-1, 1), (1, 1)),
-        node(A, "A"),
-        node(Y, "Y"),
-        node(X, "X"),
-        edge(X, Y, "->"),
-        edge(A, Y, "->"),
-      )
 
-      = $Y(1), Y(0) tack.t.double A$
+    = RCT data
+    #fletcher-diagram(
+      cell-size: 10mm,
+      node-stroke: 0.6pt,
+      spacing: 1.5em,
+      let (X, A, Y) = ((0, 0), (-1, 1), (1, 1)),
+      node(A, "A"),
+      node(Y, "Y"),
+      node(X, "X"),
+      edge(X, Y, "->"),
+      edge(A, Y, "->"),
+    )
 
-      == Force random assignment of the intervention
-    ]
+    = $Y(1), Y(0) tack.t.double A$
+
+    == Force random assignment of the intervention
   ]
+
 ]
 
 #slide(title: [Illustration: RCT data])[
@@ -589,7 +559,7 @@
   ]
   #only(1)[
     #align(center)[
-      #diagram(
+      #fletcher-diagram(
         cell-size: 10mm,
         node-stroke: 0.6pt,
         spacing: 1.5em,
@@ -665,7 +635,7 @@
 
 #slide(title: "Directed acyclic graphs (DAG), definitions")[
   #align(center)[
-    #diagram(
+    #fletcher-diagram(
       cell-size: 15mm,
       node-stroke: 1pt,
       spacing: 2.5em,
@@ -687,10 +657,10 @@
 
 
 
-  #align((center))[
+  #align(center)[
     == This is not a DAG
     #v(4em)
-    #diagram(
+    #fletcher-diagram(
       cell-size: 30mm,
       node-stroke: 2pt,
       spacing: 2em,
@@ -712,9 +682,9 @@
     two different levels of $A_(i)$ because of the arrow from A to Y.
   - #alert[Lack of edges] between nodes denotes the absence of a causal relationships.
 
-  #side-by-side(columns: (1fr, 2fr))[
+  #grid(columns: (1fr, 2fr))[
     #align(center)[
-      #diagram(
+      #fletcher-diagram(
         cell-size: 14mm,
         node-stroke: 0.6pt,
         spacing: 1.5em,
@@ -747,7 +717,7 @@
     align: center,
     [
       $A arrow.l X arrow Y$ #linebreak()
-      #diagram(
+      #fletcher-diagram(
         cell-size: 10mm,
         node-stroke: 0.6pt,
         spacing: 1.5em,
@@ -761,7 +731,7 @@
     ],
     [
       $A arrow Y$ #linebreak()
-      #diagram(
+      #fletcher-diagram(
         cell-size: 10mm,
         node-stroke: 0.6pt,
         spacing: 1.5em,
@@ -792,7 +762,7 @@
     gutter: 3pt,
     align: center,
     [
-      #diagram(
+      #fletcher-diagram(
         cell-size: 10mm,
         node-stroke: 0.6pt,
         spacing: 1.5em,
@@ -818,7 +788,7 @@
 )[
 
   #set align(center)
-  #diagram(
+  #fletcher-diagram(
     cell-size: 10mm,
     node-stroke: 0.6pt,
     spacing: 2.5em,
@@ -857,9 +827,9 @@
   - The effect of A “flows" through B. A and C are not independent and the relationship is causal.
 
 
-  #side-by-side(columns: (1fr, 2fr))[
+  #grid(columns: (1fr, 2fr))[
     #align(center)[
-      #diagram(
+      #fletcher-diagram(
         cell-size: 10mm,
         node-stroke: 0.6pt,
         spacing: 1.5em,
@@ -877,7 +847,6 @@
     #ex_block(
       title: "Example",
     )[An individual receiving a message (A) encouraging them to vote causes that individual to actually vote (C) only if the individual actually reads (B) the message.]
-
   ]
 ]
 
@@ -890,29 +859,30 @@
   - A and C are not independent, but are independent conditional on B.
   - #alert[Not conditionning on X] introduces bias.
 
-    #side-by-side(columns: (1fr, 2fr))[
-      #align(center)[
-        #diagram(
-          cell-size: 12mm,
-          node-stroke: 0.6pt,
-          spacing: 1.5em,
-          node-shape: circle,
-          let (A, B, C) = ((-1, 1), (0, 0), (1, 1)),
-          node(A, $A$),
-          node(B, $B$),
-          node(C, $C$),
-          edge(B, A, "->"),
-          edge(B, C, "->"),
-        )
-      ]][
-      #pause
-      #ex_block(title: "Examples")[
-        - Rise in temperature (B) causes both the thermometer (A) to change, and ice to melt (C), but the thermometer changing
-          does not cause ice to melt.
-
-        - A is prostate cancer; B is age; and C is Alzheimer’s disease.
-      ]
+  #grid(columns: (1fr, 2fr))[
+    #align(center)[
+      #fletcher-diagram(
+        cell-size: 12mm,
+        node-stroke: 0.6pt,
+        spacing: 1.5em,
+        node-shape: circle,
+        let (A, B, C) = ((-1, 1), (0, 0), (1, 1)),
+        node(A, $A$),
+        node(B, $B$),
+        node(C, $C$),
+        edge(B, A, "->"),
+        edge(B, C, "->"),
+      )
     ]
+  ][
+    #pause
+    #ex_block(title: "Examples")[
+      - Rise in temperature (B) causes both the thermometer (A) to change, and ice to melt (C), but the thermometer changing
+        does not cause ice to melt.
+
+      - A is prostate cancer; B is age; and C is Alzheimer's disease.
+    ]
+  ]
 ]
 
 #slide(title: "Three types of directed edges: collider")[
@@ -923,9 +893,9 @@
   - A and C are independent, but *conditionnaly* dependent given B.
   - #alert[Conditionning on B] introduces a spurious correlation between A and C.
 
-  #side-by-side(columns: (1fr, 2fr))[
+  #grid(columns: (1fr, 2fr))[
     #align(center)[
-      #diagram(
+      #fletcher-diagram(
         cell-size: 10mm,
         node-stroke: 0.6pt,
         spacing: 1.5em,
@@ -937,7 +907,8 @@
         edge(A, B, "->"),
         edge(C, B, "->"),
       )
-    ]][
+    ]
+  ][
     #pause
     #ex_block(title: "Examples")[
       - A is result from dice 1, C is results from dice 2, B is sum of dice 1 and dice 2.
@@ -955,9 +926,9 @@
   #uncover((2, 3))[
     - or the path contains a collider that has not been conditioned on (and has no descendants that have been conditioned on).
   ]
-  #side-by-side()[
+  #grid(columns: (1fr, 1fr))[
     #align(center)[
-      #diagram(
+      #fletcher-diagram(
         cell-size: 5mm,
         node-stroke: 0.6pt,
         spacing: 1em,
@@ -974,7 +945,7 @@
   ][
     #only((2, 3))[
       #align(center)[
-        #diagram(
+        #fletcher-diagram(
           cell-size: 5mm,
           node-stroke: 0.6pt,
           spacing: 1em,
@@ -988,7 +959,6 @@
           edge(A, Y, "->", stroke: red),
         )
       ]
-
     ]
   ]
   #only(3)[
@@ -1005,7 +975,7 @@
 )[
 
   #set align(center)
-  #diagram(
+  #fletcher-diagram(
     cell-size: 10mm,
     node-stroke: 0.6pt,
     spacing: 2.5em,
@@ -1047,7 +1017,7 @@
     gutter: 3pt,
     align: center,
     align(center)[
-      #diagram(
+      #fletcher-diagram(
         cell-size: 5mm,
         node-stroke: 0.6pt,
         spacing: 1em,
@@ -1062,7 +1032,7 @@
       )
     ],
     align(center)[
-      #diagram(
+      #fletcher-diagram(
         cell-size: 5mm,
         node-stroke: 0.6pt,
         spacing: 1em,
@@ -1084,7 +1054,7 @@
 )[
 
   #set align(center)
-  #diagram(
+  #fletcher-diagram(
     cell-size: 10mm,
     node-stroke: 0.6pt,
     spacing: 2.5em,
@@ -1115,7 +1085,7 @@
   DAGs help us know whether observed covariates are enough to identify a treatment effect.
 
   #align(center)[
-    #diagram(
+    #fletcher-diagram(
       cell-size: 5mm,
       node-stroke: 0.6pt,
       spacing: 1em,
@@ -1151,7 +1121,7 @@
   - NOT condition on M because it is a descendant of T
 
   #align(center)[
-    #diagram(
+    #fletcher-diagram(
       cell-size: 5mm,
       node-stroke: 0.6pt,
       spacing: 1em,
@@ -1174,7 +1144,7 @@
 #slide(title: "Famous examples of confounders")[
 
   #align(center)[
-    #diagram(
+    #fletcher-diagram(
       cell-size: 10mm,
       node-stroke: 1pt,
       spacing: 1.5em,
@@ -1199,7 +1169,7 @@
   === Instrumental variable (IV): influences only the treatment.
 
   #align(center)[
-    #diagram(
+    #fletcher-diagram(
       cell-size: 10mm,
       node-stroke: 0.6pt,
       spacing: 2em,
@@ -1221,7 +1191,7 @@
 #slide(title: "Famous examples of colliders: consequence of both the treatment and the outcome")[
 
   #align(center)[
-    #diagram(
+    #fletcher-diagram(
       cell-size: 15mm,
       node-stroke: 0.6pt,
       spacing: 2em,
@@ -1249,7 +1219,7 @@
 #slide(title: "More colliders: M-bias")[
 
   #align(center)[
-    #diagram(
+    #fletcher-diagram(
       cell-size: 5mm,
       node-stroke: 0.6pt,
       spacing: 0.8em,
@@ -1369,30 +1339,27 @@
 
 #slide(title: "Special types of variables: mediators")[
   A #alert[mediator] block the path from the treatment to the outcome.
-  #side-by-side(
-    [
-      #align(center)[
-        #diagram(
-          cell-size: 5mm,
-          node-stroke: 0.6pt,
-          spacing: 1em,
-          node-shape: circle,
-          let (A, M, Y) = ((-1, 1), (0, 0), (1, 1)),
-          node(A, $A$),
-          node(M, $M$),
-          node(Y, $Y$),
-          edge(A, M, "->"),
-          edge(M, Y, "->"),
-          edge(A, Y, "->"),
-        )
-      ]
-    ],
-    [
-      Here, two causal paths from A:
-      - $A arrow Y$ - a “direct effect"
-      - $A arrow M arrow Y$ - an “indirect effect" through M
-    ],
-  )
+  #grid(columns: (1fr, 2fr))[
+    #align(center)[
+      #fletcher-diagram(
+        cell-size: 5mm,
+        node-stroke: 0.6pt,
+        spacing: 1em,
+        node-shape: circle,
+        let (A, M, Y) = ((-1, 1), (0, 0), (1, 1)),
+        node(A, $A$),
+        node(M, $M$),
+        node(Y, $Y$),
+        edge(A, M, "->"),
+        edge(M, Y, "->"),
+        edge(A, Y, "->"),
+      )
+    ]
+  ][
+    Here, two causal paths from A:
+    - $A arrow Y$ - a "direct effect"
+    - $A arrow M arrow Y$ - an "indirect effect" through M
+  ]
   #only(2)[
     - All causal paths from a treatment capture its overall treatment effect.
 
