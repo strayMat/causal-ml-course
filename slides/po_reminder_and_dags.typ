@@ -227,9 +227,12 @@
   - The fallacy is that we are comparing different populations: people who go to the hospital typically have a worse
     baseline health than people who do not.
 
-  #def_box([
-    This is a confounding factor: A variable that influences both the treatment and the outcome.
-  ])
+  #def_box(
+    [
+      A variable that influences both the treatment and the outcome.
+    ],
+    title: "Definition: Confounding factor",
+  )
 
 ]
 
@@ -258,7 +261,7 @@
       ie. the covariate shift between treated and control units.
     ]
   ]
-  #hyp_box([No unmeasured variables influencing both treatment and outcome\ ie. no confounders.])
+  #hyp_box([No unmeasured variables influencing both treatment and outcome.], title: "Assumption: No counfounders")
 
 ]
 
@@ -387,7 +390,7 @@
 
   Further references:
   - Gentle introduction from ML and epidemiologists @abecassis2024prediction
-  - Advanced statistical point of view @wager2024causal
+  - Formal statistical point of view @wager2024causal
 ]
 
 = Framing: How to ask a sound causal question
@@ -559,7 +562,7 @@
 
   === Four assumptions, referred as strong ignorability
 
-  === Required to assure identifiability of the causal estimands with observational data @rubin2005causal
+  === Required for identifiability of the causal estimands with observational data @rubin2005causal
 
 ]
 
@@ -590,7 +593,7 @@
 
 #slide(title: "Assumption 1: Unconfoundedness, also called ignorability")[
 
-  == Treatment assignment is as good as random given the covariates $X$
+  == Treatment assignment as good as random given the covariates $X$
 
   #eq[
     ${Y(1), Y(0)} tack.t.double A | X$
@@ -605,7 +608,7 @@
   - #alert[Knowledge based] ie. cannot be validated with data //Still, there is some work on causal discovery, mostly based on conditional independence tests @glymour2019review.
     - Because of possibly unmeasured confounders
 
-    - In practice : ask yourself if you have measured all the relevant variables that could influence both the treatment and
+    - In practice: ask yourself if you have measured all the relevant variables that could influence both the treatment and
       the outcome.
 
 
@@ -680,7 +683,7 @@
 
 
   #align(center)[
-    == This is not a DAG
+    == #emoji.warning This is not a DAG
     #v(4em)
     #fletcher-diagram(
       cell-size: 30mm,
@@ -1021,8 +1024,8 @@
 
 #slide(title: "Backdoor paths: a special type of paths")[
 
-  #def_box(title: "Def. Backdoor path")[
-    A Backdoor path from a variable A to another Y, is any non-causal path between A and Y that does not include descendants of A.
+  #def_box(title: "Def. Backdoor path from A to Y")[
+    Any non-causal path between A and Y that does not include descendants of A.
   ]
 
   #pause
@@ -1392,22 +1395,28 @@
   ]
 ]
 
-#slide(title: "Take aways on DAGs")[
+#slide(title: "Special types of variables: Effect modifier")[
+  An #alert[Effect modifier] influences the treatment effect on the outcome.
 
-  == On DAGs
+  #figure(image("img/po_reminder_and_dags/effect_modifier.svg", width: 20%))
+]
+
+#slide(title: "Take aways")[
+
+  == DAGs
 
   - DAGs are a powerful tool to reason about causality
 
   - Useful to identify the variables to condition on / to include into the analysis
 
-  - Drawing the true DAG is often hard / not feasable
+  - Drawing the true DAG is often hard / not feasible
 
   #pause
-  == On covariate selection: What is important part to insure validity?
+  == Covariate selection: What is important to ensure validity?
 
-  - The covariate included (an appropriate DAG)?
+  - The covariate included (an appropriate DAG)
 
-  - The design of the study?
+  - The design of the study
 
   - The causal estimator (IPW, G-formula, AIPW...)
 
@@ -1470,14 +1479,8 @@
   #bibliography
 ]
 
-#new-section-slide("Supplementary material")
+//#new-section-slide("Supplementary material")
 
-
-#slide(title: "DAG: Effect modifier")[
-  === Effect modifier: influences the treatment effect on the outcome.
-
-  #figure(image("img/po_reminder_and_dags/effect_modifier.svg", width: 20%))
-]
 // #slide(title: "A word on structural equation models")[
 //   TODO
 // ]
