@@ -380,16 +380,13 @@
     columns: (auto, auto),
     gutter: 3pt,
   )[
-    #image("img/penalized_linear_models/ols_simple_test.svg", width: 70%)]
-  [
-  #image("img/penalized_linear_models/splines_cubic_test.svg", width: 70%)
+    #image("img/penalized_linear_models/ols_simple_test.svg", width: 70%)][
+    #image("img/penalized_linear_models/splines_cubic_test.svg", width: 70%)
   ]
 
-  //#uncover(2)[
   This trade-off is is called #alert[Bias variance trade-off].
 
   - Let's recover it in the context of statistical learning theory.
-  //]
 ]
 
 #slide(title: "Empirical Risk Minimization")[
@@ -433,17 +430,15 @@
     gutter: 3pt,
     align: center,
   )[
-    #image("img/penalized_linear_models/polynomial_overfit_simple_legend.svg", width: 90%),
-  ]
-  [
-  #set align(left)
-  == Model is too complex
-  - The model is able to recover the true generative process
-  - But its flexibility captures noise
+    #image("img/penalized_linear_models/polynomial_overfit_simple_legend.svg", width: 90%)
+  ][
+    #set align(left)
+    == Model is too complex
+    - The model is able to recover the true generative process
+    - But its flexibility captures noise
 
-
-  == Too much noise
-  == Not enough data
+    == Too much noise
+    == Not enough data
   ]
 ]
 
@@ -533,9 +528,8 @@
   ]
   #only(2)[
     #grid(columns: (1fr, 1fr))[
-      #image("img/penalized_linear_models/polynomial_overfit_test_2.svg", width: 80%)]
-    [
-    #image("img/penalized_linear_models/polynomial_validation_curve_2.svg", width: 80%)]
+      #image("img/penalized_linear_models/polynomial_overfit_test_2.svg", width: 80%)][
+      #image("img/penalized_linear_models/polynomial_validation_curve_2.svg", width: 80%)]
   ]
 
   #only(3)[
@@ -697,63 +691,58 @@
 
   #eq[$ln(p(Y_i=1|X_i)/p(Y_i=0|X_i)) = X_i^T beta_0$]
 
-  #uncover((2, 3))[
+  #only(2)[
     Taking exponential of both sides, we get:
     #eq[$p(Y_i=1|X_i, beta_0) \u{225D} p(X_i, beta_0) = 1 / (1+exp(-X_i^T beta_0))$]
 
     The statistical model is a Bernoulli 🪙: $B(p(x, beta_0))$
   ]
 
-  #uncover(3)[
-    Model fitted by maximum likelihood with iterative optimization @hastie2009elements: eg. coordinate descents (liblinear), second order descent (Newton's method), gradient descent (SAG)...
+
+  #only(3)[
+    #emoji.abacus Model fitted by maximum likelihood with iterative optimization @hastie2009elements: eg. coordinate descents (liblinear), second order descent (Newton's method), gradient descent (SAG)...
   ]
 ]
 
+
 #slide(title: "Reminder: classification, logistic regression")[
-  #grid(columns: (2fr, 1fr))
-  [
-  == Common metrics
+  #grid(columns: (2fr, 1fr))[
+    == Common metrics
 
-  - $text("Accuracy") = 1 / n sum_(i=1)^n bb(1)(Y_i = hat(Y_i))$
+    - $text("Accuracy") = 1 / n sum_(i=1)^n bb(1)(Y_i = hat(Y_i))$
 
-  - Precision: $text("Precision") = text("TP") / (text("TP") + text("FP"))$
+    - Precision: $text("Precision") = text("TP") / (text("TP") + text("FP"))$
 
-  - Recall: $text("Recall") = text("TP") / (text("TP") + text("FN"))$
+    - Recall: $text("Recall") = text("TP") / (text("TP") + text("FN"))$
 
-  - Brier score loss: $text("BSL") = 1/n sum_(i=1)^n (Y_i - p_i)^2$
-  ],
-  [
-  #image("img/penalized_linear_models/Precisionrecall.svg.png", width: 80%)
+    - Brier score loss: $text("BSL") = 1/n sum_(i=1)^n (Y_i - p_i)^2$
+  ][
+    #image("img/penalized_linear_models/Precisionrecall.svg.png", width: 80%)
   ]
 ]
 
 #slide(title: "Logistic regression: Illustrations")[
 
-  #grid(columns: (1fr, 1fr))
-  [
-  #image("img/penalized_linear_models/logistic_color.svg", width: 80%)
-  Logistic regression in one dimension.
-  ],
-  [
+  #grid(columns: (1fr, 1fr))[
+    #image("img/penalized_linear_models/logistic_color.svg", width: 80%)
+    Logistic regression in one dimension.
+  ][
 
-  #image("img/penalized_linear_models/logistic_2D.svg", width: 80%)
-  Logistic regression in two dimensions.
+    #image("img/penalized_linear_models/logistic_2D.svg", width: 80%)
+    Logistic regression in two dimensions.
   ]
 ]
 
 #slide(title: "Linear models are not suited to all data")[
   #set align(center)
 
-  #grid(columns: (1fr, 1fr))
-  [
-  #image("img/penalized_linear_models/lin_separable.svg", width: 80%)
-  Almost linearly separable data.
-  ],
+  #grid(columns: (1fr, 1fr))[
+    #image("img/penalized_linear_models/lin_separable.svg", width: 80%)
+    Almost linearly separable data.
+  ][
 
-  [
-
-  #image("img/penalized_linear_models/lin_not_separable.svg", width: 80%)
-  Data not linearly separable.
+    #image("img/penalized_linear_models/lin_not_separable.svg", width: 80%)
+    Data not linearly separable.
   ]
 ]
 
@@ -789,47 +778,41 @@
 #slide(title: "Transformation of the features: Example")[
 
   #only(1)[
-    #grid(columns: (1fr, 1fr))
-    [
-    #figure(image("img/pyfigures/2_linear_regression_non_linear_link.svg", width: 80%))
-    ],
-    [
-    ==== Non-linear relationship between the features and the outcome
-    True data generating process:\
-    $Y = X^3 - 0.5 times X^2 + epsilon$
+    #grid(columns: (1fr, 1fr))[
+      #figure(image("img/pyfigures/2_linear_regression_non_linear_link.svg", width: 80%))
+    ][
+      ==== Non-linear relationship between the features and the outcome
+      True data generating process:\
+      $Y = X^3 - 0.5 times X^2 + epsilon$
     ]
   ]
 
 
   #only(2)[
-    #grid(columns: (1fr, 1fr))
-    [
-    #figure(image("img/pyfigures/2_linear_regression_non_linear_link_linear.svg", width: 100%))
-    ],
-    [
+    #grid(columns: (1fr, 1fr))[
+      #figure(image("img/pyfigures/2_linear_regression_non_linear_link_linear.svg", width: 100%))
+    ][
 
-    Vanilla linear regression fails to capture the relationship.
+      Vanilla linear regression fails to capture the relationship.
 
-    ],
+    ]
   ]
 
 
   #only(3)[
-    #grid(columns: (1fr, 1fr))
-    [
-    #figure(image("img/pyfigures/2_linear_regression_non_linear_link_polynomial.svg", width: 100%))
-    ],
-    [
+    #grid(columns: (1fr, 1fr))[
+      #figure(image("img/pyfigures/2_linear_regression_non_linear_link_polynomial.svg", width: 100%))
+    ][
 
-    Solution:
+      Solution:
 
-    - Expand the feature space with polynoms of the features:
+      - Expand the feature space with polynoms of the features:
 
-      $X = [X, X^2, X^3]$
+        $X = [X, X^2, X^3]$
 
-    - Run a linear regression on the new feature space.
+      - Run a linear regression on the new feature space.
 
-    $Y = [X, X^2, X^3]^T hat(beta)$
+      $Y = [X, X^2, X^3]^T hat(beta)$
     ]
 
   ]
@@ -847,9 +830,12 @@
   - Different feature expansions exists: polynomial, log, splines, embeddings, kernels, ...
 ]
 #slide(title: [KEN @cvetkov2023relational: Relational Data Embeddings])[
-  #grid(columns: (1fr, 1fr))
-  [Easy to use with #link("https://skrub-data.org/stable/auto_examples/06_ken_embeddings.html#sphx-glr-auto-examples-06-ken-embeddings-py")[skrub library]],
-  [#figure(image("img/penalized_linear_models/ken_embeddings.png", width: 120%))]
+  #grid(columns: (
+      1fr,
+      1fr,
+    ))[Easy to use with #link("https://skrub-data.org/stable/auto_examples/06_ken_embeddings.html#sphx-glr-auto-examples-06-ken-embeddings-py")[skrub library]][#figure(
+    image("img/penalized_linear_models/ken_embeddings.png", width: 120%),
+  )]
 ]
 
 
@@ -901,19 +887,17 @@
 ]
 
 #slide(title: "Bias variance trade-off with Lasso")[
-  #grid(columns: (1fr, 1fr))
-  [
-  #figure(image("img/pyfigures/linreg_noreg_0.svg", width: 80%))
-  Linear regression (no regularization)
+  #grid(columns: (1fr, 1fr))[
+    #figure(image("img/pyfigures/linreg_noreg_0.svg", width: 80%))
+    Linear regression (no regularization)
 
-  High variance, no bias.
-  ],
-  [
-  #figure(image("img/pyfigures/lasso_0_withreg.svg", width: 80%))
-  Lasso (regularization): Shrink some coefficients of $beta$.
+    High variance, no bias.
+  ][
+    #figure(image("img/pyfigures/lasso_0_withreg.svg", width: 80%))
+    Lasso (regularization): Shrink some coefficients of $beta$.
 
-  Lower variance, but bias.
-  ],
+    Lower variance, but bias.
+  ]
 ]
 
 
@@ -971,42 +955,39 @@
 
 #slide(title: "Why does Lasso shrink some coefficients to zero?")[
   #set align(center)
-  #grid(columns: (1fr, 1fr))
-  [
-  #only(1)[
-    #figure(image("img/pyfigures/lasso_intuition_ols_cross.svg", width: 150%))
-  ]
-  #only(2)[
-    #figure(image("img/pyfigures/lasso_intuition_inner.svg", width: 150%))
-  ]
-  #only(3)[
-    #figure(image("img/pyfigures/lasso_intuition_middle.svg", width: 150%))
-  ]
-  #only(4)[
-    #figure(image("img/pyfigures/lasso_intuition_outer.svg", width: 150%))
-  ]
-  #only(5)[
-    #figure(image("img/pyfigures/lasso_intuition_penalty.svg", width: 150%))
-  ]
-  ],
-  [
-  #set align(left)
-  MSE as a function of the coefficients.
+  #grid(columns: (1fr, 1fr))[
+    #only(1)[
+      #figure(image("img/pyfigures/lasso_intuition_ols_cross.svg", width: 150%))
+    ]
+    #only(2)[
+      #figure(image("img/pyfigures/lasso_intuition_inner.svg", width: 150%))
+    ]
+    #only(3)[
+      #figure(image("img/pyfigures/lasso_intuition_middle.svg", width: 150%))
+    ]
+    #only(4)[
+      #figure(image("img/pyfigures/lasso_intuition_outer.svg", width: 150%))
+    ]
+    #only(5)[
+      #figure(image("img/pyfigures/lasso_intuition_penalty.svg", width: 150%))
+    ]
+  ][
+    #set align(left)
+    MSE as a function of the coefficients.
 
-  #uncover((2, 3, 4, 5))[
-    The MSE surface is an ellipsoid in $beta$:\
-    Every point on the ellipsoid edge has the same MSE.
-  ]
+    #uncover((2, 3, 4, 5))[
+      The MSE surface is an ellipsoid in $beta$:\
+      Every point on the ellipsoid edge has the same MSE.
+    ]
 
-  #uncover((4, 5))[
-    Moving away from OLS solution
-  ]
+    #uncover((4, 5))[
+      Moving away from OLS solution
+    ]
 
-  #uncover(5)[
-    Until the ellipsoid respects the lasso penalty (green diamond).
+    #uncover(5)[
+      Until the ellipsoid respects the lasso penalty (green diamond).
+    ]
   ]
-  ],
-  )
 ]
 
 #slide(title: "Another regularized linear model: Ridge")[
@@ -1025,25 +1006,22 @@
 
 #slide(title: "Illustration of Ridge penalty")[
   #set align(center)
-  #grid(columns: (1fr, 1fr))
-  [
+  #grid(columns: (1fr, 1fr))[
 
-  #figure(image("img/pyfigures/ridge_intuition_penalty.svg", width: 150%))
+    #figure(image("img/pyfigures/ridge_intuition_penalty.svg", width: 150%))
 
-  ],
-  [
-  #set align(left)
-  The first contact between the ellipsoid and the circle is the solution of Ridge.
+  ][
+    #set align(left)
+    The first contact between the ellipsoid and the circle is the solution of Ridge.
 
-  #uncover((2, 3))[
-    Few chances than lasso to cross an axis.
+    #uncover((2, 3))[
+      Few chances than lasso to cross an axis.
+    ]
+
+    #uncover(3)[
+      Ridge insure smaller coefficients, but no exact zeros.
+    ]
   ]
-
-  #uncover(3)[
-    Ridge insure smaller coefficients, but no exact zeros.
-  ]
-  ],
-  )
 ]
 
 
