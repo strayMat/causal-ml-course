@@ -557,36 +557,45 @@
   #eq[
     ${Y(1), Y(0)} tack.t.double A | X$
   ]
-  #only(1)[
-    #align(center)[
-      #fletcher-diagram(
-        cell-size: 10mm,
-        node-stroke: 0.6pt,
-        spacing: 1.5em,
-        let (X, A, Y) = ((0, 0), (-1, 1), (1, 1)),
-        node(A, "A"),
-        node(Y, "Y"),
-        node(X, "X", fill: rgb("#9c9c9c")),
-        edge(X, Y, "->"),
-        edge(X, A, "->"),
-        edge(A, Y, "->"),
-      )
-    ]
+
+  #align(center)[
+    #fletcher-diagram(
+      cell-size: 10mm,
+      node-stroke: 0.6pt,
+      spacing: 1.5em,
+      let (X, A, Y) = ((0, 0), (-1, 1), (1, 1)),
+      node(A, "A"),
+      node(Y, "Y"),
+      node(X, "X", fill: rgb("#9c9c9c")),
+      edge(X, Y, "->"),
+      edge(X, A, "->"),
+      edge(A, Y, "->"),
+    )
   ]
-  #only((2, 3))[
-    - Equivalent to conditional independence on the propensity score: #linebreak() $e(X) \u{225D} PP(A=1|X)$ @rosenbaum1983central:
+]
 
-    #eq[${Y(1), Y(0)} A | e(X)$]
+
+#slide(title: "Assumption 1: Unconfoundedness, also called ignorability")[
+
+  == Treatment assignment is as good as random given the covariates $X$
+
+  #eq[
+    ${Y(1), Y(0)} tack.t.double A | X$
   ]
 
-  #only(3)[
-    - #alert[Knowledge based] ie. cannot be validated with data //Still, there is some work on causal discovery, mostly based on conditional independence tests @glymour2019review.
-      - Because of possibly unmeasured confounders
+  - Equivalent to conditional independence on the propensity score: #linebreak() $e(X) \u{225D} PP(A=1|X)$ @rosenbaum1983central:
 
-      - In practice : ask yourself if you have measured all the relevant variables that could influence both the treatment and
-        the outcome.
+  #eq[${Y(1), Y(0)} A | e(X)$]
 
-  ]
+
+  #pause
+  - #alert[Knowledge based] ie. cannot be validated with data //Still, there is some work on causal discovery, mostly based on conditional independence tests @glymour2019review.
+    - Because of possibly unmeasured confounders
+
+    - In practice : ask yourself if you have measured all the relevant variables that could influence both the treatment and
+      the outcome.
+
+
 ]
 
 #slide(title: "Assumption 2: Overlap, also known as positivity")[
@@ -920,12 +929,10 @@
 
 #slide(title: "Open and blocked paths by conditionning")[
 
-  A path is #alert[blocked] (or d-separated) if:
+  A path is #text(fill: orange)[blocked] (or d-separated) if:
   - the path contains a non-collider that has been conditioned on.
+  - or the path contains a collider that has not been conditioned on (and has no descendants that have been conditioned on).
 
-  #uncover((2, 3))[
-    - or the path contains a collider that has not been conditioned on (and has no descendants that have been conditioned on).
-  ]
   #grid(columns: (1fr, 1fr))[
     #align(center)[
       #fletcher-diagram(
@@ -943,30 +950,28 @@
       )
     ]
   ][
-    #only((2, 3))[
-      #align(center)[
-        #fletcher-diagram(
-          cell-size: 5mm,
-          node-stroke: 0.6pt,
-          spacing: 1em,
-          node-shape: circle,
-          let (A, X, Y) = ((-1, 1), (0, 0), (1, 1)),
-          node(A, $A$),
-          node(X, $X$),
-          node(Y, $Y$),
-          edge(X, A, "->"),
-          edge(X, Y, "->", stroke: red),
-          edge(A, Y, "->", stroke: red),
-        )
-      ]
+    #align(center)[
+      #fletcher-diagram(
+        cell-size: 5mm,
+        node-stroke: 0.6pt,
+        spacing: 1em,
+        node-shape: circle,
+        let (A, X, Y) = ((-1, 1), (0, 0), (1, 1)),
+        node(A, $A$),
+        node(X, $X$),
+        node(Y, $Y$),
+        edge(X, A, "->"),
+        edge(X, Y, "->", stroke: red),
+        edge(A, Y, "->", stroke: red),
+      )
     ]
-  ]
-  #only(3)[
 
-    Conditioning on a variable:
-    - #alert[Blocks] a path if that variable is #alert[not a collider] on that path.
-    - #alert[Opens] a path if that variable is a #alert[collider] on that path.
   ]
+
+  Conditioning on a variable:
+  - #text(fill: orange)[Blocks] a path if that variable is #text(fill: orange)[not a collider] on that path.
+  - #text(fill: orange)[Opens] a path if that variable is a #text(fill: orange)[collider] on that path.
+
 ]
 
 #slide(
