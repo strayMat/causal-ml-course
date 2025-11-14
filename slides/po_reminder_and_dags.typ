@@ -89,7 +89,7 @@
   #outline(depth: 1)
 ]
 
-#new-section-slide("Introduction")
+= Introduction
 
 #slide(title: "Causal inference: subfield of statistics dealing with \"why questions\"")[
 
@@ -136,7 +136,18 @@
   == Prediction (ML): What usually happens in a given situation?
 
   #grid(columns: (1fr, 1fr), gutter: 3mm)[
-    #figure(image("img/po_reminder_and_dags/dag_x_to_y.svg", width: 40%))
+    //#figure(image("img/po_reminder_and_dags/dag_x_to_y.svg", width: 40%))
+    #align(center)[
+      #fletcher-diagram(
+        cell-size: 30mm,
+        node-stroke: 1.5pt,
+
+        spacing: 1.5em,
+        let (X, Y) = ((0, 0), (1, 0)),
+        node(Y, "Y"),
+        node(X, "X"),
+        edge(X, Y, "->"),
+      )]
   ][
     Prediction models $(X, Y)$
   ]
@@ -184,23 +195,24 @@
   #grid(columns: (1fr, 1fr))[
 
     === Images: Image classification with deep convolutional neural networks @krizhevsky2012imagenet
-    #pause
-    === Speech-to-text: Towards end-to-end speech recognition with recurrent neural networks @graves2014towards
-
-    #pause
-    === Text: Attention is all you need @vaswani2017attention
-
+    #uncover("2-")[
+      === Speech-to-text: Towards end-to-end speech recognition with recurrent neural networks @graves2014towards
+    ]
+    #uncover("3-")[
+      === Text: Attention is all you need @vaswani2017attention
+    ]
   ][
     #set align(center)
-
-    #figure(
-      image("img/po_reminder_and_dags/image_classification.png", width: 100%),
-      caption: "ImageNet 1K: 1.5 million images, 1000 classes",
-    )
+    #only(1)[
+      #figure(
+        image("img/po_reminder_and_dags/image_classification.png", width: 100%),
+        caption: "ImageNet 1K: 1.5 million images, 1000 classes",
+      )
+    ]
+    #only(3)[
+      #figure(image("img/po_reminder_and_dags/ner_edsnlp.png", width: 100%), caption: "Named entity recognition")
+    ]
   ]
-
-  #figure(image("img/po_reminder_and_dags/ner_edsnlp.png", width: 100%), caption: "Named entity recognition")
-
 ]
 
 
@@ -309,7 +321,7 @@
   #grid(columns: (1fr, 1fr), gutter: 10mm)[
     #set align(center)
 
-    = Observational data
+    == Observational data
 
     #fletcher-diagram(
       cell-size: 10mm,
@@ -324,7 +336,7 @@
       edge(A, Y, "->"),
     )
 
-    = $Y(1), Y(0) #rotate(-90deg)[$tack.r.double.not$] A$
+    == $Y(1), Y(0) #rotate(-90deg)[$tack.r.double.not$] A$
 
     == Intervention is not random
     (with respect to the confounders)
@@ -332,7 +344,7 @@
   ][
     #set align(center)
 
-    = RCT data
+    == RCT data
     #fletcher-diagram(
       cell-size: 10mm,
       node-stroke: 0.6pt,
@@ -345,7 +357,7 @@
       edge(A, Y, "->"),
     )
 
-    = $Y(1), Y(0) tack.t.double A$
+    == $Y(1), Y(0) tack.t.double A$
 
     == Force random assignment of the intervention
   ]
@@ -378,7 +390,8 @@
   - Advanced statistical point of view @wager2024causal
 ]
 
-#new-section-slide("Framing: How to ask a sound causal question")
+= Framing: How to ask a sound causal question
+
 //lalonde example from the book (I am less fan of no intervention examples).
 
 /* #slide(
@@ -455,7 +468,7 @@
   - O: Test scores (math and reading)
 ]
 
-#new-section-slide("Identification: List necessary information to answer the causal question")
+= Identification: List necessary information to answer the causal question
 
 #slide(title: [Identification: Build the causal model])[
 
@@ -629,7 +642,7 @@
 
 ]
 
-#new-section-slide("Directed acyclic graphs (DAGs)")
+= Directed acyclic graphs (DAGs)
 
 #slide(title: "Directed acyclic graphs (DAG), a tool to reason about causality")[
   == DAGs encode the causal structure of the data generating process
@@ -1443,7 +1456,7 @@
   #figure(image("img/po_reminder_and_dags/tutorial_ci_results.png", width: 52%))
 ]
 
-#new-section-slide("Practical session")
+= Practical session
 
 #slide(title: "To your notebooks! 👩‍💻")[
   - url: https://straymat.github.io/causal-ml-course/practical_sessions.html
