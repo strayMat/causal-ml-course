@@ -116,7 +116,7 @@
 
   - Basics and #alert[references for formal understanding]
 
-  - Focus on practical skills: #alert[Coding] 👩‍💻
+  - Focus on practical skills: #alert[coding] 👩‍💻
 ]
 
 #slide(title: "Course syllabus")[
@@ -148,7 +148,7 @@
   - Inscription: email sent to every students.
 ]
 
-#slide(title: "Course ressources for my four sessions")[
+#slide(title: "Course resources for my four sessions")[
 
   == Website
 
@@ -165,22 +165,23 @@
   == #alert[Predictive inference] in high dimensions
   - Statistical learning basics
   - Regularized linear models for predictive inference
-  - Putting it into practice with scikit-learn
+  - Practice with scikit-learn
 
   #pause
 
   == Next two sessions
 
-  - Double-Lasso: using penalized linear models for causal inference (Bruno Crépon)
+  - Flexible models: Trees, Random Forests, Gradient Boosting and more scikit-learn
 
-  - Flexible models: Trees, Random Forests, Gradient Boosting and more scikit-learn (Me)
+  - Reminders of potential outcomes and Directed Acyclic Graphs
 
 ]
 
 #slide(title: "Table of contents")[
-  #outline(indent: 2em, title: none)
+  #outline(depth: 1)
 ]
-#new-section-slide("Statistical learning framework")
+
+= Statistical learning framework
 
 #slide(title: "Statistical learning, ie. predictive inference")[
   == Goal
@@ -320,7 +321,7 @@
 
 #slide(title: "Under vs. overfitting")[
 
-  = Which data fit do you prefer?
+  == Which data fit do you prefer?
 
   #grid(
     columns: (auto, auto),
@@ -332,7 +333,7 @@
 
 #slide(title: "Under vs. overfitting")[
 
-  = Which data fit do you prefer? (new data incoming)
+  == Which data fit do you prefer? (new data incoming)
 
   #grid(
     columns: (auto, auto),
@@ -523,27 +524,30 @@
   #set align(center)
 
   #only(1)[
-    #grid(columns: (1fr, auto))[
-      image("img/penalized_linear_models/polynomial_overfit_test_1.svg", width: 80%),
-      image("img/penalized_linear_models/polynomial_validation_curve_1.svg", width: 80%),
+    #grid(columns: (1fr, 1fr))[
+      #image(
+        "img/penalized_linear_models/polynomial_overfit_test_1.svg",
+        width: 80%,
+      )][      #image("img/penalized_linear_models/polynomial_validation_curve_1.svg", width: 80%),
     ]
   ]
   #only(2)[
-    #grid(columns: (1fr, auto))[
-      image("img/penalized_linear_models/polynomial_overfit_test_2.svg", width: 80%),
-      image("img/penalized_linear_models/polynomial_validation_curve_2.svg", width: 80%),
-    ]
+    #grid(columns: (1fr, 1fr))[
+      #image("img/penalized_linear_models/polynomial_overfit_test_2.svg", width: 80%)]
+    [
+    #image("img/penalized_linear_models/polynomial_validation_curve_2.svg", width: 80%)]
   ]
+
   #only(3)[
-    #grid(columns: (1fr, auto))[
-      image("img/penalized_linear_models/polynomial_overfit_test_5.svg", width: 80%),
-      image("img/penalized_linear_models/polynomial_validation_curve_5.svg", width: 80%),
+    #grid(columns: (1fr, 1fr))[
+      #image("img/penalized_linear_models/polynomial_overfit_test_5.svg", width: 80%)][
+      #image("img/penalized_linear_models/polynomial_validation_curve_5.svg", width: 80%)
     ]
   ]
   #only(4)[
-    #grid(columns: (1fr, auto))[
-      image("img/penalized_linear_models/polynomial_overfit_test_9.svg", width: 80%),
-      image("img/penalized_linear_models/polynomial_validation_curve_15.svg", width: 80%),
+    #grid(columns: (1fr, 1fr))[
+      #image("img/penalized_linear_models/polynomial_overfit_test_9.svg", width: 80%)][
+      #image("img/penalized_linear_models/polynomial_validation_curve_15.svg", width: 80%)
     ]
   ]
 
@@ -565,29 +569,26 @@
   #set text(size: 2em)
 
   #only(1)[
-    #grid(columns: (1fr, auto))[
-      image("img/penalized_linear_models/polynomial_overfit_ntrain_42.svg", width: 80%),
-      image("img/penalized_linear_models/polynomial_learning_curve_42.svg", width: 80%),
-    ]
+    #grid(columns: (1fr, 1fr))[
+      #image("img/penalized_linear_models/polynomial_overfit_ntrain_42.svg", width: 80%)][
+      #image("img/penalized_linear_models/polynomial_learning_curve_42.svg", width: 80%)]
     #align(left)[
       #h(3em)
       #highlight(fill: rgb("#440154").opacify(-50%))[*Overfit*]
     ]
   ]
 
-
   #only(2)[
-    #grid(columns: (1fr, auto))[
-      image("img/penalized_linear_models/polynomial_overfit_ntrain_145.svg", width: 80%),
-      image("img/penalized_linear_models/polynomial_learning_curve_145.svg", width: 80%),
-    ]
+    #grid(columns: (1fr, 1fr))[
+      #image("img/penalized_linear_models/polynomial_overfit_ntrain_145.svg", width: 80%)][
+      #image("img/penalized_linear_models/polynomial_learning_curve_145.svg", width: 80%)]
   ]
 
   #only(3)[
-    #grid(columns: (1fr, auto))[
-      image("img/penalized_linear_models/polynomial_overfit_ntrain_1179.svg", width: 80%),
-      image("img/penalized_linear_models/polynomial_learning_curve_1179.svg", width: 80%),
-    ]
+    #grid(columns: (1fr, 1fr))[
+      #image("img/penalized_linear_models/polynomial_overfit_ntrain_1179.svg", width: 80%)][
+      #image("img/penalized_linear_models/polynomial_learning_curve_1179.svg", width: 80%)]
+
     #align(left)[
       #h(3em)
       #highlight(fill: rgb("#7ad151").opacify(-50%))[*Sweet spot?*]
@@ -595,10 +596,10 @@
   ]
 
   #only(4)[
-    #grid(columns: (1fr, auto))[
-      image("img/penalized_linear_models/polynomial_overfit_ntrain_6766.svg", width: 80%),
-      image("img/penalized_linear_models/polynomial_learning_curve_6766.svg", width: 80%),
-    ]
+    #grid(columns: (1fr, 1fr))[
+      #image("img/penalized_linear_models/polynomial_overfit_ntrain_6766.svg", width: 80%)][
+      #image("img/penalized_linear_models/polynomial_learning_curve_6766.svg", width: 80%)]
+
     #align(left)[
       #h(3em)
       #highlight(fill: rgb("#440154").opacify(-50%))[*Diminishing returns?*]
@@ -608,17 +609,15 @@
   #set align(left)
 
   #only(5)[
-    #grid(columns: (1fr, 1.7fr))[
-      image("img/penalized_linear_models/polynomial_overfit_ntrain_6766.svg", width: 100%),
-      [
+    #grid(columns: (1fr, 2fr))[
+      #image("img/penalized_linear_models/polynomial_overfit_ntrain_6766.svg", width: 100%)][
       The error of the best model trained on unlimited data.
 
       Here, the data is generated by a polynomial of degree 9.
 
-      We cannot do better.
+      #text(fill: orange)[We cannot do better.]
 
       Prediction is limited by noise: #highlight(fill: c_bayes)[Bayes error].
-      ],
     ]
   ]
 ]
@@ -627,7 +626,7 @@
 
 #slide(title: "Remaining of this session (and the next on predictive inference)")[
 
-  = Common model families suited to tabular data
+  == #alert[Common model families suited to tabular data]
 
   == Today
 
