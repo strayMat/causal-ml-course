@@ -2,13 +2,13 @@
 Evaluation 
 ==========
 
-The evaluation is based on a group project on real data making use of some important concepts seen in course. Run through the different steps of causal or predictive inference with machine learning on a dataset of your choice (see below for some propositions of dataset).
+The evaluation is based on a group project on real data making use of some important concepts seen in course. Run through the different steps of causal or predictive inference with machine learning on a dataset of your choice (see below for some suggestions of dataset).
 
 You will be evaluated on two deliverables: 
 
-- **Handing over a notebook** detailing both the formalization of your problem, the chosen methods to address the question of interest, and the results of your analysis. The notebook should be clear and well-structured, with a good balance between text and code. You can use either R or python or stata. For causal inference, you can use the `Double ML package <https://docs.doubleml.org/stable/>`__.
+- **Handing over a notebook** detailing both the formalization of your problem, the chosen methods to address the question of interest, and the results of your analysis. The notebook should be clear and well-structured, with a good balance between text and code. You can use R or python or stata. For causal inference, you can use the `Double ML package <https://docs.doubleml.org/stable/>`__.
 
-- During the last session (April 1st), you will **present your work** to the class. The presentation should be clear and concise, with a focus on the main results and the methodological choices you made. The presentation should be between 20 and 30 min. You can use a slide deck or a live demo of your notebook.
+- During the last session, you will **present your work** to the class. The presentation should be clear and concise, with a focus on the main results and the methodological choices you made. The presentation should be between 20 and 30 min. You can use a slide deck or a live demo of your notebook.
 
 ----------
 Enrollment

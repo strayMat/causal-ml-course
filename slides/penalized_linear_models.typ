@@ -1,10 +1,9 @@
-// Get Polylux from the official package repository
 
 // documentation link : https://typst.app/universe/package/polylux
 
-#import "@preview/polylux:0.3.1": *
+#import "@preview/touying:0.6.1": *
 #import "@preview/embiggen:0.0.1": *
-#import "@preview/showybox:2.0.1": showybox
+#import "@preview/showybox:2.0.4": showybox
 
 #import themes.metropolis: *
 
@@ -34,6 +33,9 @@
   set text(size: size)
   body
 }
+
+#let m-extra-light-gray = rgb("#f5f5f5")
+#let m-dark-teal = rgb("#004c4c")
 
 // assumption box
 //
@@ -75,47 +77,6 @@
 #let c_bias = purple.opacify(-50%)
 #let c_variance = green.opacify(-50%)
 
-#let slide(title: none, body) = {
-  let header = {
-    set align(top)
-    if title != none {
-      show: m-cell.with(fill: m-dark-teal, inset: 1em)
-      set align(horizon)
-      set text(fill: m-extra-light-gray, size: 1.2em)
-      strong(title)
-    } else { [] }
-  }
-
-  let footer = {
-    set text(size: 0.8em)
-    show: pad.with(.5em)
-    set align(bottom)
-    text(fill: m-dark-teal.lighten(40%), m-footer.display())
-    h(1fr)
-    text(fill: m-dark-teal, logic.logical-slide.display())
-  }
-
-  set page(
-    header: header,
-    footer: footer,
-    margin: (top: 3em, bottom: 1.5em),
-    fill: m-extra-light-gray,
-  )
-
-  let content = {
-    show: align.with(horizon)
-    show: pad.with(
-      left: 1em,
-      top: 0em,
-      right: 1em,
-      bottom: 0em,
-    ) // super important to have a proper padding (not 1/3 of the slide blank...)
-    set text(fill: m-dark-teal)
-    body
-  }
-
-  logic.polylux-slide(content)
-}
 
 #show link: set text(fill: rgb("#3788d3"))
 
@@ -135,9 +96,8 @@
   - 2020-2023: PhD in statistics and informatics (SODA / scikit-learn inria team): #linebreak()
   #align(center)[_Causal inference with machine learning applied to clinical data_]
 
-  - Same time: Statistician since 4 years at Haute Autorité de santé (HAS)
-
-  - First course at ENSAE
+  - Same time: Statistician during 5 years at Haute Autorité de santé (HAS)
+  - #alert[2025-]: Data analyst at Insee (Département des Études Économiques)
 
   === More from the #alert[machine learning] than #alert[economics] culture
 ]
@@ -152,7 +112,7 @@
   #pause
   == Philosophy
 
-  - More #alert[Intutions] than equations
+  - More #alert[intuitions] than equations
 
   - Basics and #alert[references for formal understanding]
 
@@ -164,14 +124,14 @@
 
   == Sessions
 
-  - Statistical learning and regularized linear models (MD)
-  - Double-lasso for statistical inference (BC)
-  - Flexible models for tabular data (MD)
-  - Reminders of potential outcomes and Directed Acyclic Graphs (MD)
-  - Event studies: Causal methods for pannel data (MD)
-  - Double machine learning: Neyman-orthogonality (BC)
-  - Heterogeneous treatment effect (BC)
-  - Oral presentations of the evaluation projects (MD + BC)
+  - 1. Statistical learning and regularized linear models (MD)
+  - 2. Flexible models for tabular data (MD)
+  - 3. Reminders of potential outcomes and Directed Acyclic Graphs (MD)
+  - 4.a Event studies: Causal methods for pannel data (MD)
+  - 4.b Double-lasso for statistical inference (BC)
+  - 5. Double machine learning: Neyman-orthogonality (BC)
+  - 6. Heterogeneous treatment effect (BC)
+  - 7. Oral presentations of the evaluation projects (MD + BC)
 ]
 
 #slide(title: "Evaluation of the course")[
@@ -217,9 +177,8 @@
 
 ]
 
-
 #slide(title: "Table of contents")[
-  #metropolis-outline
+  #outline(indent: 2em, title: none)
 ]
 #new-section-slide("Statistical learning framework")
 
@@ -242,35 +201,30 @@
   Finding the appropriate model $hat(f)$ is called learning, training or fitting the model.
 ]
 
-#slide(title: "Statistical learning, two classes of problems")[
+#slide(title: "Statistical learning, two classes of problems", composer: (1fr, auto))[
+  #figure(image("img/penalized_linear_models/linear_regression.png", width: 80%))
+][
+  === Regression
 
+  - The outcome is continuous: eg. wage prediction
 
-  #side-by-side[
-    #figure(image("img/penalized_linear_models/linear_regression.png", width: 80%))
-  ][
-    === Regression
-
-    - The outcome is continuous: eg. wage prediction
-
-    - The error is often measured by the mean squared error (MSE):
-    #eq[$text("MSE") = EE[(Y - hat(f)(X))^2]$]
-  ]
+  - The error is often measured by the mean squared error (MSE):
+  #eq[$text("MSE") = EE[(Y - hat(f)(X))^2]$]
 ]
 
 
 #slide(title: "Statistical learning, two classes of problems")[
-  #side-by-side[
-    #figure(image("img/penalized_linear_models/linear_classification.png", width: 80%))
-  ][
-    === Classification
+  #figure(image("img/penalized_linear_models/linear_classification.png", width: 80%))
+][
+  === Classification
 
-    - Outcome is categorical: eg. diagnosis, loan default, ...
+  - Outcome is categorical: eg. diagnosis, loan default, ...
 
-    - Error is often measured with accuracy:
-    #eq[$text("Misclassification rate") = EE[bb(1)(Y != hat(f)(X))]$] with $hat(f) in {0, 1}$ for binary classification
+  - Error is often measured with accuracy:
+  #eq[$text("Misclassification rate") = EE[bb(1)(Y != hat(f)(X))]$] with $hat(f) in {0, 1}$ for binary classification
 
-  ]
 ]
+
 
 #new-section-slide("Motivation: why prediction?")
 
@@ -393,48 +347,48 @@
 ]
 
 #slide(title: "Train vs test error: simple models")[
-  #side-by-side[
+  #components.side-by-side(columns: (1fr, 1fr))[
     === Measure the errors on the training data => fitting
     #figure(image("img/pyfigures/ols_simple_w_r2.svg", width: 80%))
   ][
-    #only((2, 3))[
+    #uncover((2, 3))[
       === Measure the performances on test data => generalization
       #figure(image("img/pyfigures/ols_test_w_r2.svg", width: 80%))
     ]
-  ]
-  #only(3)[
-    #emoji.party Here, no problem of overfitting: train vs test error are similar.
+    #uncover(3)[
+      #emoji.party Here, no problem of overfitting: train vs test error are similar.
+    ]
   ]
 ]
 
-
 #slide(title: "Train vs test error: flexible models")[
-  #side-by-side[
+  #components.side-by-side(columns: (1fr, 1fr))[
+
     === Measure the errors on the training data = fitting
     #figure(image("img/pyfigures/splines_cubic_w_r2.svg", width: 80%))
   ][
     === Measure the performances on test data = generalization
     #figure(image("img/pyfigures/splines_test_w_r2.svg", width: 80%))
+    \u{1F62B} Overfitting: the model is too complex and captures noise.
   ]
-  \u{1F62B} Overfitting: the model is too complex and captures noise.
 ]
 
 
-
-
 #slide(title: "How to choose the complexity of the model?")[
-  #grid(
+  #components.side-by-side(
     columns: (auto, auto),
     gutter: 3pt,
-    image("img/penalized_linear_models/ols_simple_test.svg", width: 70%),
-    image("img/penalized_linear_models/splines_cubic_test.svg", width: 70%),
-  )
-
-  #only(2)[
-    This trade-off is is called #alert[Bias variance trade-off].
-
-    - Let's recover it in the context of statistical learning theory.
+  )[
+    #image("img/penalized_linear_models/ols_simple_test.svg", width: 70%)]
+  [
+  #image("img/penalized_linear_models/splines_cubic_test.svg", width: 70%)
   ]
+
+  //#uncover(2)[
+  This trade-off is is called #alert[Bias variance trade-off].
+
+  - Let's recover it in the context of statistical learning theory.
+  //]
 ]
 
 #slide(title: "Empirical Risk Minimization")[
@@ -466,29 +420,30 @@
   #eq[$hat(f) = text("argmin")_(f in cal(F)) sum_(i=1)^n (f(x_i) - y_i)^2$]
 
   #pause
-  - This creates the #highlight(fill:c_variance)[estimation error], related to sampling noise:
+  - This creates the #highlight(fill: c_variance)[estimation error], related to sampling noise:
   #eq[$cal(E)(hat(f)) - cal(E)(f^(star)) = EE[(hat(f)(x) - y)^2] - EE[(f^(star)(x) - y)^2] >= 0$]
 ]
 
 #slide(title: "Empirical risk minimization: estimation error illustration")[
   = High #highlight(fill: c_variance)[estimation error] means overfit
 
-  #grid(
+  #components.side-by-side(
     columns: (auto, auto),
     gutter: 3pt,
     align: center,
-    image("img/penalized_linear_models/polynomial_overfit_simple_legend.svg", width: 90%),
-    [
-      #set align(left)
-      == Model is too complex
-      - The model is able to recover the true generative process
-      - But its flexibility captures noise
+  )[
+    #image("img/penalized_linear_models/polynomial_overfit_simple_legend.svg", width: 90%),
+  ]
+  [
+  #set align(left)
+  == Model is too complex
+  - The model is able to recover the true generative process
+  - But its flexibility captures noise
 
-      #pause
-      == Too much noise
-      == Not enough data
-    ],
-  )
+
+  == Too much noise
+  == Not enough data
+  ]
 ]
 
 #slide(title: "Bayes error rate: Randomness of the problem")[
@@ -500,7 +455,7 @@
   #pause
   == 🥇 $g(dot)$ is the best possible estimator
 
-  $g(dot)$ induces the #highlight(fill:c_bayes)[Bayes error], the unavoidable error:
+  $g(dot)$ induces the #highlight(fill: c_bayes)[Bayes error], the unavoidable error:
   #eq[$cal(E)(g) = EE[(g(x) + e - g(x))^2] = EE[e^2] = sigma^2$]
 ]
 
@@ -514,7 +469,7 @@
   $f^star in cal(F)$ eg. linear models, polynomials, trees, neural networks...
 
   #pause
-  === This creates the #highlight(fill:c_bias)[approximation error]:
+  === This creates the #highlight(fill: c_bias)[approximation error]:
   #v(1em)
   #eq[$cal(E)(f^(star)) - cal(E)(g) = EE[(f^(star)(x) - y)^2] - EE[(g(x) - y)^2] >= 0$]
 ]
@@ -547,9 +502,9 @@
   #h(1em)
   #eq[
     $cal(E)(hat(f)) =
-    #rect(fill:c_bayes,inset:15pt)[$underbrace(cal(E)(g), "Bayes error")$] +
-    #rect(fill:c_bias,inset:15pt)[$underbrace(cal(E)(f^(star)) - cal(E)(g), "approximation error")$] +
-    #rect(fill:c_variance, inset:15pt)[$underbrace(cal(E)(hat(f)) - cal(E)(f^(star)), "estimation error")$]$
+    #rect(fill: c_bayes, inset: 15pt)[$underbrace(cal(E)(g), "Bayes error")$] +
+    #rect(fill: c_bias, inset: 15pt)[$underbrace(cal(E)(f^(star)) - cal(E)(g), "approximation error")$] +
+    #rect(fill: c_variance, inset: 15pt)[$underbrace(cal(E)(hat(f)) - cal(E)(f^(star)), "estimation error")$]$
   ]
 
   #only(2)[
@@ -568,28 +523,28 @@
   #set align(center)
 
   #only(1)[
-    #side-by-side(
+    #grid(columns: (1fr, auto))[
       image("img/penalized_linear_models/polynomial_overfit_test_1.svg", width: 80%),
       image("img/penalized_linear_models/polynomial_validation_curve_1.svg", width: 80%),
-    )
+    ]
   ]
   #only(2)[
-    #side-by-side(
+    #grid(columns: (1fr, auto))[
       image("img/penalized_linear_models/polynomial_overfit_test_2.svg", width: 80%),
       image("img/penalized_linear_models/polynomial_validation_curve_2.svg", width: 80%),
-    )
+    ]
   ]
   #only(3)[
-    #side-by-side(
+    #grid(columns: (1fr, auto))[
       image("img/penalized_linear_models/polynomial_overfit_test_5.svg", width: 80%),
       image("img/penalized_linear_models/polynomial_validation_curve_5.svg", width: 80%),
-    )
+    ]
   ]
   #only(4)[
-    #side-by-side(
+    #grid(columns: (1fr, auto))[
       image("img/penalized_linear_models/polynomial_overfit_test_9.svg", width: 80%),
       image("img/penalized_linear_models/polynomial_validation_curve_15.svg", width: 80%),
-    )
+    ]
   ]
 
   #only(5)[
@@ -610,10 +565,10 @@
   #set text(size: 2em)
 
   #only(1)[
-    #side-by-side(
+    #grid(columns: (1fr, auto))[
       image("img/penalized_linear_models/polynomial_overfit_ntrain_42.svg", width: 80%),
       image("img/penalized_linear_models/polynomial_learning_curve_42.svg", width: 80%),
-    )
+    ]
     #align(left)[
       #h(3em)
       #highlight(fill: rgb("#440154").opacify(-50%))[*Overfit*]
@@ -622,17 +577,17 @@
 
 
   #only(2)[
-    #side-by-side(
+    #grid(columns: (1fr, auto))[
       image("img/penalized_linear_models/polynomial_overfit_ntrain_145.svg", width: 80%),
       image("img/penalized_linear_models/polynomial_learning_curve_145.svg", width: 80%),
-    )
+    ]
   ]
 
   #only(3)[
-    #side-by-side(
+    #grid(columns: (1fr, auto))[
       image("img/penalized_linear_models/polynomial_overfit_ntrain_1179.svg", width: 80%),
       image("img/penalized_linear_models/polynomial_learning_curve_1179.svg", width: 80%),
-    )
+    ]
     #align(left)[
       #h(3em)
       #highlight(fill: rgb("#7ad151").opacify(-50%))[*Sweet spot?*]
@@ -640,10 +595,10 @@
   ]
 
   #only(4)[
-    #side-by-side(
+    #grid(columns: (1fr, auto))[
       image("img/penalized_linear_models/polynomial_overfit_ntrain_6766.svg", width: 80%),
       image("img/penalized_linear_models/polynomial_learning_curve_6766.svg", width: 80%),
-    )
+    ]
     #align(left)[
       #h(3em)
       #highlight(fill: rgb("#440154").opacify(-50%))[*Diminishing returns?*]
@@ -653,19 +608,18 @@
   #set align(left)
 
   #only(5)[
-    #side-by-side(
-      columns: (1fr, 1.7fr),
+    #grid(columns: (1fr, 1.7fr))[
       image("img/penalized_linear_models/polynomial_overfit_ntrain_6766.svg", width: 100%),
       [
-        The error of the best model trained on unlimited data.
+      The error of the best model trained on unlimited data.
 
-        Here, the data is generated by a polynomial of degree 9.
+      Here, the data is generated by a polynomial of degree 9.
 
-        We cannot do better.
+      We cannot do better.
 
-        Prediction is limited by noise: #highlight(fill:c_bayes)[Bayes error].
+      Prediction is limited by noise: #highlight(fill: c_bayes)[Bayes error].
       ],
-    )
+    ]
   ]
 ]
 
@@ -694,30 +648,31 @@
 
 #slide(title: "Reminder: Linear regression")[
 
-  #only(1)[
 
-    $y$ is a linear combination of the features $x in RR^p$
+  $y$ is a linear combination of the features $x in RR^p$
 
-  ]
   #eq[$Y_i = X_i^T beta_0 + epsilon_i$]
 
-  #only(1)[
-    - $epsilon$ the random error term (noise), often assumed $epsilon_i  | X tilde cal(N)(0, sigma^2)$
+  - $epsilon$ the random error term (noise), often assumed $epsilon_i | X tilde cal(N)(0, sigma^2)$
 
-    - $beta_0 in RR^(p times 1)$ the _true_ coefficients.
+  - $beta_0 in RR^(p times 1)$ the _true_ coefficients.
 
-    #pause
-    Usually, we assume that the errors are normally distributed and independent of $X_i$ :
+  #pause
+  Usually, we assume that the errors are normally distributed and independent of $X_i$ :
 
-    $epsilon_i tilde cal(N)(0, sigma^2)$ and $epsilon_i tack.t.double X_i$
+  $epsilon_i tilde cal(N)(0, sigma^2)$ and $epsilon_i tack.t.double X_i$
 
-    Model are typically fitted by linear algebra methods @hastie2009elements.
-  ]
-  #only(2)[
-    #figure(image("img/penalized_linear_models/linear_fit_red.svg", width: 50%))
-  ]
-
+  Model are typically fitted by linear algebra methods @hastie2009elements.
 ]
+
+#slide(title: "Reminder: Linear regression")[
+  $y$ is a linear combination of the features $x in RR^p$
+
+  #eq[$Y_i = X_i^T beta_0 + epsilon_i$]
+
+  #figure(image("img/penalized_linear_models/linear_fit_red.svg", width: 50%))
+]
+
 
 #slide(title: "Reminder: Linear regression")[
   == Common metrics
@@ -756,57 +711,51 @@
 ]
 
 #slide(title: "Reminder: classification, logistic regression")[
-  #side-by-side(
-    columns: (2fr, 1fr),
-    [
-      == Common metrics
+  #grid(columns: (2fr, 1fr))
+  [
+  == Common metrics
 
-      - $text("Accuracy") = 1 / n sum_(i=1)^n bb(1)(Y_i = hat(Y_i))$
+  - $text("Accuracy") = 1 / n sum_(i=1)^n bb(1)(Y_i = hat(Y_i))$
 
-      - Precision: $text("Precision") = text("TP") / (text("TP") + text("FP"))$
+  - Precision: $text("Precision") = text("TP") / (text("TP") + text("FP"))$
 
-      - Recall: $text("Recall") = text("TP") / (text("TP") + text("FN"))$
+  - Recall: $text("Recall") = text("TP") / (text("TP") + text("FN"))$
 
-      - Brier score loss: $text("BSL") = 1/n sum_(i=1)^n (Y_i - p_i)^2$
-    ],
-    [
-      #image("img/penalized_linear_models/Precisionrecall.svg.png", width: 80%)
-    ],
-  )
-
-
+  - Brier score loss: $text("BSL") = 1/n sum_(i=1)^n (Y_i - p_i)^2$
+  ],
+  [
+  #image("img/penalized_linear_models/Precisionrecall.svg.png", width: 80%)
+  ]
 ]
 
 #slide(title: "Logistic regression: Illustrations")[
 
-  #side-by-side(
-    [
-      #image("img/penalized_linear_models/logistic_color.svg", width: 80%)
-      Logistic regression in one dimension.
-    ],
-    [
-      #pause
-      #image("img/penalized_linear_models/logistic_2D.svg", width: 80%)
-      Logistic regression in two dimensions.
-    ],
-  )
+  #grid(columns: (1fr, 1fr))
+  [
+  #image("img/penalized_linear_models/logistic_color.svg", width: 80%)
+  Logistic regression in one dimension.
+  ],
+  [
+
+  #image("img/penalized_linear_models/logistic_2D.svg", width: 80%)
+  Logistic regression in two dimensions.
+  ]
 ]
 
 #slide(title: "Linear models are not suited to all data")[
   #set align(center)
 
-  #side-by-side(
-    [
-      #image("img/penalized_linear_models/lin_separable.svg", width: 80%)
-      Almost linearly separable data.
-    ],
+  #grid(columns: (1fr, 1fr))
+  [
+  #image("img/penalized_linear_models/lin_separable.svg", width: 80%)
+  Almost linearly separable data.
+  ],
 
-    [
-      #pause
-      #image("img/penalized_linear_models/lin_not_separable.svg", width: 80%)
-      Data not linearly separable.
-    ],
-  )
+  [
+
+  #image("img/penalized_linear_models/lin_not_separable.svg", width: 80%)
+  Data not linearly separable.
+  ]
 ]
 
 #slide(title: "Linear model pros and cons")[
@@ -841,49 +790,49 @@
 #slide(title: "Transformation of the features: Example")[
 
   #only(1)[
-    #side-by-side(
-      [
-        #figure(image("img/pyfigures/2_linear_regression_non_linear_link.svg", width: 80%))
-      ],
-      [
-        ==== Non-linear relationship between the features and the outcome
-        True data generating process:\
-        $Y = X^3 - 0.5 times X^2 + epsilon$
-      ],
-    )
+    #grid(columns: (1fr, 1fr))
+    [
+    #figure(image("img/pyfigures/2_linear_regression_non_linear_link.svg", width: 80%))
+    ],
+    [
+    ==== Non-linear relationship between the features and the outcome
+    True data generating process:\
+    $Y = X^3 - 0.5 times X^2 + epsilon$
+    ]
   ]
+
 
   #only(2)[
-    #side-by-side(
-      [
-        #figure(image("img/pyfigures/2_linear_regression_non_linear_link_linear.svg", width: 100%))
-      ],
-      [
+    #grid(columns: (1fr, 1fr))
+    [
+    #figure(image("img/pyfigures/2_linear_regression_non_linear_link_linear.svg", width: 100%))
+    ],
+    [
 
-        Vanilla linear regression fails to capture the relationship.
+    Vanilla linear regression fails to capture the relationship.
 
-      ],
-    )
+    ],
   ]
 
+
   #only(3)[
-    #side-by-side(
-      [
-        #figure(image("img/pyfigures/2_linear_regression_non_linear_link_polynomial.svg", width: 100%))
-      ],
-      [
+    #grid(columns: (1fr, 1fr))
+    [
+    #figure(image("img/pyfigures/2_linear_regression_non_linear_link_polynomial.svg", width: 100%))
+    ],
+    [
 
-        Solution:
+    Solution:
 
-        - Expand the feature space with polynoms of the features:
+    - Expand the feature space with polynoms of the features:
 
-          $X = [X, X^2, X^3]$
+      $X = [X, X^2, X^3]$
 
-        - Run a linear regression on the new feature space.
+    - Run a linear regression on the new feature space.
 
-        $Y = [X, X^2, X^3]^T hat(beta)$
-      ],
-    )
+    $Y = [X, X^2, X^3]^T hat(beta)$
+    ]
+
   ]
 ]
 
@@ -899,11 +848,11 @@
   - Different feature expansions exists: polynomial, log, splines, embeddings, kernels, ...
 ]
 #slide(title: [KEN @cvetkov2023relational: Relational Data Embeddings])[
-  #side-by-side(
-    [Easy to use with #link("https://skrub-data.org/stable/auto_examples/06_ken_embeddings.html#sphx-glr-auto-examples-06-ken-embeddings-py")[skrub library]],
-    [#figure(image("img/penalized_linear_models/ken_embeddings.png", width: 120%))],
-  )
+  #grid(columns: (1fr, 1fr))
+  [Easy to use with #link("https://skrub-data.org/stable/auto_examples/06_ken_embeddings.html#sphx-glr-auto-examples-06-ken-embeddings-py")[skrub library]],
+  [#figure(image("img/penalized_linear_models/ken_embeddings.png", width: 120%))]
 ]
+
 
 #slide(title: "But Linear models can also overfit!")[
 
@@ -920,21 +869,21 @@
 ]
 
 #slide(title: "Many features, few observations: illustration in 1D")[
-  #side-by-side(
+  #grid(columns: (1fr, 1fr))[
     [
-      #only(1)[
-        #figure(image("img/pyfigures/linreg_noreg_0_nogrey.svg", width: 80%))
-      ]
-      #only(2)[
-        #figure(image("img/pyfigures/linreg_noreg_0.svg", width: 80%))
-      ]
+    #only(1)[
+      #figure(image("img/pyfigures/linreg_noreg_0_nogrey.svg", width: 80%))
+    ]
+    #only(2)[
+      #figure(image("img/pyfigures/linreg_noreg_0.svg", width: 80%))
+    ]
     ],
     [
-      - Few observations with respect to the number of features.
-      - Fit a linear model without regularization.
-      #uncover(2)[- Linear model can overfit if data is noisy.]
+    - Few observations with respect to the number of features.
+    - Fit a linear model without regularization.
+    #uncover(2)[- Linear model can overfit if data is noisy.]
     ],
-  )
+  ]
 ]
 
 #slide(title: "Many features, few observations: illustration in 1D")[
@@ -953,21 +902,21 @@
 ]
 
 #slide(title: "Bias variance trade-off with Lasso")[
-  #side-by-side(
-    [
-      #figure(image("img/pyfigures/linreg_noreg_0.svg", width: 80%))
-      Linear regression (no regularization)
+  #grid(columns: (1fr, 1fr))
+  [
+  #figure(image("img/pyfigures/linreg_noreg_0.svg", width: 80%))
+  Linear regression (no regularization)
 
-      High variance, no bias.
-    ],
-    [
-      #figure(image("img/pyfigures/lasso_0_withreg.svg", width: 80%))
-      Lasso (regularization): Shrink some coefficients of $beta$.
+  High variance, no bias.
+  ],
+  [
+  #figure(image("img/pyfigures/lasso_0_withreg.svg", width: 80%))
+  Lasso (regularization): Shrink some coefficients of $beta$.
 
-      Lower variance, but bias.
-    ],
-  )
+  Lower variance, but bias.
+  ],
 ]
+
 
 #slide(title: "Bias variance trade-off with Lasso")[
   #grid(
@@ -1015,7 +964,7 @@
 
   #pause
   This is equivalent to the following optimization problem (using lagrangian multiplier):
-  #eq($min_(beta)  1/n  sum((y_i - beta^T x_i)^2) + alpha sum(|beta_j|)$)
+  #eq($min_(beta) 1/n sum((y_i - beta^T x_i)^2) + alpha sum(|beta_j|)$)
 
   #pause
   This penalty discourages large weights and can shrink certain weights to exactly _zero_ (not clear yet why).
@@ -1023,52 +972,52 @@
 
 #slide(title: "Why does Lasso shrink some coefficients to zero?")[
   #set align(center)
-  #side-by-side(
-    [
-      #only(1)[
-        #figure(image("img/pyfigures/lasso_intuition_ols_cross.svg", width: 150%))
-      ]
-      #only(2)[
-        #figure(image("img/pyfigures/lasso_intuition_inner.svg", width: 150%))
-      ]
-      #only(3)[
-        #figure(image("img/pyfigures/lasso_intuition_middle.svg", width: 150%))
-      ]
-      #only(4)[
-        #figure(image("img/pyfigures/lasso_intuition_outer.svg", width: 150%))
-      ]
-      #only(5)[
-        #figure(image("img/pyfigures/lasso_intuition_penalty.svg", width: 150%))
-      ]
-    ],
-    [
-      #set align(left)
-      MSE as a function of the coefficients.
+  #grid(columns: (1fr, 1fr))
+  [
+  #only(1)[
+    #figure(image("img/pyfigures/lasso_intuition_ols_cross.svg", width: 150%))
+  ]
+  #only(2)[
+    #figure(image("img/pyfigures/lasso_intuition_inner.svg", width: 150%))
+  ]
+  #only(3)[
+    #figure(image("img/pyfigures/lasso_intuition_middle.svg", width: 150%))
+  ]
+  #only(4)[
+    #figure(image("img/pyfigures/lasso_intuition_outer.svg", width: 150%))
+  ]
+  #only(5)[
+    #figure(image("img/pyfigures/lasso_intuition_penalty.svg", width: 150%))
+  ]
+  ],
+  [
+  #set align(left)
+  MSE as a function of the coefficients.
 
-      #uncover((2, 3, 4, 5))[
-        The MSE surface is an ellipsoid in $beta$:\
-        Every point on the ellipsoid edge has the same MSE.
-      ]
+  #uncover((2, 3, 4, 5))[
+    The MSE surface is an ellipsoid in $beta$:\
+    Every point on the ellipsoid edge has the same MSE.
+  ]
 
-      #uncover((4, 5))[
-        Moving away from OLS solution
-      ]
+  #uncover((4, 5))[
+    Moving away from OLS solution
+  ]
 
-      #uncover(5)[
-        Until the ellipsoid respects the lasso penalty (green diamond).
-      ]
-    ],
+  #uncover(5)[
+    Until the ellipsoid respects the lasso penalty (green diamond).
+  ]
+  ],
   )
 ]
 
 #slide(title: "Another regularized linear model: Ridge")[
 
   Ridge puts a constrainst of amplitude $t$ on the $L_2$ norm of the coefficients:
-  #eq($min_(beta)  1/n sum_i^(n)((y_i - beta^T x_i)^2) text("st.") sum_1^(p)beta_j^2 <= t$)
+  #eq($min_(beta) 1/n sum_i^(n)((y_i - beta^T x_i)^2) text("st.") sum_1^(p)beta_j^2 <= t$)
 
   #uncover((2, 3))[
     This is equivalent to the following optimization problem (using lagrangian multiplier):
-    #eq($min_(beta)  1/n  sum((y_i - beta^T x_i)^2) + alpha sum(beta_j^2)$)
+    #eq($min_(beta) 1/n sum((y_i - beta^T x_i)^2) + alpha sum(beta_j^2)$)
   ]
   #uncover(3)[
     This penalty shrinks the coefficients towards zero and each other.
@@ -1077,24 +1026,24 @@
 
 #slide(title: "Illustration of Ridge penalty")[
   #set align(center)
-  #side-by-side(
-    [
+  #grid(columns: (1fr, 1fr))
+  [
 
-      #figure(image("img/pyfigures/ridge_intuition_penalty.svg", width: 150%))
+  #figure(image("img/pyfigures/ridge_intuition_penalty.svg", width: 150%))
 
-    ],
-    [
-      #set align(left)
-      The first contact between the ellipsoid and the circle is the solution of Ridge.
+  ],
+  [
+  #set align(left)
+  The first contact between the ellipsoid and the circle is the solution of Ridge.
 
-      #uncover((2, 3))[
-        Few chances than lasso to cross an axis.
-      ]
+  #uncover((2, 3))[
+    Few chances than lasso to cross an axis.
+  ]
 
-      #uncover(3)[
-        Ridge insure smaller coefficients, but no exact zeros.
-      ]
-    ],
+  #uncover(3)[
+    Ridge insure smaller coefficients, but no exact zeros.
+  ]
+  ],
   )
 ]
 
@@ -1134,8 +1083,7 @@
     $p_(i, beta) = PP[Y_i|X_i, beta] = 1 / (1 + exp(-beta^T X_i))$
 
     $L(beta) = 1 / n sum_(i=1)^n log[p_(i, beta)^(y_i)(1-p_(i,beta))^(1-y_i)] #linebreak()
-
-      = 1 / n sum_(i=1)^n [(y_i beta^T X_i - log[1 + exp(beta^T X_i)]$
+    = 1 / n sum_(i=1)^n [(y_i beta^T X_i - log[1 + exp(beta^T X_i)]$
   ]
 ]
 
