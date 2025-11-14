@@ -216,7 +216,7 @@
     baseline health than people who do not.
 
   #def_box([
-    This is a #alert[confounding factor]: A variable that influences both the treatment and the outcome.
+    This is a confounding factor: A variable that influences both the treatment and the outcome.
   ])
 
 ]
