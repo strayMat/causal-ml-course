@@ -359,7 +359,7 @@
   )
 ]
 
-#slide(title: [Illustration: RCT data, a naive solution #only(2)[that works!]])[
+#slide(title: [Illustration: RCT data, a naive solution that works!])[
   == Compute the difference in mean (DM): $tau_(text("DM"))=$ $$#c_treated[$EE[Y(1)]$] - #c_control($EE[Y(0)]$)
 
   #figure(image("img/po_reminder_and_dags/sample_rct_mean_difference.png", width: 75%))
