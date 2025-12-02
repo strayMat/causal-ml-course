@@ -1,24 +1,24 @@
-// Get Polylux from the official package repository
-
-// documentation link : https://typst.app/universe/package/polylux
-
-#import "@preview/polylux:0.4.0": *
+#import "@preview/touying:0.6.1": *
 #import "@preview/embiggen:0.0.1": * // LaTeX-like delimiter sizing for Typst
 #import "@preview/showybox:2.0.4": showybox
-#import "@preview/codly:1.1.1": * // Code highlighting for Typst
+#import "@preview/codly:1.3.0": * // Code highlighting for Typst
 #show: codly-init
-#import "@preview/codly-languages:0.1.3": * // Code highlighting for Typst
-#import "@preview/fletcher:0.5.6" as fletcher: diagram, node, edge // for dags
-#import "@preview/metropolis-polylux:0.1.0" as metropolis
-#import metropolis: new-section, focus
+#import "@preview/codly-languages:0.1.10": * // Code highlighting for Typst
+#codly(languages: codly-languages)
+#import "@preview/fletcher:0.5.5" as fletcher: diagram, edge, node // for dags
 
-#show: metropolis.setup
+// Fletcher bindings for touying
+#let fletcher-diagram = touying-reducer.with(reduce: fletcher.diagram, cover: fletcher.hide)
+
+#import themes.metropolis: *
+
+#show: metropolis-theme//.with(footer: [ENSAE, Introduction course])
 
 
 #set text(size: 22pt)
 #set par(justify: true)
 #set figure(numbering: none)
-#show math.equation: set text(font: "Latin Modern Math")
+//#show math.equation: set text(font: "Latin Modern Math")
 #set strong(delta: 100)
 #show figure.caption: set text(size: 18pt)
 
@@ -96,8 +96,6 @@
 
   Event studies: Causal methods for pannel data
 
-  #metropolis.divider
-
   #set text(size: .8em, weight: "light")
   Matthieu Doutreligne
   March, 11th, 2025
@@ -110,7 +108,7 @@
 
 #set align(top)
 
-#new-section[Motivation]
+#new-section-slide[Motivation]
 
 #slide[
   = Setup - Estimation of the effect of a treatment when data is:
@@ -161,7 +159,7 @@
 
   - Did the guidelines on the prescription of a specific drug had an effect on the practices?
 
-  #show: later
+  #pause
   === Modern examples
 
   - What is the effect of the extension of Medicaid on mortality? @miller2019medicaid
@@ -178,7 +176,7 @@
     It should introduce _some_ randomness in the treatment assignment: enforcing treatment exogeneity, i.e. ignorability (i.e. unconfoundedness).
   ]
 
-  #show: later
+  #pause
   == Other quasi-experiment designs
 
   - #alert[Instrumental variables:] a variable that is correlated with the treatment but not with the outcome.
@@ -187,7 +185,7 @@
 ]
 
 
-#new-section[Reminder on difference-in-differences]
+#new-section-slide[Reminder on difference-in-differences]
 
 #slide[
   = Difference-in-differences
@@ -197,7 +195,7 @@
 
   - Modern usage introduced formally by @ashenfelter1978estimating, applied to labor economics
 
-  #show: later
+  #pause
   == Idea
   - Contrast the temporal effect of the treated unit with the control unit temporal effect.
 
@@ -227,7 +225,9 @@
 
   #only(4)[$tau_("ATT") = EE[Y_2 (1)| D = 1] - EE [Y_2(0)| D = 1]$]
 
-  #only(5)[$tau_("ATT") = underbrace([Y_2 (1)| D = 1], #c_treated("treated outcome for t=2")) - underbrace(EE [Y_2(0)| D = 1], "unobserved counterfactual")$]
+  #only(
+    5,
+  )[$tau_("ATT") = underbrace([Y_2 (1)| D = 1], #c_treated("treated outcome for t=2")) - underbrace(EE [Y_2(0)| D = 1], "unobserved counterfactual")$]
 
   #only(6)[
     === First assumption, no anticipation of the treatment
@@ -237,7 +237,7 @@
     #figure(image("img/pyfigures/did_no_anticipation.svg", width: 50%))
   ]
 
-  #only((7,10))[=== Second assumption, parallel trends]
+  #only((7, 10))[=== Second assumption, parallel trends]
   #only(7)[
     $EE[Y_2(0) - Y_1(0) | D = 1] = EE[Y_2(0) - Y_1(0) | D = 0]$
     #figure(image("img/pyfigures/did_parallel_trends.svg", width: 50%))
@@ -264,7 +264,7 @@
   = Identification of ATT
 
   $tau_("ATT") &= EE[Y_2(1)| D = 1] - EE [Y_2(0)| D = 1]\
-    &= underbrace(EE[Y_2(1)| D = 1] - EE[Y_1(0)|D=1], #c_treated("Factual Trend(1)")) - underbrace(EE[Y_2(0)|D=0] - EE[Y_1(0)|D=0], #c_control("Trend(0)"))$
+  &= underbrace(EE[Y_2(1)| D = 1] - EE[Y_1(0)|D=1], #c_treated("Factual Trend(1)")) - underbrace(EE[Y_2(0)|D=0] - EE[Y_1(0)|D=0], #c_control("Trend(0)"))$
   #figure(image("img/pyfigures/did_att.svg", width: 50%))
 ]
 
@@ -300,7 +300,9 @@
 
   === DID estimator
 
-  #eq($hat(tau_(text("DID"))) = 1 / (|{i \: D_i=1}|) sum_(i:D_i=1) [1 / (T-H) sum_(t=H+1)^T Y_(i t) - 1 / H sum_(t=1)^H Y_(i t)] - 1 / (|{i \: D_i=0}|) sum_(i:D_i=0) [1 / (T-H) sum_(t=H+1)^T Y_(i t) - 1 / H sum_(t=1)^H Y_(i t)]$)
+  #eq(
+    $hat(tau_(text("DID"))) = 1 / (|{i \: D_i=1}|) sum_(i:D_i=1) [1 / (T-H) sum_(t=H+1)^T Y_(i t) - 1 / H sum_(t=1)^H Y_(i t)] - 1 / (|{i \: D_i=0}|) sum_(i:D_i=0) [1 / (T-H) sum_(t=H+1)^T Y_(i t) - 1 / H sum_(t=1)^H Y_(i t)]$,
+  )
 
   #hyp_box[
     === No anticipation of the treatment: $Y_(i t)(0) = Y_(i t)(1) forall t = 1,..., H.$
@@ -319,17 +321,17 @@
     - more than two time periods: exact same formulation
     - staggered adoption of the treatment: a bit more complex
 
-  #show: later
+  #pause
   == Cons
   - Strong assumptions: parallel trends and no anticipation.
   - Does not account for heterogeneity of treatment effect over time @de2020two.
 
-  #show: later
+  #pause
 
   == Can we do better: i.e. robust to the parallel trend assumption?
 ]
 
-#new-section[Synthetic controls]
+#new-section-slide[Synthetic controls]
 
 #slide[
   = Synthetic Control Methods (SCM)
@@ -338,13 +340,13 @@
 
   Quick introduction in @bonander2021synthetic, technical overiew in @abadie2021using,
 
-  #show: later
+  #pause
 
   #quote(attribution: [@athey2017state], block: true)[
     The most important innovation in the policy evaluation literature in the last few years
   ]
 
-  #show: later
+  #pause
   === Idea
   Find a weighted average of controls that predicts well the treated unit outcome before treatment.
 
@@ -375,22 +377,22 @@
 
   1988: 25-cent tax per pack of cigarettes, ban of on cigarette vending machines in public areas accessible by juveniles, and a ban on the individual sale of single cigarettes.
 
-  #show: later
+  #pause
 
   == Setup
 
   === Outcome, $Y_(j, t)$: cigarette sales per capita
-  #show: later
+  #pause
 
   === Treated unit, $j=1$: California as from 1988
-  #show: later
+  #pause
 
   === Control units, $j in {2,..J}$: 39 other US states without similar policies
-  #show: later
+  #pause
 
   === Time period: $t in {1,..T} = {1970, ..2000}$ and treatment time $T_0 = 1988$
 
-  #show: later
+  #pause
 
   == Covariates $X_(j, t)$: cigarette price, previous cigarette sales.
 ]
@@ -400,24 +402,24 @@
   #figure(image("img/pyfigures/scm_california_vs_other_states.svg", width: 70%))
 
 
-  #show: later
+  #pause
   😯 Decrease in cigarette sales in California.
 
-  #show: later
+  #pause
   🤔 Decrease began before the treatment and occured also for other states.
 ]
 
 #slide[
   = Synthetic control example: plot the data
   #figure(image("img/pyfigures/scm_california_and_other_states.svg", width: 70%))
-  #show: later
+  #pause
   💡 Force parallel trends: Find a weighted average of other states that predicts well the pre-treatment trend of California (before $T_0=1988$).
 ]
 
 #slide[
   = Synthetic control as weighted average of control outcomes
 
-  #toolbox.side-by-side()[
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
     Build a predictor for #c_treated($Y_(1, t)$) (California):
 
     $#c_treated[$hat(Y)_(1, t)$] = sum_(j=2)^(n_0 + 1) hat(w)_j #c_control[$Y_(j, t)$]$
@@ -447,7 +449,7 @@
 
   Pre-treatment characteristics concatenate pre-treatment outcomes and other pre-treatment predictors $Z_1$ eg. cigarette prices:
 
-  #toolbox.side-by-side()[
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
     #c_treated[$X_("treat") = X_1 = vec(Y_(1, 1), Y_(1,2), ..., Y_(1, T_0), Z_1)$] $in R^(p times 1)$
   ][
     #c_control[$X_("control") = (X_2, .., X_(n_0 + 1))$] $in R^(p times n_0)$
@@ -467,8 +469,8 @@
   ]
   #only(5)[
     $w^(*) &= "argmin"_(w) ||X_("treat") - X_("control") w||_V^2\
-      &s.t. space w_j >= 0, \
-      &sum_(j=2)^(n_0 + 1) w_j = 1$
+    &s.t. space w_j >= 0, \
+    &sum_(j=2)^(n_0 + 1) w_j = 1$
   ]
 ]
 
@@ -476,12 +478,12 @@
 #slide[
   = Synthetic controls: Why choose positive weights summing to one?
 
-  #show: later
+  #pause
   == This is called interpolation (vs extrapolation)
 
   #figure(image("img/event_studies/extrapolation.png", width: 70%))
 
-  #show: later
+  #pause
   == Interpolation enforces regularization, thus limits overfitting
 
   Same kind of regularization than L1 norm in Lasso: forces some coefficient to be zero.
@@ -493,15 +495,15 @@
   = Synthetic controls: Extrapolation failure with unconstrained weights
 
   #set align(horizon)
-  #toolbox.side-by-side(columns: (2fr, 2fr))[
+  #grid(columns: (2fr, 2fr), gutter: 3mm)[
     $p=2 T_0$ covariates:
 
-    $X_j= vec(Y_(j, 1), ...,Y_(j, T_0), Z_(j, 1), ..., Z_(j, T_0))^T in R^(2T_0)$
+    $X_j= vec(Y_(j, 1), ..., Y_(j, T_0), Z_(j, 1), ..., Z_(j, T_0))^T in R^(2T_0)$
 
     Y cigarette sales, Z cigarette prices.
 
     #only(2)[
-      Model: $underbrace(X_("treat"), p times 1)  tilde underbrace(X_("control"), p times n_0) underbrace(w, n_0)$
+      Model: $underbrace(X_("treat"), p times 1) tilde underbrace(X_("control"), p times n_0) underbrace(w, n_0)$
     ]
     #only(3)[#alert("-> Simple linear regression estimated by OLS")]
 
@@ -509,7 +511,7 @@
       Prediction: $hat(Y)_("synth") = vec(Y_(t, j))_(t=1..T#linebreak()j=2..n_0+1) w$
     ]
   ][
-    #show: later
+    #pause
     #figure(image("img/pyfigures/scm_california_vs_synth_lr.svg", width: 100%))
   ]
   #only(5)[=== 😭 Overfitting]
@@ -521,14 +523,14 @@
 
   1. Don't choose: set $V = I_(p)$, i.e. $||X||_V = ||X||_2$.
 
-  #show: later
+  #pause
   2. Rescale by the variance of the predictors: #linebreak() $V = "diag"("var"(Y_(j, 1))^(-1), .., "var"(Y_(j, T_0))^(-1), "var"(Z_(j, 1))^(-1), .., "var"(Z_(j, T_0))^(-1))$.
 
-  #show: later
+  #pause
   3. Minimize the pre-treatment mean squared prediction error (MSPE) of the treated unit:
 
   $"MSPE"(V) &= sum_(t=1)^(T_0) [Y_(1, t) - sum_(j=2)^(n_0+1) w_j^*(V) Y_(j, t)]^2 \
-    &= || vec(Y_(1, t))_(t=1..T_0) - vec(Y_(j, t))^T_(j=2..n_0+1#linebreak()t=1..T_0) hat(w) ||_(2)^(2)$
+  &= || vec(Y_(1, t))_(t=1..T_0) - vec(Y_(j, t))^T_(j=2..n_0+1#linebreak()t=1..T_0) hat(w) ||_(2)^(2)$
 
   This solution is solved by running two optimization problems:
   - #alert[Inner loop] solving $w^*(V)= "argmin"_(w) ||X_("treat") - X_("control") w||_V^2$
@@ -539,9 +541,9 @@
 #slide[
   = Synthetic controls: estimation without the outer optimization problem
 
-  #toolbox.side-by-side(columns: (1.5fr, 2fr))[
+  #grid(columns: (1.5fr, 2fr), gutter: 3mm)[
 
-    Same coviarates: $X_j= vec(Y_(j, 1), ...,Y_(j, T_0), Z_(j, 1), ..., Z_(j, T_0))^T$
+    Same coviarates: $X_j= vec(Y_(j, 1), ..., Y_(j, T_0), Z_(j, 1), ..., Z_(j, T_0))^T$
 
     Y cigarette sales, Z cigarette prices.
 
@@ -550,8 +552,8 @@
     #v(1em)
 
     $w^(*) &= "argmin"_(w) ||X_("treat") - X_("control") w||_2^2\
-      &s.t. space w_j >= 0, \
-      &sum_(j=2)^(n_0 + 1) w_j = 1$
+    &s.t. space w_j >= 0, \
+    &sum_(j=2)^(n_0 + 1) w_j = 1$
 
   ][
     #figure(image("img/pyfigures/scm_california_vs_synth_wo_v.svg", width: 100%))
@@ -573,12 +575,12 @@
 
   Indeed, aggregates are often not very noisy (once deseasonalized)...
 
-  #show: later
+  #pause
   === ... but from the variability of the chosen control units
 
   Treatment assignment introduces more noise than outcome variability.
 
-  #show: later
+  #pause
 
   @abadie2010synthetic introduced the placebo test to assess the variability of the synthetic control.
 
@@ -603,26 +605,26 @@
   = Example of placebo test : For all 38 control states
 
   #figure(image("img/pyfigures/scm_placebo_test.svg", width: 70%))
-  
-  #show: later
+
+  #pause
 
   - More variance after the treatment for California than before.
   - Some states have pre-treatment trends which are hard to predict.
 ]
 
 #slide[
-    = Example of placebo test : For 34 control states with "good" pre-treatment fit
-  
-    #figure(image("img/pyfigures/scm_placebo_test_wo_outliers.svg", width: 70%))
+  = Example of placebo test : For 34 control states with "good" pre-treatment fit
 
-    I removed the states above the 90 percentiles of the distribution of the pre-treatment fit.
+  #figure(image("img/pyfigures/scm_placebo_test_wo_outliers.svg", width: 70%))
+
+  I removed the states above the 90 percentiles of the distribution of the pre-treatment fit.
 ]
 
 #slide[
   = Example of placebo tests: distribution
 
-  #toolbox.side-by-side()[
-    
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
+
     #align(center)[
       === California absolute cumulative effect
 
@@ -632,7 +634,7 @@
       #h(1em)
       $"PV" &= 1 / (n_0) sum_(j=2)^(n_0) bb(1) big("(") |hat(tau)_("scm, california")| > |hat(tau)_("scm", j)| big(")")\ &= 0.029$
     ]
-    
+
   ][
     #figure(image("img/pyfigures/scm_placebo_test_distribution.svg", width: 100%))
   ]
@@ -640,22 +642,21 @@
 
 #slide[
   = Failure of synthetic controls: confounding events
-  
+
   Confounding event : affecting the outcome for the treated unit and only part of the controls.
 
   @degli2020can setup:
 
-  #toolbox.side-by-side(
-    [
-      - Population: US states
-      - Intervention: Stand Your Ground law in Florida (october 2005)
-      - Comparator: Other states without SYG laws
-      - Outcome: homicide rate
-    ],
-    [#figure(image("img/event_studies/scm_failure_map.png", width: 70%))],
-  )
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
+    - Population: US states
+    - Intervention: Stand Your Ground law in Florida (october 2005)
+    - Comparator: Other states without SYG laws
+    - Outcome: homicide rate
+  ][
+    #figure(image("img/event_studies/scm_failure_map.png", width: 70%))
+  ]
 
-  #show: later
+  #pause
   If it has an impact on the outcome after the treatment:
   For state in [KS, MD, AL, CT, FL], there is a step change in the outcome after the treatment: $bb(1)[t>T_0]$
 ]
@@ -685,14 +686,14 @@
 #slide[
   = Synthetic controls: Take-away
 
-  #toolbox.side-by-side()[
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
     == Pros
     - More convincing for parallel trends assumption.
     - Handle multiple time periods.
     - Data driven.
     - Gives confidence intervals thanks to placebo test.
   ][
-    #show: later
+    #pause
     == Cons
     - Many controls needed for good pre-treatment fits.
     - Prone to overfitting during the pre-treatment period.
@@ -700,11 +701,11 @@
     - Strong assumption: weights should balance the post-treatment unexposed outcomes i.e. conditional ignorability.
     - Still requires the no-anticipation assumption.
   ]
-  #show: later
+  #pause
   See @arkhangelsky2021synthetic for discussions.
 ]
 
-#new-section[Interrupted time-series: methods without a control group]
+#new-section-slide[Interrupted time-series: methods without a control group]
 
 #slide[
   = Interrupted Time Series: intuition
@@ -714,11 +715,11 @@
   - Multiple time periods.
   - Sometimes, predictors are availables: there are called exogeneous covariates.
 
-  #show: later
+  #pause
   == Intuition
 
   - Model the pre-treatment trend: $Y_t(1) "for" t<T_0$
-  - Predict post-treatment trend as the control: $#c_control[$hat(Y_t)$(0)] "for" t>T_0 $
+  - Predict post-treatment trend as the control: $#c_control[$hat(Y_t)$(0)] "for" t>T_0$
 
   - Obtain treatment effect by taking the difference between observed and predicted post-treatment observations: $#c_treated[$Y_(t)(1)$] - #c_control[$hat(Y_t)$(0)]$
 ]
@@ -756,26 +757,26 @@
 ]
 
 #slide[
-  = ARIMA are State Space Models (SSM) #text("says the machine learning community",size: 18pt)
+  = ARIMA are State Space Models (SSM) #text("says the machine learning community", size: 18pt)
 
   == What is a (linear) state space model?
 
-  #toolbox.side-by-side(columns: (2fr, 1fr))[
+  #grid(columns: (2fr, 1fr), gutter: 3mm)[
 
     - Two (sometimes multi-dimensional) components: the state $mu_t$ and the observation $y_t$.
 
-    #only((2,3))[
-    - State, ie. latent (unobserved) variable:
-    #align(center)[
-      $mu_t = overbrace(T_t, "Transition matrix") mu_(t-1) + overbrace(R_t, "Transition matrix") underbrace(eta_t, "gaussian white noise")$
-    ]
+    #only((2, 3))[
+      - State, ie. latent (unobserved) variable:
+      #align(center)[
+        $mu_t = overbrace(T_t, "Transition matrix") mu_(t-1) + overbrace(R_t, "Transition matrix") underbrace(eta_t, "gaussian white noise")$
+      ]
     ]
 
-    #only((3))[
-    - Observation is a noisy version of the state:
-    #align(center)[
-      $y_t = overbrace(Z_t, "design matrix") mu_t + epsilon_t$
-    ]
+    #only(3)[
+      - Observation is a noisy version of the state:
+      #align(center)[
+        $y_t = overbrace(Z_t, "design matrix") mu_t + epsilon_t$
+      ]
     ]
   ][
     #align(center)[
@@ -836,48 +837,45 @@
 
   == AR(1)
   #set align(horizon)
-  #toolbox.side-by-side(
-    [
-      #align(center)[
-        == DAG
-        #diagram(
-          cell-size: 30mm,
-          node-stroke: 0.6pt,
-          node-shape: circle,
-          spacing: 1em,
-          let (y_1, y_2, y_3) = ((0, 0), (1, 0), (2, 0)),
-          let (mu_1, mu_2, mu_3) = ((0, -1), (1, -1), (2, -1)),
-          let (eta_1, eta_2, eta_3) = ((0, -2), (1, -2), (2, -2)),
-          node(y_1, radius: 8mm, [$y_(t-1)$]),
-          node(y_2, radius: 8mm, [$y_t$]),
-          node(y_3, radius: 8mm, [$y_(t+1)$]),
-          node(mu_1, radius: 8mm, [$mu_(t-1)$]),
-          node(mu_2, radius: 8mm, [$mu_t$]),
-          node(mu_3, radius: 8mm, [$mu_(t+1)$]),
-          node(eta_1, radius: 8mm, [$eta_(t-1)$]),
-          node(eta_2, radius: 8mm, [$eta_t$]),
-          node(eta_3, radius: 8mm, [$eta_(t+1)$]),
-          edge(mu_1, y_1, "->"),
-          edge(mu_2, y_2, "->"),
-          edge(mu_3, y_3, "->"),
-          edge(mu_1, mu_2, "->"),
-          edge(mu_2, mu_3, "->"),
-          edge(eta_1, mu_1, "->"),
-          edge(eta_2, mu_2, "->"),
-          edge(eta_3, mu_3, "->"),
-        )
-      ]
-    ],
-    [
-      == Formalization
-      Latent: $mu_t = rho mu_(t-1) + eta_t$\
-      Observation: $y_t =  mu_t $
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
+    #align(center)[
+      == DAG
+      #diagram(
+        cell-size: 30mm,
+        node-stroke: 0.6pt,
+        node-shape: circle,
+        spacing: 1em,
+        let (y_1, y_2, y_3) = ((0, 0), (1, 0), (2, 0)),
+        let (mu_1, mu_2, mu_3) = ((0, -1), (1, -1), (2, -1)),
+        let (eta_1, eta_2, eta_3) = ((0, -2), (1, -2), (2, -2)),
+        node(y_1, radius: 8mm, [$y_(t-1)$]),
+        node(y_2, radius: 8mm, [$y_t$]),
+        node(y_3, radius: 8mm, [$y_(t+1)$]),
+        node(mu_1, radius: 8mm, [$mu_(t-1)$]),
+        node(mu_2, radius: 8mm, [$mu_t$]),
+        node(mu_3, radius: 8mm, [$mu_(t+1)$]),
+        node(eta_1, radius: 8mm, [$eta_(t-1)$]),
+        node(eta_2, radius: 8mm, [$eta_t$]),
+        node(eta_3, radius: 8mm, [$eta_(t+1)$]),
+        edge(mu_1, y_1, "->"),
+        edge(mu_2, y_2, "->"),
+        edge(mu_3, y_3, "->"),
+        edge(mu_1, mu_2, "->"),
+        edge(mu_2, mu_3, "->"),
+        edge(eta_1, mu_1, "->"),
+        edge(eta_2, mu_2, "->"),
+        edge(eta_3, mu_3, "->"),
+      )
+    ]
+  ][
+    == Formalization
+    Latent: $mu_t = rho mu_(t-1) + eta_t$\
+    Observation: $y_t = mu_t$
 
 
-      $"with" &eta_t ~ N(0, sigma^2)\
-        &|rho|< 1$
-    ],
-  )
+    $"with" &eta_t ~ N(0, sigma^2)\
+    &|rho|< 1$
+  ]
   #only(1)[
     Auto-regression time series model an outcome as a linear regression of its prior values.
   ]
@@ -888,99 +886,93 @@
 
   == AR(2)
   #set align(horizon)
-  #toolbox.side-by-side(
-    [
-      #align(center)[
-        == DAG
-        #diagram(
-          cell-size: 30mm,
-          node-stroke: 0.6pt,
-          node-shape: circle,
-          spacing: 1em,
-          let (y_1, y_2, y_3) = ((0, 0), (1, 0), (2, 0)),
-          let (mu_1, mu_2, mu_3, mu_4) = ((0, -1), (1, -1), (2, -1), (3, -1)),
-          let (eta_1, eta_2, eta_3) = ((0, -2), (1, -2), (2, -2)),
-          node(y_1, radius: 8mm, [$y_(t-1)$]),
-          node(y_2, radius: 8mm, [$y_t$]),
-          node(y_3, radius: 8mm, [$y_(t+1)$]),
-          node(mu_1, radius: 8mm, [$mu_(t-1)$]),
-          node(mu_2, radius: 8mm, [$mu_t$]),
-          node(mu_3, radius: 8mm, [$mu_(t+1)$]),
-          node(eta_1, radius: 8mm, [$eta_(t-1)$]),
-          node(eta_2, radius: 8mm, [$eta_t$]),
-          node(eta_3, radius: 8mm, [$eta_(t+1)$]),
-          edge(mu_1, y_1, "->"),
-          edge(mu_2, y_2, "->"),
-          edge(mu_3, y_3, "->"),
-          edge(mu_1, mu_2, "->"),
-          edge(mu_1, mu_3, "->", bend: 30deg),
-          edge(mu_2, mu_3, "->"),
-          edge(mu_2, mu_4, "->", bend: 30deg),
-          edge(eta_1, mu_1, "->"),
-          edge(eta_2, mu_2, "->"),
-          edge(eta_3, mu_3, "->"),
-        )
-      ]
-    ],
-    [
-      == Formalization
-      Latent: $mu_t = mat(rho_1, rho_2; 1, 0) mu_(t-1) + vec(1, 0) eta_t$\
-      Observation: $y_t =  [1, 0] mu_t $\
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
+    #align(center)[
+      == DAG
+      #diagram(
+        cell-size: 30mm,
+        node-stroke: 0.6pt,
+        node-shape: circle,
+        spacing: 1em,
+        let (y_1, y_2, y_3) = ((0, 0), (1, 0), (2, 0)),
+        let (mu_1, mu_2, mu_3, mu_4) = ((0, -1), (1, -1), (2, -1), (3, -1)),
+        let (eta_1, eta_2, eta_3) = ((0, -2), (1, -2), (2, -2)),
+        node(y_1, radius: 8mm, [$y_(t-1)$]),
+        node(y_2, radius: 8mm, [$y_t$]),
+        node(y_3, radius: 8mm, [$y_(t+1)$]),
+        node(mu_1, radius: 8mm, [$mu_(t-1)$]),
+        node(mu_2, radius: 8mm, [$mu_t$]),
+        node(mu_3, radius: 8mm, [$mu_(t+1)$]),
+        node(eta_1, radius: 8mm, [$eta_(t-1)$]),
+        node(eta_2, radius: 8mm, [$eta_t$]),
+        node(eta_3, radius: 8mm, [$eta_(t+1)$]),
+        edge(mu_1, y_1, "->"),
+        edge(mu_2, y_2, "->"),
+        edge(mu_3, y_3, "->"),
+        edge(mu_1, mu_2, "->"),
+        edge(mu_1, mu_3, "->", bend: 30deg),
+        edge(mu_2, mu_3, "->"),
+        edge(mu_2, mu_4, "->", bend: 30deg),
+        edge(eta_1, mu_1, "->"),
+        edge(eta_2, mu_2, "->"),
+        edge(eta_3, mu_3, "->"),
+      )
+    ]
+  ][
+    == Formalization
+    Latent: $mu_t = mat(rho_1, rho_2; 1, 0) mu_(t-1) + vec(1, 0) eta_t$\
+    Observation: $y_t = [1, 0] mu_t$\
 
-      $"with" &eta_t ~ N(0, sigma^2)\
-        &|rho_1|< 1, |rho_2|< 1$
+    $"with" &eta_t ~ N(0, sigma^2)\
+    &|rho_1|< 1, |rho_2|< 1$
 
-      Observation unrolled:\
-      $y_t = rho_1 y_(t-1) + rho_2 y_(t-2) + eta_t$
-    ],
-  )
+    Observation unrolled:\
+    $y_t = rho_1 y_(t-1) + rho_2 y_(t-2) + eta_t$
+  ]
 ]
 
 #slide[
   = State space models: MA(1) i.e. ARIMA(0,0,1) model example
 
-  #toolbox.side-by-side(
-    [
-      #align(center)[
-        == DAG
-        #diagram(
-          cell-size: 30mm,
-          node-stroke: 0.6pt,
-          node-shape: circle,
-          spacing: 1em,
-          let (y_1, y_2, y_3) = ((0, 0), (1, 0), (2, 0)),
-          let (mu_1, mu_2, mu_3) = ((0, -1), (1, -1), (2, -1)),
-          let (eta_1, eta_2, eta_3) = ((0, -2), (1, -2), (2, -2)),
-          node(y_1, radius: 8mm, [$y_(t-1)$]),
-          node(y_2, radius: 8mm, [$y_t$]),
-          node(y_3, radius: 8mm, [$y_(t+1)$]),
-          node(mu_1, radius: 8mm, [$mu_(t-1)$]),
-          node(mu_2, radius: 8mm, [$mu_t$]),
-          node(mu_3, radius: 8mm, [$mu_(t+1)$]),
-          node(eta_1, radius: 8mm, [$eta_(t-1)$]),
-          node(eta_2, radius: 8mm, [$eta_t$]),
-          node(eta_3, radius: 8mm, [$eta_(t+1)$]),
-          edge(mu_1, y_1, "->"),
-          edge(mu_2, y_2, "->"),
-          edge(mu_3, y_3, "->"),
-          edge(eta_1, mu_1, "->"),
-          edge(eta_1, mu_2, "->"),
-          edge(eta_2, mu_2, "->"),
-          edge(eta_2, mu_3, "->"),
-          edge(eta_3, mu_3, "->"),
-        )
-      ]
-    ],
-    [
-      == Formalization
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
+    #align(center)[
+      == DAG
+      #diagram(
+        cell-size: 30mm,
+        node-stroke: 0.6pt,
+        node-shape: circle,
+        spacing: 1em,
+        let (y_1, y_2, y_3) = ((0, 0), (1, 0), (2, 0)),
+        let (mu_1, mu_2, mu_3) = ((0, -1), (1, -1), (2, -1)),
+        let (eta_1, eta_2, eta_3) = ((0, -2), (1, -2), (2, -2)),
+        node(y_1, radius: 8mm, [$y_(t-1)$]),
+        node(y_2, radius: 8mm, [$y_t$]),
+        node(y_3, radius: 8mm, [$y_(t+1)$]),
+        node(mu_1, radius: 8mm, [$mu_(t-1)$]),
+        node(mu_2, radius: 8mm, [$mu_t$]),
+        node(mu_3, radius: 8mm, [$mu_(t+1)$]),
+        node(eta_1, radius: 8mm, [$eta_(t-1)$]),
+        node(eta_2, radius: 8mm, [$eta_t$]),
+        node(eta_3, radius: 8mm, [$eta_(t+1)$]),
+        edge(mu_1, y_1, "->"),
+        edge(mu_2, y_2, "->"),
+        edge(mu_3, y_3, "->"),
+        edge(eta_1, mu_1, "->"),
+        edge(eta_1, mu_2, "->"),
+        edge(eta_2, mu_2, "->"),
+        edge(eta_2, mu_3, "->"),
+        edge(eta_3, mu_3, "->"),
+      )
+    ]
+  ][
+    == Formalization
 
-      Latent: $mu_t= [1, theta] vec(eta_t, eta_(t-1))$\
-      Observation: $y_t = mu_t$
+    Latent: $mu_t= [1, theta] vec(eta_t, eta_(t-1))$\
+    Observation: $y_t = mu_t$
 
-      $"with" &eta_t ~ N(0, sigma^2)$
-    ],
-  )
-  #show: later
+    $"with" &eta_t ~ N(0, sigma^2)$
+  ]
+  #pause
   The MA time series models the residual of the regression of $y_t$ on its previous values as a linear combination of the previous residuals : i.e. vanishing shocks.
 ]
 
@@ -996,10 +988,10 @@
   Latent: $mu_t = mat(
     1, rho_1, rho_2, ..., rho_(r-1);
     1, 0, 0, ..., 0;
-    0,1, 0, ..., 0;
+    0, 1, 0, ..., 0;
     dots.v, dots.down, dots.v, dots.v, dots.v;
     0, ..., 0, 1, 0;
-    ) mu_(t-1) + vec(epsilon_(t), 0, ..., 0)$ with $epsilon_(t) ~ N(0, sigma^2)$
+  ) mu_(t-1) + vec(epsilon_(t), 0, ..., 0)$ with $epsilon_(t) ~ N(0, sigma^2)$
 
 
   == Unfolding the state space equations
@@ -1010,82 +1002,74 @@
 #slide[
   = State space models: Adding a seasonnality and a covariate component
 
-  #toolbox.side-by-side(
-    [
-      #align(center)[
-        == DAG
-        #diagram(
-          cell-size: 12mm,
-          node-stroke: 0.6pt,
-          node-shape: circle,
-          spacing: 1em,
-          let (s_11, s_12, s_13) = ((0, 0), (0, -1), (0, -2)),
-          let (s_1, s_2, s_3) = ((1, 0), (1, -1), (1, -2)),
-          let (mu_1, mu_2) = ((0, -3), (1, -3)),
-          let (eta_1, eta_2) = ((0, -4), (1, -4)),
-          let y = (1, 1),
-          let x = (2, 1),
-          node(s_11, radius: 7mm, [$s_(t-1)$]),
-          node(s_12, radius: 7mm, [$s_(t-2)$]),
-          node(s_13, radius: 7mm, [$s_(t-3)$]),
-          node(s_1, radius: 7mm, [$s_(t)$]),
-          node(s_2, radius: 7mm, [$s_(t-1)$]),
-          node(s_3, radius: 7mm, [$s_(t-2)$]),
-          node(mu_1, radius: 7mm, [$mu_(t-1)$]),
-          node(mu_2, radius: 7mm, [$mu_t$]),
-          node(eta_1, radius: 7mm, [$eta_(t-1)$]),
-          node(eta_2, radius: 7mm, [$eta_t$]),
-          node(y, radius: 7mm, [$y_t$]),
-          node(x, radius: 7mm, [$x_t$]),
-          edge(s_11, s_1, "->"),
-          edge(s_11, s_2, "->"),
-          edge(s_12, s_1, "->"),
-          edge(s_12, s_3, "->"),
-          edge(s_13, s_1, "->"),
-          edge(s_1, y, "->"),
-          edge(mu_1, mu_2, "->"),
-          edge(eta_1, mu_1, "->"),
-          edge(eta_1, mu_2, "->"),
-          edge(eta_2, mu_2, "->"),
-          edge(mu_2, y, "->", bend: 40deg),
-          edge(x, y, "->"),
-        )
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
+    #align(center)[
+      == DAG
+      #diagram(
+        cell-size: 12mm,
+        node-stroke: 0.6pt,
+        node-shape: circle,
+        spacing: 1em,
+        let (s_11, s_12, s_13) = ((0, 0), (0, -1), (0, -2)),
+        let (s_1, s_2, s_3) = ((1, 0), (1, -1), (1, -2)),
+        let (mu_1, mu_2) = ((0, -3), (1, -3)),
+        let (eta_1, eta_2) = ((0, -4), (1, -4)),
+        let y = (1, 1),
+        let x = (2, 1),
+        node(s_11, radius: 7mm, [$s_(t-1)$]),
+        node(s_12, radius: 7mm, [$s_(t-2)$]),
+        node(s_13, radius: 7mm, [$s_(t-3)$]),
+        node(s_1, radius: 7mm, [$s_(t)$]),
+        node(s_2, radius: 7mm, [$s_(t-1)$]),
+        node(s_3, radius: 7mm, [$s_(t-2)$]),
+        node(mu_1, radius: 7mm, [$mu_(t-1)$]),
+        node(mu_2, radius: 7mm, [$mu_t$]),
+        node(eta_1, radius: 7mm, [$eta_(t-1)$]),
+        node(eta_2, radius: 7mm, [$eta_t$]),
+        node(y, radius: 7mm, [$y_t$]),
+        node(x, radius: 7mm, [$x_t$]),
+        edge(s_11, s_1, "->"),
+        edge(s_11, s_2, "->"),
+        edge(s_12, s_1, "->"),
+        edge(s_12, s_3, "->"),
+        edge(s_13, s_1, "->"),
+        edge(s_1, y, "->"),
+        edge(mu_1, mu_2, "->"),
+        edge(eta_1, mu_1, "->"),
+        edge(eta_1, mu_2, "->"),
+        edge(eta_2, mu_2, "->"),
+        edge(mu_2, y, "->", bend: 40deg),
+        edge(x, y, "->"),
+      )
+    ]
+  ][
+    == Formalization
 
-      ]
-    ],
-    [
-      == Formalization
+    Observation with covariates and seasonality:
 
-      Observation with covariates and seasonality:
+    $y_t = beta x_t + s_t + underbrace(rho mu_(t-1), "AR(1)") + underbrace(theta eta_(t-1) + eta_t, "MA(1)")$
 
-      $y_t = beta x_t + s_t + underbrace(rho mu_(t-1), "AR(1)") + underbrace(theta eta_(t-1) + eta_t, "MA(1)")$
+    #v(1em)
+    Where seasonality:
 
-      #v(1em)
-      Where seasonality:
-
-      $s_t &= - sum^(S-1)_(k=1) s_(t-k) + epsilon_(s,t)\
-        &"with" epsilon_s,t ~ N(0, sigma^2_s)$
-    ],
-  )
+    $s_t &= - sum^(S-1)_(k=1) s_(t-k) + epsilon_(s,t)\
+    &"with" epsilon_s,t ~ N(0, sigma^2_s)$
+  ]
 ]
 
 #slide[
   = State space models: General formulation
 
 
-  #toolbox.side-by-side(
-    columns: (1fr, 2fr),
-    [
-      Latent:\ $mu_t = T_t mu_(t-1) + R_t eta_t$\
+  #grid(columns: (1fr, 2fr), gutter: 3mm)[
+    Latent:\ $mu_t = T_t mu_(t-1) + R_t eta_t$\
 
-      Observation:\ $y_t = Z_t mu_t + beta^T x_t + epsilon_t$
+    Observation:\ $y_t = Z_t mu_t + beta^T x_t + epsilon_t$
 
-      With $eta_t$ and $epsilon_t$ mean zero gaussian noise, sometimes with a specific covariance structure.
-    ],
-    [
-      #figure(image("img/event_studies/complex_ssm.png", width: 90%))
-    ],
-  )
+    With $eta_t$ and $epsilon_t$ mean zero gaussian noise, sometimes with a specific covariance structure.
+  ][
+    #figure(image("img/event_studies/complex_ssm.png", width: 90%))
+  ]
   Complex SSM DAG from the Causal Impact paper @brodersen2015inferring.
 ]
 
@@ -1099,7 +1083,7 @@
 
   #alert[Closed form formula] for the likelihood of the data under the model.
 
-  #show: later
+  #pause
 
   == Expectation-Minimization: a widespread algorithm for fitting
 
@@ -1172,7 +1156,7 @@
   = Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007
 
   #figure(image("img/event_studies/sabuncu2009_fig4.png", width: 64%))
-  
+
   #set text(size: 18pt)
   - #text(red)[Red curve: arima fitted with intervention]
   - #text(red)[Red Horizontal line: intervention effect fitted during intervention]
@@ -1193,13 +1177,13 @@
 
   However, we could any model that we want to fit the pre-treatment trend !
 
-  #show: later
+  #pause
   #link("https://facebook.github.io/prophet/", [Facebook prophet model]) @taylor2018forecasting uses Generalized Additive Models (GAM).
 
-  #show: later
+  #pause
   Any sklearn estimator could do the trick: Linear regression, Random Forest, Gradient Boosting...
 
-  #show: later
+  #pause
   ⚠️ You should pay attention to appropriate train/test split when cross-validating a time-series model not to use the future to predict the past.
 
   Relevant remark for all time series models (even ARIMA or state space models).
@@ -1222,7 +1206,7 @@
   = Main threat to validity for an ITS: historical bias
   @degli2020can[Fig. 1]
 
-  #toolbox.side-by-side()[
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
     ⚠ If there is a co-intervention, it will impact the outcome trend and bias the treatment effect estimation.
 
     #uncover(2)[
@@ -1275,9 +1259,9 @@
     [Parallel trends, no anticipation, prone to overfitting],
     [Economics],
     [#link(
-        "https://matheusfacure.github.io/python-causality-handbook/13-Difference-in-Differences.html",
-        "Causal Inference for the Brave and True, chapter 13",
-      )],
+      "https://matheusfacure.github.io/python-causality-handbook/13-Difference-in-Differences.html",
+      "Causal Inference for the Brave and True, chapter 13",
+    )],
     //[@arkhangelsky2024causal],
 
     "ARIMA, ITS",
@@ -1292,11 +1276,11 @@
     [Contional ignorability on predictors, goodness of fit pre-treatment],
     [Machine learning, bayesian methods],
     [#link(
-        "repository.cinec.edu/bitstream/cinec20/1109/1/2016_Book_IntroductionToTimeSeriesAndFor.pdf#page=259",
-        [Introduction
-          to Time Series
-          and Forecasting, chapter 9],
-      )],
+      "repository.cinec.edu/bitstream/cinec20/1109/1/2016_Book_IntroductionToTimeSeriesAndFor.pdf#page=259",
+      [Introduction
+        to Time Series
+        and Forecasting, chapter 9],
+    )],
     // [@murphy2022probabilistic[chapter 18]],
 
     "Synthetic control",
@@ -1304,9 +1288,9 @@
     [Conditional parallel trend on controls, goodness of fit pre-treatment],
     [Economics],
     [#link(
-        "https://matheusfacure.github.io/python-causality-handbook/15-Synthetic-Control.html",
-        "Causal Inference for the Brave and True, chapter 15",
-      )],
+      "https://matheusfacure.github.io/python-causality-handbook/15-Synthetic-Control.html",
+      "Causal Inference for the Brave and True, chapter 15",
+    )],
     // [@abadie2021using],
   )
 
@@ -1400,14 +1384,14 @@
 ]
 
 
-#new-section[Python hands-on]
+#new-section-slide[Python hands-on]
 
 #slide[
   = To your notebooks 🧑‍💻!
   - url: https://github.com/strayMat/causal-ml-course/tree/main/notebooks
 ]
 
-#new-section[Supplementary materials]
+#new-section-slide[Supplementary materials]
 
 
 #slide[
@@ -1415,7 +1399,7 @@
 
   Introduced by @chernozhukov2021exact
 
-  - Recast the problem as #alert[counterfactual inference], i.e. predict: $Y_(i t)(0) "for" t>T_0 $
+  - Recast the problem as #alert[counterfactual inference], i.e. predict: $Y_(i t)(0) "for" t>T_0$
 
   - Test hypothesis: $H_0$ eg. $H_0 = (0, 0, .., 0)$ ie no effect for $t > T_0$
 
@@ -1470,20 +1454,6 @@
   - P-value: $hat(F) (x) = 1/(|Pi|) sum_(pi in Pi) bb(1) [S(hat(u)_(pi_(0))) <= S(hat(u)_(pi))]$ where $pi_(0)$ is the original data.
 
 ]
-
-// #slide[
-//   = Informal inference: confidence intervals
-//   TODO
-// ]
-
-
-// #slide[
-//   = Conditional difference-in-differences
-//   TODO
-// ]
-
-
-
 
 #set align(left)
 #set text(size: 20pt, style: "italic")

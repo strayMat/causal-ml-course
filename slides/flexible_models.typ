@@ -1,14 +1,13 @@
-// Get Polylux from the official package repository
+// Use touying for slides
+// documentation link : https://typst.app/universe/package/touying
 
-// documentation link : https://typst.app/universe/package/polylux
-
-#import "@preview/polylux:0.3.1": *
+#import "@preview/touying:0.6.1": *
 #import "@preview/embiggen:0.0.1": * // LaTeX-like delimiter sizing for Typst
-#import "@preview/codly:1.1.1": * // Code highlighting for Typst
+#import "@preview/codly:1.3.0": * // Code highlighting for Typst
 #show: codly-init
-#import "@preview/codly-languages:0.1.3": * // Code highlighting for Typst
+#import "@preview/codly-languages:0.1.10": * // Code highlighting for Typst
 #codly(languages: codly-languages)
-#import "@preview/showybox:2.0.1": showybox
+#import "@preview/showybox:2.0.4": showybox
 
 #import themes.metropolis: *
 
@@ -30,7 +29,7 @@
 
 
 #let argmin(body) = {
-  $#math.op("argmin", limits: true)_(body)$
+  $#math.op("argmin", limits: true) _(body)$
 }
 
 #let c_treated(body) = {
@@ -44,47 +43,7 @@
   body
 }
 
-#let slide(title: none, body) = {
-  let header = {
-    set align(top)
-    if title != none {
-      show: m-cell.with(fill: m-dark-teal, inset: 1em)
-      set align(horizon)
-      set text(fill: m-extra-light-gray, size: 1.2em)
-      strong(title)
-    } else { [] }
-  }
-
-  let footer = {
-    set text(size: 0.8em)
-    show: pad.with(.5em)
-    set align(bottom)
-    text(fill: m-dark-teal.lighten(40%), m-footer.display())
-    h(1fr)
-    text(fill: m-dark-teal, logic.logical-slide.display())
-  }
-
-  set page(
-    header: header,
-    footer: footer,
-    margin: (top: 3em, bottom: 1.5em),
-    fill: m-extra-light-gray,
-  )
-
-  let content = {
-    show: align.with(horizon)
-    show: pad.with(
-      left: 1em,
-      top: 0.5em,
-      right: 1em,
-      bottom: 0em,
-    ) // super important to have a proper padding (not 1/3 of the slide blank...)
-    set text(fill: m-dark-teal)
-    body
-  }
-
-  logic.polylux-slide(content)
-}
+// Slides are provided by touying/metropolis; no custom slide macro needed
 
 
 #let my_box(title, color, body) = {
@@ -143,7 +102,7 @@
 
 
 #slide(title: "Table of contents")[
-  #metropolis-outline
+  #outline(depth: 1)
 ]
 
 #new-section-slide("Model evaluation and selection with cross-validation")
@@ -317,11 +276,11 @@
   ]
 
   #uncover(3)[
-    - #alert[Averaging cross-validate estimators selects the best model] asymptotically among a family of models @lecue2012oracle
+    - #text(fill: orange)[Averaging cross-validate estimators selects the best model] asymptotically among a family of models @lecue2012oracle
   ]
 ]
 
-#slide(title: [Naive cross-validation to #alert[select and estimate] the best performances])[
+#slide(title: [Naive cross-validation to select and estimate the best performances])[
   == Hyper-parameters selection is a kind of model fitting
 
   Using a single loop of cross-validation, the full dataset is used to:
@@ -336,7 +295,7 @@
   ]
 ]
 
-#slide(title: [Nested cross-validation to #alert[select and estimate] the best performances])[
+#slide(title: [Nested cross-validation to select and estimate the best performances])[
   - Inner CV loop to select the best hyper-parameters
   - Outer loop to estimate the generalization performance of the selected model
   #figure(image("img/flexible_models/nested_cross_validation.png", width: 70%))
@@ -344,20 +303,17 @@
 
 
 #slide(title: "Over-optimistic performance estimation: example")[
-  #side-by-side(
-    [
-      - Dataset: Breast cancer (N, p) = (569, 30)
-      - Classifier: RandomForestClassifier with multiple choices of hyper-parameter],
-    [
-      #figure(
-        image(
-          "img/pyfigures/3_flexible_models_cross_validation_nested_overfitting.svg",
-          width: 100%,
-        ),
-      )
-    ],
-  )
-
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
+    - Dataset: Breast cancer (N, p) = (569, 30)
+    - Classifier: RandomForestClassifier with multiple choices of hyper-parameter
+  ][
+    #figure(
+      image(
+        "img/pyfigures/3_flexible_models_cross_validation_nested_overfitting.svg",
+        width: 100%,
+      ),
+    )
+  ]
 ]
 
 
@@ -368,58 +324,52 @@
 ]
 
 #slide(title: "Growing a classification tree")[
-  #side-by-side(
-    [
-      #only(1)[
-        #figure(image("img/flexible_models/tree_blue_orange1.svg", width: 90%))
-      ]
-      #only(2)[
-        #figure(image("img/flexible_models/tree_blue_orange2.svg", width: 90%))
-      ]
-      #only(3)[
-        #figure(image("img/flexible_models/tree_blue_orange3.svg", width: 90%))
-      ]
-    ],
-    [
-      #only(1)[
-        #figure(image("img/flexible_models/tree2D_1split.svg", width: 90%))
-      ]
-      #only(2)[
-        #figure(image("img/flexible_models/tree2D_2split.svg", width: 90%))
-      ]
-      #only(3)[
-        #figure(image("img/flexible_models/tree2D_3split.svg", width: 90%))
-      ]
-    ],
-  )
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
+    #only(1)[
+      #figure(image("img/flexible_models/tree_blue_orange1.svg", width: 90%))
+    ]
+    #only(2)[
+      #figure(image("img/flexible_models/tree_blue_orange2.svg", width: 90%))
+    ]
+    #only(3)[
+      #figure(image("img/flexible_models/tree_blue_orange3.svg", width: 90%))
+    ]
+  ][
+    #only(1)[
+      #figure(image("img/flexible_models/tree2D_1split.svg", width: 90%))
+    ]
+    #only(2)[
+      #figure(image("img/flexible_models/tree2D_2split.svg", width: 90%))
+    ]
+    #only(3)[
+      #figure(image("img/flexible_models/tree2D_3split.svg", width: 90%))
+    ]
+  ]
 ]
 
 
 #slide(title: "Growing a regression tree")[
-  #side-by-side(
-    [
-      #only(1)[
-        #figure(image("img/flexible_models/tree_regression_structure1.svg", width: 90%))
-      ]
-      #only(2)[
-        #figure(image("img/flexible_models/tree_regression_structure2.svg", width: 90%))
-      ]
-      #only(3)[
-        #figure(image("img/flexible_models/tree_regression_structure3.svg", width: 90%))
-      ]
-    ],
-    [
-      #only(1)[
-        #figure(image("img/flexible_models/tree_regression2.svg", width: 90%))
-      ]
-      #only(2)[
-        #figure(image("img/flexible_models/tree_regression3.svg", width: 90%))
-      ]
-      #only(3)[
-        #figure(image("img/flexible_models/tree_regression4.svg", width: 90%))
-      ]
-    ],
-  )
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
+    #only(1)[
+      #figure(image("img/flexible_models/tree_regression_structure1.svg", width: 90%))
+    ]
+    #only(2)[
+      #figure(image("img/flexible_models/tree_regression_structure2.svg", width: 90%))
+    ]
+    #only(3)[
+      #figure(image("img/flexible_models/tree_regression_structure3.svg", width: 90%))
+    ]
+  ][
+    #only(1)[
+      #figure(image("img/flexible_models/tree_regression2.svg", width: 90%))
+    ]
+    #only(2)[
+      #figure(image("img/flexible_models/tree_regression3.svg", width: 90%))
+    ]
+    #only(3)[
+      #figure(image("img/flexible_models/tree_regression4.svg", width: 90%))
+    ]
+  ]
 ]
 
 
@@ -466,40 +416,40 @@
 
 #slide(title: "Chose the best split: example")[
   #only(1)[
-    #side-by-side(
-      columns: (1fr, 2fr),
-      [== Random split],
-      figure(image("img/pyfigures/tree_random_split.svg", width: 110%)),
-    )
+    #grid(columns: (1fr, 2fr), gutter: 3mm)[
+      == Random split
+    ][
+      figure(image("img/pyfigures/tree_random_split.svg", width: 110%))
+    ]
   ]
   #only(2)[
-    #side-by-side(
-      columns: (1fr, 2fr),
-      [== Moving the split to the right from one point],
-      figure(image("img/pyfigures/tree_split_2.svg", width: 110%)),
-    )
+    #grid(columns: (1fr, 2fr), gutter: 3mm)[
+      == Moving the split to the right from one point
+    ][
+      figure(image("img/pyfigures/tree_split_2.svg", width: 110%))
+    ]
 
   ]
   #only(3)[
-    #side-by-side(
-      columns: (1fr, 2fr),
-      [== Moving the split to the right from 10 points],
-      figure(image("img/pyfigures/tree_split_10.svg", width: 110%)),
-    )
+    #grid(columns: (1fr, 2fr), gutter: 3mm)[
+      == Moving the split to the right from 10 points
+    ][
+      figure(image("img/pyfigures/tree_split_10.svg", width: 110%))
+    ]
   ]
   #only(4)[
-    #side-by-side(
-      columns: (1fr, 2fr),
-      [== Moving the split to the right from 20 points],
-      figure(image("img/pyfigures/tree_split_19.svg", width: 110%)),
-    )
+    #grid(columns: (1fr, 2fr), gutter: 3mm)[
+      == Moving the split to the right from 20 points
+    ][
+      figure(image("img/pyfigures/tree_split_19.svg", width: 110%))
+    ]
   ]
   #only(5)[
-    #side-by-side(
-      columns: (1fr, 2fr),
-      [== Best split],
-      figure(image("img/pyfigures/tree_best_split.svg", width: 110%)),
-    )
+    #grid(columns: (1fr, 2fr), gutter: 3mm)[
+      == Best split
+    ][
+      figure(image("img/pyfigures/tree_best_split.svg", width: 110%))
+    ]
   ]
 ]
 
@@ -579,32 +529,29 @@
 #slide(title: "Random forests: Bagging with classification trees
 ")[
   #set align(top)
-  #side-by-side(
-    [
-      === Full dataset
-      #only((1, 2))[
-        #figure(image("img/flexible_models/bagging0.svg", width: 80%))
-      ]
-      #only(3)[
-        #figure(image("img/flexible_models/bagging0_cross.svg", width: 80%))
-      ]
-    ],
-    [
-      === Three bootstrap samples
-      #only(1)[
-        #figure(image("img/flexible_models/bagging.svg", width: 90%))
-      ]
-      #only(2)[
-        #figure(image("img/flexible_models/bagging_line.svg", width: 90%))
-        #figure(image("img/flexible_models/bagging_trees.svg", width: 90%))
-      ]
-      #only(3)[
-        #figure(image("img/flexible_models/bagging_cross.svg", width: 83%))
-        #figure(image("img/flexible_models/bagging_trees_predict.svg", width: 83%))
-        #figure(image("img/flexible_models/bagging_vote.svg", width: 83%))
-      ]
-    ],
-  )
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
+    === Full dataset
+    #only((1, 2))[
+      #figure(image("img/flexible_models/bagging0.svg", width: 80%))
+    ]
+    #only(3)[
+      #figure(image("img/flexible_models/bagging0_cross.svg", width: 80%))
+    ]
+  ][
+    === Three bootstrap samples
+    #only(1)[
+      #figure(image("img/flexible_models/bagging.svg", width: 90%))
+    ]
+    #only(2)[
+      #figure(image("img/flexible_models/bagging_line.svg", width: 90%))
+      #figure(image("img/flexible_models/bagging_trees.svg", width: 90%))
+    ]
+    #only(3)[
+      #figure(image("img/flexible_models/bagging_cross.svg", width: 83%))
+      #figure(image("img/flexible_models/bagging_trees_predict.svg", width: 83%))
+      #figure(image("img/flexible_models/bagging_vote.svg", width: 83%))
+    ]
+  ]
 ]
 #slide(title: "Random forests: Bagging with regression trees")[
   #only(1)[
@@ -620,24 +567,21 @@
     #figure(image("img/flexible_models/bagging_reg_grey_fitted.svg", width: 100%))
   ]
   #h(1em)
-  #side-by-side(
-    [
-      #uncover((1, 2, 3))[
-        === Bootstrap multiple subsets
-      ]
-      #uncover((2, 3))[
-        === Fit one model to each subset
-      ]
-      #uncover(3)[
-        === Average the predictions
-      ]
-    ],
-    [
-      #only(3)[
-        #figure(image("img/flexible_models/bagging_reg_blue.svg", width: 60%))
-      ]
-    ],
-  )
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
+    #uncover((1, 2, 3))[
+      === Bootstrap multiple subsets
+    ]
+    #uncover((2, 3))[
+      === Fit one model to each subset
+    ]
+    #uncover(3)[
+      === Average the predictions
+    ]
+  ][
+    #only(3)[
+      #figure(image("img/flexible_models/bagging_reg_blue.svg", width: 60%))
+    ]
+  ]
 ]
 
 #slide(title: "Main hyper-parameters of random forests")[
@@ -691,35 +635,32 @@
 ]
 
 #slide(title: "Boosting: Adaptive boosting, classification example")[
-  #side-by-side(
-    [
-      #only(1)[
-        #figure(image("img/flexible_models/boosting0.svg"))
-      ]
-      #only(2)[
-        == First prediction:
-        #figure(image("img/flexible_models/boosting1.svg"))
-      ]
-      #only(3)[
-        #figure(image("img/flexible_models/boosting2.svg"))
-      ]
-      #only(4)[
-        #figure(image("img/flexible_models/boosting3.svg"))
-      ]
-    ],
-    [
-      #only(2)[
-        #figure(image("img/flexible_models/boosting_trees1.svg"))
-      ]
-      #only(3)[
-        #figure(image("img/flexible_models/boosting_trees2.svg"))
-      ]
-      #only(4)[
-        #figure(image("img/flexible_models/boosting_trees3.svg"))
-        == At each step, AdaBoost weights mispredicted samples
-      ]
-    ],
-  )
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
+    #only(1)[
+      #figure(image("img/flexible_models/boosting0.svg"))
+    ]
+    #only(2)[
+      == First prediction:
+      #figure(image("img/flexible_models/boosting1.svg"))
+    ]
+    #only(3)[
+      #figure(image("img/flexible_models/boosting2.svg"))
+    ]
+    #only(4)[
+      #figure(image("img/flexible_models/boosting3.svg"))
+    ]
+  ][
+    #only(2)[
+      #figure(image("img/flexible_models/boosting_trees1.svg"))
+    ]
+    #only(3)[
+      #figure(image("img/flexible_models/boosting_trees2.svg"))
+    ]
+    #only(4)[
+      #figure(image("img/flexible_models/boosting_trees3.svg"))
+      == At each step, AdaBoost weights mispredicted samples
+    ]
+  ]
 ]
 
 
@@ -742,7 +683,7 @@
   ]
   #uncover((5, 6, 7, 8))[
 
-    🔸 Compute $alpha_m = log((1 - "err"_m )/"err"_m )$\
+    🔸 Compute $alpha_m = log((1 - "err"_m )/"err"_m)$\
   ]
   #uncover((6, 7, 8))[
 
@@ -778,15 +719,15 @@
 
   $h_m = argmin(h) (L_m)=argmin(h) sum_(i=1)^n l(y_i, F_(m-1)(x_i)+h(x_i))$
 
-  Expand the loss inside the sum using #alert[a Taylor expansion.]\
+  Expand the loss inside the sum using #text(fill: orange)[a Taylor expansion.]\
 
   #uncover((3, 4, 5))[
-
-    $l(y_i, F_(m-1)(x_i) + h(x_i)) = #only(3)[$l(y_i, F_(m-1)(x_i))$] #only((4, 5))[$underbrace(l(y_i, F_(m-1)(x_i)), "constant in "h(x_i))$] + h(x_i) #only(3)[$[(diff l (y_i, F(x_i))) / (diff F(x_i))]_(F=F_(m-1))$] #only((4, 5))[$underbrace([(diff l (y_i, F(x_i))) / (diff F(x_i))]_(F=F_(m-1)), \u{225D} g_i", the gradient")$]$
+    $l(y_i, F_(m-1)(x_i) + h(x_i)) = underbrace(l(y_i, F_(m-1)(x_i)), "constant in "h(x_i)) + h(x_i) underbrace((partial l (y_i, F(x_i))) / (partial F(x_i))]_(F=F_(m-1)), \u{225D} g_i", the gradient")$
   ]
+
   #only((2, 3))[
     #def_box(title: "🔔Taylor expansion")[
-      For $l(dot)$ differentiable: $l(y+h) approx l(y) + h (diff l) / (diff y) (y)$
+      For $l(dot)$ differentiable: $l(y+h) approx l(y) + h (partial l) / (partial y) (y)$
     ]
   ]
 
@@ -794,96 +735,79 @@
     Finally:
     $h_m = argmin(h) sum^n_(i=1) h(x_i) g_i$ -> kind of an inner product $<g, h>$
 
-    So $h_m(x_i)$ should be proportional to $- g_i$, so #alert[fit $h_m$ to the negative gradient.]
+    So $h_m(x_i)$ should be proportional to $- g_i$, so #text(fill: orange)[fit $h_m$ to the negative gradient.]
   ]
 ]
-
 
 
 #slide(title: "Boosting: Gradient boosting, regression example")[
-  #only(1)[
-    #side-by-side(
-      [
-        == Regression
-        - The loss is: $l(y, F(x)) = (y - F(x))^2$
-        - The gradient is: $g_i = -2(y_i - F_(m-1)(x_i))$
-        💡The new tree should fit the residuals
-      ],
-      [
-        #figure(image("img/pyfigures/gradient_boosting_data.svg", width: 110%))
-      ],
-    )
-  ]
-  #only(2)[
-    #side-by-side(
-      columns: (1fr, 2fr),
-      [
-        == Fit a shallow tree (depth=3)
-      ],
-      [
-        #figure(image("img/pyfigures/gradient_boosting_fit.svg", width: 85%))
-      ],
-    )
-  ]
-  #only(3)[
-    #side-by-side(
-      columns: (1fr, 2fr),
-      [
-        == Fit a second tree to the residuals
-        - This tree performs poorly on some samples.
-
-      ],
-      [
-        #figure(image("img/pyfigures/gradient_boosting_residuals.svg", width: 85%))
-      ],
-    )
-  ]
-  #only(4)[
-    #side-by-side(
-      columns: (1fr, 2fr),
-      [
-        == Fit a second tree to the residuals
-        - This tree performs well on some residuals.
-        - Let's zoom on one of those.
-      ],
-      [
-        #figure(image("img/pyfigures/gradient_boosting_residuals_before_zoom.svg", width: 85%))
-      ],
-    )
-  ]
-  #only((5, 6))[
-    #side-by-side(
-      columns: (1fr, 2fr),
-      [
-
-        === Focus on a sample
-        $(x_i, y_i) = (-0.454, -0.417)$
-
-        === First tree prediction
-
-        Prediction: $f_1(x_i) = -0.016$
-
-        Residuals: #linebreak() $y_i-f_1(x_i)= -0.401$
-
-        #only(6)[
-          === Second tree prediction
-          Prediction: $f_2(x_i) = -0.401$
-
-          Residuals: #linebreak() $y_i-f_1(x_i) - f_2(x_i)= 0$
-
-        ]
-      ],
-      [
-        #only(5)[
-          #figure(image("img/pyfigures/gradient_boosting_fit_zoom.svg", width: 85%))
-        ]
-        #only(6)[
-          #figure(image("img/pyfigures/gradient_boosting_residuals_zoom.svg", width: 85%))
-        ]
-      ],
-    )
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
+    == Regression
+    - The loss is: $l(y, F(x)) = (y - F(x))^2$
+    - The gradient is: $g_i = -2(y_i - F_(m-1)(x_i))$
+    💡The new tree should fit the residuals
+  ][
+    #figure(image("img/pyfigures/gradient_boosting_data.svg", width: 110%))
   ]
 ]
+
+#slide(title: "Boosting: Gradient boosting, regression example")[
+
+  #grid(columns: (1fr, 2fr), gutter: 3mm)[
+    == Fit a shallow tree (depth=3)
+  ][
+    #figure(image("img/pyfigures/gradient_boosting_fit.svg", width: 85%))
+  ]
+]
+#slide(title: "Boosting: Gradient boosting, regression example")[
+
+  #grid(columns: (1fr, 2fr), gutter: 3mm)[
+    == Fit a second tree to the residuals
+    - This tree performs poorly on some samples.
+  ][
+    #figure(image("img/pyfigures/gradient_boosting_residuals.svg", width: 85%))
+  ]
+]
+#slide(title: "Boosting: Gradient boosting, regression example")[
+  #grid(columns: (1fr, 2fr), gutter: 3mm)[
+    == Fit a second tree to the residuals
+    - This tree performs well on some residuals.
+    - Let's zoom on one of those.
+  ][
+    #figure(image("img/pyfigures/gradient_boosting_residuals_before_zoom.svg", width: 85%))
+  ]
+]
+
+#slide(title: "Boosting: Gradient boosting, regression example")[
+
+  #grid(columns: (1fr, 2fr), gutter: 3mm)[
+
+    === Focus on a sample
+    $(x_i, y_i) = (-0.454, -0.417)$
+
+    === First tree prediction
+
+    Prediction: $f_1(x_i) = -0.016$
+
+    Residuals: #linebreak() $y_i-f_1(x_i)= -0.401$
+
+    #uncover(2)[
+      === Second tree prediction
+      Prediction: $f_2(x_i) = -0.401$
+
+      Residuals: #linebreak() $y_i-f_1(x_i) - f_2(x_i)= 0$
+
+    ]
+  ][
+    #only(1)[
+      #figure(image("img/pyfigures/gradient_boosting_fit_zoom.svg", width: 85%))
+    ]
+    #only(2)[
+      #figure(image("img/pyfigures/gradient_boosting_residuals_zoom.svg", width: 85%))
+    ]
+  ]
+]
+
 
 #slide(title: "Faster gradient boosting with binned features")[
   === 😭 Gradient boosting is slow when N>10,000
@@ -908,10 +832,7 @@
 
   #table(
     columns: 2,
-    table.header(
-      [#alert[Bagging] (eg. *Random forests*)],
-      [#alert[Boosting]],
-    ),
+    table.header([#text(fill: orange)[Bagging] (eg. *Random forests*)], [#text(fill: orange)[Boosting]]),
 
     "Fit trees independently", "Fit trees sequentially",
     "Each deep tree overfits", "Each shallow tree underfits",
@@ -937,7 +858,7 @@
 
   #pause
   == Deep neural networks (deep learning)
-  Iterative layers of parametrized basis functions: eg. $bb(1)[w X + b >= 0] $\
+  Iterative layers of parametrized basis functions: eg. $bb(1)[w X + b >= 0]$\
   Trainable by gradient descent: each layer should be differentiable.\
   Training thanks to backpropagation ie. automatic differentiation and gradient methods.
 ]
@@ -945,13 +866,13 @@
 
 #slide(title: "A word on deep learning")[
 
-  #side-by-side()[
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
     === Success of deep learning
     🔸 For images: Convolutional Neural Network (CNN) architecture @russakovsky2015imagenet,\
     🔸 For text: transformer architecture @vaswani2017attention,\
     🔸 For protein folding: transformer architecture @jumper2021highly\
 
-    #only(2)[
+    #uncover(2)[
       🤔 Why not so used in econometrics?
     ]
   ][
@@ -982,50 +903,46 @@
 ]
 
 #slide(title: "Nuance: recent work using deep learning for tabular data")[
-  #side-by-side([
-  === Learning appropriate representations (prior) of tabular data
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
+    === Learning appropriate representations (prior) of tabular data
 
-  - TabPFN: large scale pretraining a transformer based model on synthetic tabular data @hollmann2025accurate
-  
-  - Allows In-Context Learning (ICL): learn with few examples.
+    - TabPFN: large scale pretraining a transformer based model on synthetic tabular data @hollmann2025accurate
 
-  #uncover(2)[ 
-  - @hollmann2025accurate Figure 4a:\ Comparison on test benchmarks, 29 classification and 28 regression datasets, containing with up to 10,000 samples and 500 features. 
-  ]
-  ],
-  [  
+    - Allows In-Context Learning (ICL): learn with few examples.
+
+    #uncover(2)[
+      - @hollmann2025accurate Figure 4a:\ Comparison on test benchmarks, 29 classification and 28 regression datasets, containing with up to 10,000 samples and 500 features.
+    ]
+  ][
     #figure(image("img/flexible_models/tabpfn.png", width: 44%))
   ]
-  )
 ]
 
 #slide(title: "Nuance: recent work using deep learning for tabular data")[
-  #side-by-side([
-  == Using Large Language Models (LLM)
-  - #text(fill:oklab(45.46%, -0.026, -0.31))[Tabula 8B] Fine-tuning existing LLM (Llama 3-8B) on tabular data @gardner2024large
-  
-  #uncover(2)[
-    - Allow ICL with few examples.
-    - But requires large computational resources and is outperform rapidly when number of samples grows.
-  ]
-  ],
-  [
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
+    == Using Large Language Models (LLM)
+    - #text(fill: oklab(45.46%, -0.026, -0.31))[Tabula 8B] Fine-tuning existing LLM (Llama 3-8B) on tabular data @gardner2024large
+
+    #uncover(2)[
+      - Allow ICL with few examples.
+      - But requires large computational resources and is outperform rapidly when number of samples grows.
+    ]
+  ][
     #figure(image("img/flexible_models/tabula8B.png", width: 80%))
-  ])
+  ]
 ]
 
 
 #slide(title: "Nuance: recent work using deep learning for tabular data")[
-  #side-by-side([
-  === Transferable components tailored to tabular data
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
+    === Transferable components tailored to tabular data
 
-  - CARTE: tailored learning components such as `{key:value}` representations  @kim2024carte
-  - TABICL: Combine tailored components and pretraining on synthetic data @qu2025tabicl
-  - @qu2025tabicl Figure 5:\ Benchmark accuracy results and train times on 200 classification datasets.
-  ],
-  [
+    - CARTE: tailored learning components such as `{key:value}` representations  @kim2024carte
+    - TABICL: Combine tailored components and pretraining on synthetic data @qu2025tabicl
+    - @qu2025tabicl Figure 5:\ Benchmark accuracy results and train times on 200 classification datasets.
+  ][
     #figure(image("img/flexible_models/tabicl.png", width: 80%))
-  ])
+  ]
 ]
 
 #new-section-slide("Python hands-on")
