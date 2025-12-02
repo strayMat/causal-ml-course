@@ -112,7 +112,6 @@ Session 4b -- Double-lasso for statistical inference
 - Practical session: `Wage analysis from a statistical inference point of view <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/PM2/python_ml_for_wage_prediction.ipynb>`__
 
 - References:
-
   - :cite:t:`chernozhukov2024applied`, `chapter 4 <https://causalml-book.org/assets/chapters/CausalML_chap_4.pdf>`_
 
   - :cite:t:`wager2020stats`, Chapter 4
