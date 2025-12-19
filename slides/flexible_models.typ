@@ -105,7 +105,8 @@
   #outline(depth: 1)
 ]
 
-#new-section-slide("Model evaluation and selection with cross-validation")
+//#new-section-slide("Model evaluation and selection with cross-validation")
+= Model evaluation and selection with cross-validation
 
 #slide(title: "A closer look at model evaluation: Wage example")[
   == Example with the Wage dataset
@@ -302,7 +303,7 @@
 ]
 
 
-#slide(title: "Over-optimistic performance estimation: example")[
+#slide(title: "Over-optimistic performance estimation: Toy example")[
   #grid(columns: (1fr, 1fr), gutter: 3mm)[
     - Dataset: Breast cancer (N, p) = (569, 30)
     - Classifier: RandomForestClassifier with multiple choices of hyper-parameter
@@ -316,8 +317,13 @@
   ]
 ]
 
+// #slide(title: [Over-optimistic performance estimation: Real life example #emoji.skull])[
+//   //https://www.nature.com/articles/s41746-022-00592-y
+//   // intersting but a bit hard to explain in few words
+// ]
 
-#new-section-slide("Flexible models: Tree, random forests and boosting")
+
+= Flexible models: Tree, random forests and boosting
 
 #slide(title: "What is a decision tree? An example.")[
   #figure(image("img/flexible_models/tree_example.svg", width: 80%))
@@ -356,7 +362,7 @@
     #only(2)[
       #figure(image("img/flexible_models/tree_regression_structure2.svg", width: 90%))
     ]
-    #only(3)[
+    #only((3,4))[
       #figure(image("img/flexible_models/tree_regression_structure3.svg", width: 90%))
     ]
   ][
@@ -366,8 +372,11 @@
     #only(2)[
       #figure(image("img/flexible_models/tree_regression3.svg", width: 90%))
     ]
-    #only(3)[
+    #only((3,4))[
       #figure(image("img/flexible_models/tree_regression4.svg", width: 90%))
+    ]
+    #only(4)[
+      Remark: Trees don't extrapolate\ outside training data
     ]
   ]
 ]
@@ -419,14 +428,14 @@
     #grid(columns: (1fr, 2fr), gutter: 3mm)[
       == Random split
     ][
-      figure(image("img/pyfigures/tree_random_split.svg", width: 110%))
+      #figure(image("img/pyfigures/tree_random_split.svg", width: 110%))
     ]
   ]
   #only(2)[
     #grid(columns: (1fr, 2fr), gutter: 3mm)[
       == Moving the split to the right from one point
     ][
-      figure(image("img/pyfigures/tree_split_2.svg", width: 110%))
+      #figure(image("img/pyfigures/tree_split_2.svg", width: 110%))
     ]
 
   ]
@@ -434,21 +443,21 @@
     #grid(columns: (1fr, 2fr), gutter: 3mm)[
       == Moving the split to the right from 10 points
     ][
-      figure(image("img/pyfigures/tree_split_10.svg", width: 110%))
+      #figure(image("img/pyfigures/tree_split_10.svg", width: 110%))
     ]
   ]
   #only(4)[
     #grid(columns: (1fr, 2fr), gutter: 3mm)[
       == Moving the split to the right from 20 points
     ][
-      figure(image("img/pyfigures/tree_split_19.svg", width: 110%))
+      #figure(image("img/pyfigures/tree_split_19.svg", width: 110%))
     ]
   ]
   #only(5)[
     #grid(columns: (1fr, 2fr), gutter: 3mm)[
       == Best split
     ][
-      figure(image("img/pyfigures/tree_best_split.svg", width: 110%))
+      #figure(image("img/pyfigures/tree_best_split.svg", width: 110%))
     ]
   ]
 ]
@@ -497,7 +506,7 @@
 
 #slide(title: "Pros and cons of trees")[
 
-  = Pros
+  == Pros
 
   - Easy to interpret
   - Handle mixed types of data: numerical, categorical and missing data
@@ -505,7 +514,7 @@
   - Fast to fit
 
   #pause
-  = Cons
+  == Cons
 
   - Prone to overfitting
   - Unstable: small changes in the data can lead to very different trees
@@ -604,7 +613,7 @@
 //#slide(title: "Therorical advantages of random forests to reduce overfitting")[ ]
 
 #slide(title: "Random Forests are bagged randomized decision trees")[
-  = Random forests
+  == Random forests
   - For each tree a random subset of samples are selected
   - At each split a random subset of features are selected (more randomization)
   - The best split is taken among the restricted subset
@@ -612,7 +621,7 @@
   - Uncorrelated errors make bagging work better
 
   #pause
-  = Take away
+  == Take away
 
   - Bagging and random forests fit trees independently
   - Each deep tree overfits individually
@@ -780,23 +789,24 @@
 
 #slide(title: "Boosting: Gradient boosting, regression example")[
 
-  #grid(columns: (1fr, 2fr), gutter: 3mm)[
+  #grid(columns: (1.1fr, 2fr), gutter: 3mm)[
+    #align(top)[
+      === Focus on a sample
+      $(x_i, y_i) = (-0.454, -0.417)$
 
-    === Focus on a sample
-    $(x_i, y_i) = (-0.454, -0.417)$
+      === First tree prediction
 
-    === First tree prediction
+      Prediction: $f_1(x_i) = -0.016$
 
-    Prediction: $f_1(x_i) = -0.016$
+      Residuals: #linebreak() $y_i-f_1(x_i)= -0.401$
 
-    Residuals: #linebreak() $y_i-f_1(x_i)= -0.401$
+      #only(2)[
+        === Second tree prediction
+        Prediction: $f_2(x_i) = -0.401$
 
-    #uncover(2)[
-      === Second tree prediction
-      Prediction: $f_2(x_i) = -0.401$
+        Residuals: #linebreak() $y_i-f_1(x_i) - f_2(x_i)= 0$
 
-      Residuals: #linebreak() $y_i-f_1(x_i) - f_2(x_i)= 0$
-
+      ]
     ]
   ][
     #only(1)[
@@ -842,8 +852,7 @@
 ]
 
 
-#new-section-slide("A word on other families of models")
-
+= A quick word on other families of models
 
 #slide(title: "Other well known families of models")[
 
@@ -860,7 +869,7 @@
   == Deep neural networks (deep learning)
   Iterative layers of parametrized basis functions: eg. $bb(1)[w X + b >= 0]$\
   Trainable by gradient descent: each layer should be differentiable.\
-  Training thanks to backpropagation ie. automatic differentiation and gradient methods.
+  Training with backpropagation ie. automatic differentiation and gradient methods.
 ]
 
 
@@ -945,10 +954,11 @@
   ]
 ]
 
-#new-section-slide("Python hands-on")
+= Python hands-on
 
 #slide(title: [To your notebooks 🧑‍💻!])[
-  - url: https://github.com/strayMat/causal-ml-course/tree/main/notebooks
+  == 2a) Hyper-parameters selection for flexible models
+  - url: https://straymat.github.io/causal-ml-course/practical_sessions.html
 ]
 
 
