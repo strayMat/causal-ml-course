@@ -94,7 +94,7 @@
     *Machine Learning for econometrics*
   ]
 
-  Event studies: Causal methods for pannel data
+  Event studies: Causal methods for panel data
 
   #set text(size: .8em, weight: "light")
   Matthieu Doutreligne
@@ -106,12 +106,13 @@
   body
 }
 
+#outline(depth:1)
+
 #set align(top)
 
-#new-section-slide[Motivation]
+= Motivation
 
-#slide[
-  = Setup - Estimation of the effect of a treatment when data is:
+#slide(title: "Setup - Estimation of the effect of a treatment when data is")[
 
   - Aggregated: country-level data such as employment rate, GDP...
   #only(1)[
@@ -149,8 +150,7 @@
   ]
 ]
 
-#slide[
-  = Examples of event studies
+#slide(title: "Examples of event studies")[
   === Archetypal questions
 
   - Did the new marketing campaign had an effect on the sales of a product?
@@ -169,8 +169,7 @@
   - Which policies achieved major carbon emission reductions? @stechemesser2024climate
 ]
 
-#slide[
-  = Setup: event studies are quasi-experiment
+#slide(title: "Setup: event studies are quasi-experiment")[
   #def_box(title: "Quasi-experiment")[
     A situation where the treatment is not randomly assigned by the researcher but by nature or society. #linebreak()
     It should introduce _some_ randomness in the treatment assignment: enforcing treatment exogeneity, i.e. ignorability (i.e. unconfoundedness).
@@ -185,10 +184,9 @@
 ]
 
 
-#new-section-slide[Reminder on difference-in-differences]
+= Reminder on difference-in-differences
 
-#slide[
-  = Difference-in-differences
+#slide(title: "Difference-in-differences")[
   == History
 
   - First documented example (though not formalized): John Snow showing how cholera spread through the water in London @snow1855mode #footnote[#text(size: 15pt)[Good description: #link("https://mixtape.scunning.com/09-difference_in_differences#john-snows-cholera-hypothesis")]]
@@ -202,8 +200,7 @@
   - The difference between the two differences is the treatment effect.
 ]
 
-#slide[
-  = Difference-in-differences
+#slide(title: "Difference-in-differences")[
 
   #only(1)[
     == Two period of times: t=1, t=2
@@ -260,16 +257,14 @@
 
 ]
 
-#slide[
-  = Identification of ATT
+#slide(title: "Identification of ATT")[
 
   $tau_("ATT") &= EE[Y_2(1)| D = 1] - EE [Y_2(0)| D = 1]\
   &= underbrace(EE[Y_2(1)| D = 1] - EE[Y_1(0)|D=1], #c_treated("Factual Trend(1)")) - underbrace(EE[Y_2(0)|D=0] - EE[Y_1(0)|D=0], #c_control("Trend(0)"))$
   #figure(image("img/pyfigures/did_att.svg", width: 50%))
 ]
 
-#slide[
-  = Estimation: link with two way fixed effect (TWFE)
+#slide(title: "Estimation: link with two way fixed effect (TWFE)")[
   #eq[$Y = alpha + gamma D + lambda bb(1) (t=2) + tau_("ATT") D bb(1) (t=2)$]
 
   #figure(image("img/pyfigures/did_twfe.svg", width: 50%))
@@ -277,8 +272,7 @@
   ⚠️ Mechanic link: works only under parallel trends and no anticipation assumptions.
 ]
 
-#slide[
-  = Failure of the parallel trend assumption
+#slide(title: "Failure of the parallel trend assumption")[
   #only(1)[
     == Seems like the treatment decreases the outcome!
     #figure(image("img/pyfigures/did_non_parallel_trends_last_periods.svg", width: 90%))
@@ -291,8 +285,7 @@
 ]
 
 
-#slide[
-  = DID estimator for more than two time units
+#slide(title: "DID estimator for more than two time units")[
 
   === Target estimand: sample average treatment effect on the treated (SATT)
 
@@ -313,8 +306,7 @@
 ]
 
 
-#slide[
-  = DID: Take-away
+#slide(title: "DID: Take-away")[
   == Pros
   - Extremely common in economics and quite simple to implement.
   - Can be extended to @wager2024causal
@@ -331,10 +323,9 @@
   == Can we do better: i.e. robust to the parallel trend assumption?
 ]
 
-#new-section-slide[Synthetic controls]
+= Synthetic controls
 
-#slide[
-  = Synthetic Control Methods (SCM)
+#slide(title: "Synthetic Control Methods (SCM)")[
 
   Introduced by @abadie2003economic and @abadie2010synthetic.
 
@@ -343,7 +334,9 @@
   #pause
 
   #quote(attribution: [@athey2017state], block: true)[
-    The most important innovation in the policy evaluation literature in the last few years
+    #text(size: 20pt)[
+      The most important innovation in the policy evaluation literature in the last few years
+    ]
   ]
 
   #pause
@@ -354,8 +347,7 @@
   What is the effect of tobacco tax on cigarettes sales? @abadie2010synthetic
 ]
 
-#slide[
-  = Examples of application of synthetic controls to epidemiology
+#slide(title: "Examples of application of synthetic controls to epidemiology")[
 
   - Literature review of the usage of SCM in healthcare (up to 2016): @bouttell2018synthetic
 
@@ -370,35 +362,35 @@
   - What is the effect of wildfire storm on respiratory hospitalizations? @sheridan2022using
 ]
 
-#slide[
-  = Synthetic control example: California's Proposition 99 @abadie2010synthetic
-
+#slide(title: [Synthetic control example: California's Proposition 99 @abadie2010synthetic])[
   == Context
 
-  1988: 25-cent tax per pack of cigarettes, ban of on cigarette vending machines in public areas accessible by juveniles, and a ban on the individual sale of single cigarettes.
+  1988: 25-cent tax/pack of cigarettes, ban of on cigarette vending machines in public areas accessible by juveniles, and ban on single cigarettes sales.
 
   #pause
 
   == Setup
 
-  === Outcome, $Y_(j, t)$: cigarette sales per capita
-  #pause
-
-  === Treated unit, $j=1$: California as from 1988
-  #pause
-
-  === Control units, $j in {2,..J}$: 39 other US states without similar policies
-  #pause
-
-  === Time period: $t in {1,..T} = {1970, ..2000}$ and treatment time $T_0 = 1988$
+  - Outcome, $Y_(j, t)$: cigarette sales per capita
 
   #pause
 
-  == Covariates $X_(j, t)$: cigarette price, previous cigarette sales.
+  - Treated unit, $j=1$: California as from 1988
+
+  #pause
+
+  - Control units, $j in {2,..J}$: 39 other US states without similar policies
+
+  #pause
+
+  - Time period: $t in {1,..T} = {1970, ..2000}$ and treatment time $T_0 = 1988$
+
+  #pause
+
+  - Covariates $X_(j, t)$: cigarette price, previous cigarette sales.
 ]
 
-#slide[
-  = Synthetic control example: plot the data
+#slide(title: "Synthetic control example: plot the data")[
   #figure(image("img/pyfigures/scm_california_vs_other_states.svg", width: 70%))
 
 
@@ -409,15 +401,13 @@
   🤔 Decrease began before the treatment and occured also for other states.
 ]
 
-#slide[
-  = Synthetic control example: plot the data
+#slide(title: "Synthetic control example: plot the data")[
   #figure(image("img/pyfigures/scm_california_and_other_states.svg", width: 70%))
   #pause
   💡 Force parallel trends: Find a weighted average of other states that predicts well the pre-treatment trend of California (before $T_0=1988$).
 ]
 
-#slide[
-  = Synthetic control as weighted average of control outcomes
+#slide(title: "Synthetic control as weighted average of control outcomes")[
 
   #grid(columns: (1fr, 1fr), gutter: 3mm)[
     Build a predictor for #c_treated($Y_(1, t)$) (California):
@@ -443,8 +433,7 @@
 
 ]
 
-#slide[
-  = Synthetic controls: minimization problem
+#slide(title: "Synthetic controls: minimization problem")[
   === Characteristics
 
   Pre-treatment characteristics concatenate pre-treatment outcomes and other pre-treatment predictors $Z_1$ eg. cigarette prices:
@@ -475,8 +464,7 @@
 ]
 
 
-#slide[
-  = Synthetic controls: Why choose positive weights summing to one?
+#slide(title: "Synthetic controls: Why choose positive weights summing to one?")[
 
   #pause
   == This is called interpolation (vs extrapolation)
@@ -491,8 +479,7 @@
   // (both are #link("https://en.wikipedia.org/wiki/Convex_optimization", [_optimization with constraints on a simplex_])).
 ]
 
-#slide[
-  = Synthetic controls: Extrapolation failure with unconstrained weights
+#slide(title: "Synthetic controls: Extrapolation failure with unconstrained weights")[
 
   #set align(horizon)
   #grid(columns: (2fr, 2fr), gutter: 3mm)[
@@ -518,8 +505,7 @@
 ]
 
 
-#slide[
-  = Synthetic controls: How to choose the predictor weights $V$?
+#slide(title: "Synthetic controls: How to choose the predictor weights V?")[
 
   1. Don't choose: set $V = I_(p)$, i.e. $||X||_V = ||X||_2$.
 
@@ -527,10 +513,10 @@
   2. Rescale by the variance of the predictors: #linebreak() $V = "diag"("var"(Y_(j, 1))^(-1), .., "var"(Y_(j, T_0))^(-1), "var"(Z_(j, 1))^(-1), .., "var"(Z_(j, T_0))^(-1))$.
 
   #pause
-  3. Minimize the pre-treatment mean squared prediction error (MSPE) of the treated unit:
-
-  $"MSPE"(V) &= sum_(t=1)^(T_0) [Y_(1, t) - sum_(j=2)^(n_0+1) w_j^*(V) Y_(j, t)]^2 \
-  &= || vec(Y_(1, t))_(t=1..T_0) - vec(Y_(j, t))^T_(j=2..n_0+1#linebreak()t=1..T_0) hat(w) ||_(2)^(2)$
+  3. Minimize pre-treatment mean squared prediction error (MSPE) of the treated unit:
+  #text(size: 0.9em)[
+    $"MSPE"(V) &= sum_(t=1)^(T_0) [Y_(1, t) - sum_(j=2)^(n_0+1) w_j^*(V) Y_(j, t)]^2 = || vec(Y_(1, t))_(t=1..T_0) - vec(Y_(j, t))^T_(j=2..n_0+1#linebreak()t=1..T_0) hat(w) ||_(2)^(2)$
+  ]
 
   This solution is solved by running two optimization problems:
   - #alert[Inner loop] solving $w^*(V)= "argmin"_(w) ||X_("treat") - X_("control") w||_V^2$
@@ -538,17 +524,16 @@
   - #alert[Outer loop] solving $V^*= "argmin"_(V) "MSPE"(V)$
 ]
 
-#slide[
-  = Synthetic controls: estimation without the outer optimization problem
+#slide(title: "Synthetic controls: estimation without the outer optimization problem")[
 
-  #grid(columns: (1.5fr, 2fr), gutter: 3mm)[
+  #grid(columns: (2fr, 2fr), gutter: 3mm)[
 
-    Same coviarates: $X_j= vec(Y_(j, 1), ..., Y_(j, T_0), Z_(j, 1), ..., Z_(j, T_0))^T$
+    Same covariates:\ $X_j= (Y_(j, 1), ..., Y_(j, T_0), Z_(j, 1), ..., Z_(j, T_0))$
 
     Y cigarette sales, Z cigarette prices.
 
 
-    SCM minization with $V = I_(p)$, hence, $||X||_V = ||X||_2$.
+    SCM minization with $V = I_(p)$, st, $||X||_V = ||X||_2$.
     #v(1em)
 
     $w^(*) &= "argmin"_(w) ||X_("treat") - X_("control") w||_2^2\
@@ -562,14 +547,12 @@
 ]
 
 
-#slide[
-  = Synthetic controls: estimation with the outer optimization problem
+#slide(title: "Synthetic controls: estimation with the outer optimization problem")[
 
   #figure(image("img/pyfigures/scm_california_vs_synth_pysyncon.svg", width: 70%))
 ]
 
-#slide[
-  = Synthetic controls: inference
+#slide(title: "Synthetic controls: inference")[
 
   === Variability does not come from the variability of the outcomes
 
@@ -588,8 +571,7 @@
 ]
 
 
-#slide[
-  = Synthetic controls: inference with Placebo tests
+#slide(title: "Synthetic controls: inference with Placebo tests")[
   == Idea of placebo tests, also called Fisher's Exact tests
 
   - Permute the treated and control exhaustively.
@@ -601,8 +583,7 @@
 ]
 
 
-#slide[
-  = Example of placebo test : For all 38 control states
+#slide(title: "Example of placebo test: For all 38 control states")[
 
   #figure(image("img/pyfigures/scm_placebo_test.svg", width: 70%))
 
@@ -612,16 +593,14 @@
   - Some states have pre-treatment trends which are hard to predict.
 ]
 
-#slide[
-  = Example of placebo test : For 34 control states with "good" pre-treatment fit
+#slide(title: "Example of placebo test: For 34 control states with good pre-treatment fit")[
 
   #figure(image("img/pyfigures/scm_placebo_test_wo_outliers.svg", width: 70%))
 
   I removed the states above the 90 percentiles of the distribution of the pre-treatment fit.
 ]
 
-#slide[
-  = Example of placebo tests: distribution
+#slide(title: "Example of placebo tests: distribution")[
 
   #grid(columns: (1fr, 1fr), gutter: 3mm)[
 
@@ -640,8 +619,7 @@
   ]
 ]
 
-#slide[
-  = Failure of synthetic controls: confounding events
+#slide(title: "Failure of synthetic controls: confounding events")[
 
   Confounding event : affecting the outcome for the treated unit and only part of the controls.
 
@@ -661,8 +639,7 @@
   For state in [KS, MD, AL, CT, FL], there is a step change in the outcome after the treatment: $bb(1)[t>T_0]$
 ]
 
-#slide[
-  = Synthetic controls failure: appropriate controls
+#slide(title: "Synthetic controls failure: appropriate controls")[
   === Focus only on states affected by the confounding events
 
   #figure(image("img/event_studies/scm_failure_appropriate_control.png", width: 50%))
@@ -672,8 +649,7 @@
   🤩 We would conclude to no effect of the treatment.
 ]
 
-#slide[
-  = Synthetic controls failure: data-driven controls
+#slide(title: "Synthetic controls failure: data-driven controls")[
   === Focus on all comparison states
 
   #figure(image("img/event_studies/scm_failure_data_driven_controls.png", width: 50%))
@@ -683,8 +659,7 @@
   😥 We would falsely conclude to a positive treatment effect.
 ]
 
-#slide[
-  = Synthetic controls: Take-away
+#slide(title: "Synthetic controls: Take-away")[
 
   #grid(columns: (1fr, 1fr), gutter: 3mm)[
     == Pros
@@ -705,10 +680,9 @@
   See @arkhangelsky2021synthetic for discussions.
 ]
 
-#new-section-slide[Interrupted time-series: methods without a control group]
+= Interrupted time-series: methods without a control group
 
-#slide[
-  = Interrupted Time Series: intuition
+#slide(title: "Interrupted Time Series: intuition")[
   == Setup
 
   - One #c_treated[treated unit], no #c_control[control unit].
@@ -724,8 +698,7 @@
   - Obtain treatment effect by taking the difference between observed and predicted post-treatment observations: $#c_treated[$Y_(t)(1)$] - #c_control[$hat(Y_t)$(0)]$
 ]
 
-#slide[
-  = Interrupted Time Series: illustration from @schaffer2021interrupted
+#slide(title: [Interrupted Time Series: illustration from @schaffer2021interrupted])[
 
   #figure(image("img/event_studies/its_illustration.png", width: 65%))
 
@@ -736,9 +709,7 @@
 
 ]
 
-#slide[
-
-  = Modelization of a time-series
+#slide(title: "Modelization of a time-series")[
 
   == Tools
 
@@ -756,8 +727,7 @@
   #link("https://otexts.com/fpp3/", "Forecasting (fpp3): Principles and Practice, chapter 8")
 ]
 
-#slide[
-  = ARIMA are State Space Models (SSM) #text("says the machine learning community", size: 18pt)
+#slide(title: [ARIMA are State Space Models (SSM) #text("says the machine learning community", size: 18pt)])[
 
   == What is a (linear) state space model?
 
@@ -816,9 +786,7 @@
 
 ]
 
-#slide[
-
-  = Why showing the state space model formulation?
+#slide(title: "Why showing the state space model formulation?")[
 
   - I better understand ARIMA formulated as state space models.
 
@@ -832,8 +800,7 @@
 ]
 
 
-#slide[
-  = State space models: AR(1) model example
+#slide(title: "State space models: AR(1) model example")[
 
   == AR(1)
   #set align(horizon)
@@ -881,8 +848,7 @@
   ]
 ]
 
-#slide[
-  = State space models: AR(2) model example
+#slide(title: "State space models: AR(2) model example")[
 
   == AR(2)
   #set align(horizon)
@@ -931,8 +897,7 @@
   ]
 ]
 
-#slide[
-  = State space models: MA(1) i.e. ARIMA(0,0,1) model example
+#slide(title: "State space models: MA(1) i.e. ARIMA(0,0,1) model example")[
 
   #grid(columns: (1fr, 1fr), gutter: 3mm)[
     #align(center)[
@@ -976,9 +941,7 @@
   The MA time series models the residual of the regression of $y_t$ on its previous values as a linear combination of the previous residuals : i.e. vanishing shocks.
 ]
 
-#slide[
-
-  = State space models: ARMA(p, q) i.e. ARIMA(p,0,q) model example
+#slide(title: "State space models: ARMA(p, q) i.e. ARIMA(p,0,q) model example")[
 
   == Formalization (Hamilton form)
   Let $r = max(p, q+1)$
@@ -999,8 +962,7 @@
 ]
 
 
-#slide[
-  = State space models: Adding a seasonnality and a covariate component
+#slide(title: "State space models: Adding a seasonnality and a covariate component")[
 
   #grid(columns: (1fr, 1fr), gutter: 3mm)[
     #align(center)[
@@ -1057,8 +1019,7 @@
   ]
 ]
 
-#slide[
-  = State space models: General formulation
+#slide(title: "State space models: General formulation")[
 
 
   #grid(columns: (1fr, 2fr), gutter: 3mm)[
@@ -1073,8 +1034,7 @@
   Complex SSM DAG from the Causal Impact paper @brodersen2015inferring.
 ]
 
-#slide[
-  = State space models: a brief word on fitting (i.e. learning the parameters)
+#slide(title: "State space models: a brief word on fitting (i.e. learning the parameters)")[
   === When the error terms are gaussians
 
   These modeles are called linear Gaussian state space model (LG-SSM) or linear dynamical system (LDS).
@@ -1094,8 +1054,7 @@
   - Iter until convergence to a (local) maximum of likelihood.
 ]
 
-#slide[
-  = Modern state space models
+#slide(title: "Modern state space models")[
 
   === Long Short Term Memory (LSTM) networks
   A type of Recurrent Neural Network (RNN) that can learn long-term dependencies @graves2012long.
@@ -1111,8 +1070,7 @@
 ]
 
 
-#slide[
-  = Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007
+#slide(title: "Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007")[
   == Context
 
   In 2001, compared to the European Union countries, France was a country where:
@@ -1130,8 +1088,7 @@
   What has been the effect of the campaign on the consumption of antibiotics? @sabuncu2009significant
 ]
 
-#slide[
-  = Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007
+#slide(title: "Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007")[
   == Weekly reimbursed prescription of antibiotics in town
 
   #figure(image("img/event_studies/sabuncu2009_fig1.png", width: 70%))
@@ -1140,8 +1097,7 @@
 ]
 
 
-#slide[
-  = Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007
+#slide(title: "Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007")[
   == Estimation
 
   - Fit an ARIMA model on the pre-treatment trend
@@ -1152,8 +1108,7 @@
   - Assess if the additive term and other parameters are significantly different pre-treatment and post-treatment.
 ]
 
-#slide[
-  = Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007
+#slide(title: "Example of ITS with ARIMA: the French antibiotics campaign of 2002-2007")[
 
   #figure(image("img/event_studies/sabuncu2009_fig4.png", width: 64%))
 
@@ -1171,8 +1126,7 @@
 // ]
 
 
-#slide[
-  = A word on model families for ITS
+#slide(title: "A word on model families for ITS")[
   We saw ARIMA models and the more general class of state space models.
 
   However, we could any model that we want to fit the pre-treatment trend !
@@ -1189,9 +1143,7 @@
   Relevant remark for all time series models (even ARIMA or state space models).
 ]
 
-#slide[
-
-  = Cross-validation for time-series models
+#slide(title: "Cross-validation for time-series models")[
 
   ```python
   from sklearn.model_selection import TimeSeriesSplit
@@ -1202,8 +1154,7 @@
 ]
 
 
-#slide[
-  = Main threat to validity for an ITS: historical bias
+#slide(title: "Main threat to validity for an ITS: historical bias")[
   @degli2020can[Fig. 1]
 
   #grid(columns: (1fr, 1fr), gutter: 3mm)[
@@ -1224,8 +1175,7 @@
 ]
 
 
-#slide[
-  = Take-away on ITS
+#slide(title: "Take-away on ITS")[
 
   == Pros
 
@@ -1245,8 +1195,7 @@
 ]
 
 
-#slide[
-  = An attempt to map event study methods
+#slide(title: "An attempt to map event study methods")[
 
   #set text(size: 15pt)
 
@@ -1296,8 +1245,7 @@
 
 ]
 
-#slide[
-  = A summary on R packages for event studies
+#slide(title: "A summary on R packages for event studies")[
 
   #table(
     columns: 5,
@@ -1316,8 +1264,7 @@
 ]
 
 
-#slide[
-  = A summary on Python packages for event studies
+#slide(title: "A summary on Python packages for event studies")[
 
   #set text(size: 18pt)
   #table(
@@ -1359,8 +1306,7 @@
 ]
 
 
-#slide[
-  = Final word -- What methods to chose: some guides
+#slide(title: "Final word -- What methods to chose: some guides")[
 
   #set text(size: 18pt)
   == DID-family methods
@@ -1384,18 +1330,15 @@
 ]
 
 
-#new-section-slide[Python hands-on]
+= Python hands-on
 
-#slide[
-  = To your notebooks 🧑‍💻!
+#slide(title: "To your notebooks 🧑‍💻!")[
   - url: https://github.com/strayMat/causal-ml-course/tree/main/notebooks
 ]
 
-#new-section-slide[Supplementary materials]
+= Supplementary materials
 
-
-#slide[
-  = Synthetic controls: conformal prediction inference
+#slide(title: "Synthetic controls: conformal prediction inference")[
 
   Introduced by @chernozhukov2021exact
 
@@ -1415,29 +1358,25 @@
 
 ]
 
-#slide[
-  = Conformal inference: hypothesis generation
+#slide(title: "Conformal inference: hypothesis generation")[
   - Test a hypothesis : $H_0$ eg. $H_0 = (0, 0, .., 0)$ ie no effect for $t > T_0$
 
   - Gerenate a counterfactual trajectory $Y_t (0)$ under this null
 ]
 
-#slide[
-  = Conformal inference: Fit a model and compute residuals
+#slide(title: "Conformal inference: Fit a model and compute residuals")[
   - Fit a counterfactual model on the #alert[full generated trajectory]: $hat(Y_t)$
 
   - Compute the residuals: $hat(u)_t = Y_t (0) - hat(Y)_t$
 ]
 
-#slide[
-  = Conformal inference: test statistic and resampling
+#slide(title: "Conformal inference: test statistic and resampling")[
   Summarize the residuals in a statistic: $S(hat(u)) = big("(") 1 / sqrt(T-T_0 + 1) sum_(t=T_0 + 1)^(T) |hat(u)_t|^q big(")")^(1/q)$
 
 ]
 
 
-#slide[
-  = Conformal inference: resampling
+#slide(title: "Conformal inference: resampling")[
   == Resample this statistic by block permutation $pi$ of the time periods
 
   Same as permutting the data since SCM are invariant under the time series dimension.
@@ -1447,8 +1386,7 @@
   #align(center)[#text(size: 12pt)[Image from: Causal Inference for the Brave and True]]
 ]
 
-#slide[
-  = Conformal inference: P-value
+#slide(title: "Conformal inference: P-value")[
   - Assess if the post-treatment statistics is an outlier of this distribution.
 
   - P-value: $hat(F) (x) = 1/(|Pi|) sum_(pi in Pi) bb(1) [S(hat(u)_(pi_(0))) <= S(hat(u)_(pi))]$ where $pi_(0)$ is the original data.
@@ -1458,7 +1396,6 @@
 #set align(left)
 #set text(size: 20pt, style: "italic")
 
-#slide[
-  = Bibliography
+#slide(title: "Bibliography")[
   #bibliography
 ]
