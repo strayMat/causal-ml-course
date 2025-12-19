@@ -124,14 +124,15 @@
 
   == Sessions
 
-  - 1. Statistical learning and regularized linear models (MD)
-  - 2. Flexible models for tabular data (MD)
-  - 3. Reminders of potential outcomes and Directed Acyclic Graphs (MD)
-  - 4.a Event studies: Causal methods for pannel data (MD)
-  - 4.b Double-lasso for statistical inference (BC)
-  - 5. Double machine learning: Neyman-orthogonality (BC)
-  - 6. Heterogeneous treatment effect (BC)
-  - 7. Oral presentations of the evaluation projects (MD + BC)
+  - 27/01: Statistical learning and regularized linear models (MD)
+  - 03/02: Flexible models for tabular data (MD)
+  - 10/02: Reminders of potential outcomes and Directed Acyclic Graphs (MD)
+  - 17/02: Event studies: Causal methods for pannel data (MD)
+  - 17/02: Double-lasso for statistical inference (BC)
+  - 24/02: Double machine learning: Neyman-orthogonality (BC)
+  - 10/03: Heterogeneous treatment effect (BC)
+  - 17/03: Heterogeneous treatment effect (BC)
+  - 24/03: Oral presentations of the evaluation projects (MD + BC)
 ]
 
 #slide(title: "Evaluation of the course")[
@@ -829,14 +830,44 @@
 
   - Different feature expansions exists: polynomial, log, splines, embeddings, kernels, ...
 ]
-#slide(title: [KEN @cvetkov2023relational: Relational Data Embeddings])[
+#slide(title: [Encoding categorical features with LLM])[
   #grid(columns: (
       1fr,
       1fr,
-    ))[Easy to use with #link("https://skrub-data.org/stable/auto_examples/06_ken_embeddings.html#sphx-glr-auto-examples-06-ken-embeddings-py")[skrub library]][#figure(
-    image("img/penalized_linear_models/ken_embeddings.png", width: 120%),
+    ))[
+      - Transform text data into numerical vectors
+      - Projection into an adapted feature space:\ good notion of distance
+      - Easy to use (but computational-heavy) with #link("https://skrub-data.org/stable/reference/generated/skrub.TextEncoder.html#skrub.TextEncoder")[skrub `Texencoder`]][
+        #figure(
+    image("img/penalized_linear_models/ken_embeddings.png", width: 80%),
+    caption: [2D projection of embedded wikipedia entities @cvetkov2023relational]
   )]
 ]
+
+#slide(title: [Encoding with LLM : Is it always worthwhile? #cite(<grinsztajn2023vectorizing>)])[
+  #grid(columns: (
+      1fr,
+      1fr,
+    ))[
+      #align(top)[
+        === Findings
+
+        - Bigger is better !
+        - Bigger is costlier!
+        - Diminishing returns
+        #only(2)[
+        === Rule of thumb
+
+        - Useful for diverse categories:\ eg. 1000 diagnoses
+        - Less for few dirty categories:\ eg. 100 fuzzy job titles
+        ]
+        ]
+      ][
+        #figure(
+    image("img/penalized_linear_models/llm_encoding_figure_1.png", width: 100%),
+  )]
+]
+
 
 
 #slide(title: "But Linear models can also overfit!")[
@@ -855,19 +886,16 @@
 
 #slide(title: "Many features, few observations: illustration in 1D")[
   #grid(columns: (1fr, 1fr))[
-    [
-    #only(1)[
-      #figure(image("img/pyfigures/linreg_noreg_0_nogrey.svg", width: 80%))
-    ]
-    #only(2)[
-      #figure(image("img/pyfigures/linreg_noreg_0.svg", width: 80%))
-    ]
-    ],
-    [
+      #only(1)[
+        #figure(image("img/pyfigures/linreg_noreg_0_nogrey.svg", width: 80%))
+      ]
+      #only(2)[
+        #figure(image("img/pyfigures/linreg_noreg_0.svg", width: 80%))
+      ]
+    ][
     - Few observations with respect to the number of features.
     - Fit a linear model without regularization.
     #uncover(2)[- Linear model can overfit if data is noisy.]
-    ],
   ]
 ]
 
@@ -1141,15 +1169,14 @@
 ]
 
 
-
-#slide(title: [Short introduction to scikit-learn])[
+#slide(title: [Short introduction to the scikit-learn API])[
   - url: https://straymat.github.io/causal-ml-course/practical_sessions.html
 ]
 
+#slide(title: [Python hands-on: To your notebooks 🧑‍💻!])[
 
-#new-section-slide("Python hands-on: Common pitfalls in the interpretation of coefficients of linear models")
+  ==  1b) Common pitfalls in the interpretation of coefficients of linear models
 
-#slide(title: [To your notebooks 🧑‍💻!])[
   - url: https://straymat.github.io/causal-ml-course/practical_sessions.html
 ]
 
