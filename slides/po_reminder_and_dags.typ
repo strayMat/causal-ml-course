@@ -875,14 +875,14 @@
   ]
 ]
 
-#slide(title: "Three types of directed edges: mutual depence")[
+#slide(title: "Three types of directed edges: mutual dependence")[
 
   == Second, #alert[mutual dependence] or fork or confounder: $A arrow.l B arrow C$
 
 
   - A and C are not causally related but B is a common cause of both.
   - A and C are not independent, but are independent conditional on B.
-  - #alert[Not conditionning on X] introduces bias.
+  - #alert[Not conditioning on X] introduces bias.
 
   #grid(columns: (1fr, 2fr))[
     #align(center)[
@@ -943,7 +943,114 @@
   ]
 ]
 
-#slide(title: "Open and blocked paths by conditionning")[
+= Why do we need DAG?
+
+#slide(title: "Two data generating processes (DGP) yielding identical data")[
+
+  === Setup
+
+  You are an HR analyst for a large tech company. You have data on three variables for thousands of employees:
+
+  - #emoji.books Education (E): eg. university years.
+
+  - #emoji.brain Skills (S): eg. technical tests.
+
+  - #emoji.dollar Income (I): current annual income.
+]
+
+#slide(title: "First DGP: education is useful")[
+  #v(1em)
+  #align(top)[
+    Is #emoji.books education  improving #emoji.brain skills
+    thus increasing #emoji.dollar income ?
+  ]
+  #v(1em)
+  #grid(columns: (1fr, 1fr))[
+    #only((1, 2))[
+    ]
+    #only(3)[
+      #eq[
+        $E_A = cal(N)(0, 1)$
+      ]
+      #eq[
+        $S_A = 0.8 E_A + cal(N)(0, 0.6^2)$
+      ]
+      #eq[
+        $I_A = 0.8 S_A + cal(N)(0, 0.6^2)$
+      ]
+
+    ]
+  ][
+    #align(center)[
+      #fletcher-diagram(
+        cell-size: 20mm,
+        node-stroke: 0.6pt,
+        spacing: 1.5em,
+        node-shape: circle,
+        let (E, S, I) = ((-1, 1), (0, 0), (1, 1)),
+        node(E, $E$),
+        node(S, $S$),
+        node(I, $I$),
+        edge(E, S, "->"),
+        edge(S, I, "->"),
+      )
+    ]
+    #only((2, 3))[#align(center)[This is a chain]]
+  ]
+]
+
+#slide(title: "Second DGP: education is a signal for high skilled workers")[
+  #v(1em)
+  #align(top)[
+    Is #emoji.books education
+    a signal from people with high #emoji.brain skills
+    and #emoji.dollar high income?
+  ]
+  #v(1em)
+  #grid(columns: (1fr, 1fr))[
+    === Equations
+  ][
+    #align(center)[
+      #fletcher-diagram(
+        cell-size: 20mm,
+        node-stroke: 0.6pt,
+        spacing: 1.5em,
+        node-shape: circle,
+        let (E, S, I) = ((-1, 1), (0, 0), (1, 1)),
+        node(E, $E$),
+        node(S, $S$),
+        node(I, $I$),
+        edge(S, E, "->"),
+        edge(S, I, "->"),
+      )
+    ]
+    #only(2)[#align(center)[This is a fork]]
+  ]
+]
+
+#slide(title: "Same observed data, different causal effects")[
+  #grid(columns: (1fr, 1fr))[
+
+
+    #figure(
+      image("img/pyfigures/5_dgp_equivalence.svg", width: 85%),
+      caption: [Simulated data from the two DGPs.],
+    )
+  ][
+    #pause
+    Both DGP yield the same data distribution but different causal effects.
+
+    #pause
+    In the first DGP, increasing education increases skills and income
+
+    But not in the second !
+  ]
+]
+
+
+= Using DAGs to identify causal effects
+
+#slide(title: "Open and blocked paths by conditioning")[
 
   A path is #text(fill: orange)[blocked] (or d-separated) if:
   - the path contains a non-collider that has been conditioned on.
