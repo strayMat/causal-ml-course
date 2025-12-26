@@ -76,13 +76,18 @@ from mleco.figures.style_figs import *
 
 # Optional Visual check - Pairplot with correlations
 # Create combined dataframe with world labels
+palette = sns.color_palette("Paired")
+
+colors = {"dgp1": [palette[1], palette[0]], "dgp2": [palette[3], palette[2]]}
+
 df_A_labeled = df_A.copy()
-df_A_labeled["DGP"] = "1: Chain"
+df_A_labeled["DGP"] = "1: chain"
 
 df_B_labeled = df_B.copy()
-df_B_labeled["DGP"] = "2: Fork"
+df_B_labeled["DGP"] = "2: fork"
 
 df_combined = pd.concat([df_A_labeled, df_B_labeled])
+
 
 # Create pairplot using seaborn
 g = sns.pairplot(
@@ -92,7 +97,9 @@ g = sns.pairplot(
     plot_kws={"alpha": 0.6, "s": 10},
     diag_kws={"alpha": 0.4},
     corner=True,
+    palette={"1: chain": colors["dgp1"][1], "2: fork": colors["dgp2"][1]},
 )
+# Add x-axis label to the first distplot (Education histogram)
 handles, labels = g.axes[1, 0].get_legend_handles_labels()
 g.legend.remove()
 g.figure.legend(
@@ -107,14 +114,6 @@ g.figure.legend(
         0.8,
     ),  # Adjust these coordinates to center it in the gap
 )
-# handles, labels = g.axes[0, 0].get_legend_handles_labels()
-# g.legend.remove()
-# plt.legend(
-#     handles=handles,
-#     labels=labels,
-#     title="DGP",
-#     loc="upper right",
-# )
 plt.savefig(
     DIR2FIG / "5_dgp_equivalence.svg",
     bbox_inches="tight",
@@ -137,6 +136,13 @@ S_post_intervention_A = 0.8 * E_intervened + U_s_A  # S uses new E
 I_post_intervention_A = 0.8 * S_post_intervention_A + U_i_A  # I uses new S
 lift_A = I_post_intervention_A.mean() - I_A.mean()
 
+df_A_intervened = pd.DataFrame(
+    {
+        "Education": E_intervened,
+        "Skill": S_post_intervention_A,
+        "Salary": I_post_intervention_A,
+    }
+)
 # Intervention in World B (E <- S -> I)
 # If we set E, we break the arrow S -> E.
 # S does not change. Therefore I does not change.
@@ -149,3 +155,69 @@ lift_B = I_post_intervention_B.mean() - I_B.mean()
 
 print(f"\nExpected Salary Lift in World A (Chain): {lift_A:.4f}")
 print(f"Expected Salary Lift in World B (Fork):  {lift_B:.4f}")
+# %%
+# plot intervened datasets
+df_B_intervened = pd.DataFrame(
+    {
+        "Education": E_intervened_B,
+        "Skill": S_post_intervention_B,
+        "Salary": I_post_intervention_B,
+    }
+)
+
+df_A_intervened["DGP"] = "1: chain\n(intervened)"
+df_B_intervened["DGP"] = "2: fork\n(intervened)"
+
+df_comparison_A = pd.concat([df_A_labeled, df_A_intervened])
+df_comparison_B = pd.concat([df_B_labeled, df_B_intervened])
+
+palettes = [
+    {
+        "1: chain": colors["dgp1"][0],
+        "1: chain\n(intervened)": colors["dgp1"][1],
+    },
+    {
+        "2: fork": colors["dgp2"][0],
+        "2: fork\n(intervened)": colors["dgp2"][1],
+    },
+]
+for i, df in enumerate([df_comparison_A, df_comparison_B]):
+    # Create pairplot using seaborn
+    g = sns.pairplot(
+        data=df,
+        hue="DGP",
+        diag_kind="hist",
+        plot_kws={"alpha": 0.6, "s": 10},
+        diag_kws={"alpha": 0.4},
+        corner=True,
+        palette=palettes[i],
+    )
+    # Or add a text annotation inside the plot:
+    g.axes[0, 0].text(
+        1,
+        -0.15,
+        r"$\rightarrow$ Improved education",
+        transform=g.axes[0, 0].transAxes,
+        ha="center",
+        color="purple",
+        fontsize=17,
+    )
+    handles, labels = g.axes[1, 0].get_legend_handles_labels()
+    g.legend.remove()
+    g.figure.legend(
+        handles=handles,
+        labels=labels,
+        markerscale=5,
+        fontsize="large",
+        title="DGP",
+        loc="upper right",
+        bbox_to_anchor=(
+            0.8,
+            0.8,
+        ),  # Adjust these coordinates to center it in the gap
+    )
+    plt.savefig(
+        DIR2FIG / f"5_dgp_equivalence_intervened_dgp_{i}.svg",
+        bbox_inches="tight",
+    )
+# %%
