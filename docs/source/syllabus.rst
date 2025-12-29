@@ -37,9 +37,7 @@ Session 1 -- Statistical learning and regularized linear models
 
 - Practical session:
 
-  - Common pitfalls in the interpretation of coefficients of linear models
-
-  - `Wage analysis with regularized models <https://colab.research.google.com/github/CausalAIBook/MetricsMLNotebooks/blob/main/PM2/python_ml_for_wage_prediction.ipynb>`__
+  - Common pitfalls in the interpretation of coefficients of linear models.
 
 - References:
 
@@ -73,7 +71,7 @@ Session 3 -- Potential outcomes, Directed Acyclic Graphs, confounder selection
 
 - Causal graph, front-door criteria, and valid adjustment sets.
 
-- Practical Session: DAGs, valid and invalid adjustment sets, with simple linear models and simulations.
+- Practical Session: DAGs, valid and invalid adjustment sets, with simple linear models and simulations. Introduction to the DoubleML package.
 
 - References:
 
