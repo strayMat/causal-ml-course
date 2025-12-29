@@ -5,7 +5,7 @@ description = "Mleco"
 authors = [{ name = "Matthieu Doutreligne", email = "matthieu.doutreligne@insee.fr" }]
 license = { text = "EUPL-v1.2" }
 readme = "README.md"
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.12,<3.14"
 keywords = []
 classifiers = [
     "Intended Audience :: Developers",
@@ -19,7 +19,8 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
-    "numpy==1.26",
+    "doubleml>=0.10.1",
+    "skrub>=0.4.1,<1.0.0",
     "networkx>=3.4.1,<4.0.0",
     "pgmpy>=0.1.26,<1.0.0",
     "tabulate>=0.9.0,<1.0.0",
@@ -28,9 +29,6 @@ dependencies = [
     "pysyncon>=1.5.1,<2.0.0",
     "cvxpy>=1.6.0,<2.0.0",
     "statsmodels>=0.14.4,<1.0.0",
-    "skrub>=0.4.1,<1.0.0",
-    "pmdarima>=2.0.4,<3.0.0",
-    "tfcausalimpact>=0.0.18,<1.0.0",
     "sphinx>=8.0.2,<9.0.0",
     "importlib-metadata>=8.2.0,<9.0.0",
     "myst-parser>=4.0.0,<5.0.0",
@@ -41,7 +39,7 @@ dependencies = [
     "ipython>=8.29.0,<9.0.0",
     "jupytext>=1.13.7,<2.0.0",
     "jupyter>=1.0.0,<2.0.0",
-    "python-dotenv>=0.20.0,<1.0.0"
+    "python-dotenv>=0.20.0,<1.0.0",
 ]
 
 [project.urls]
