@@ -283,7 +283,7 @@
   === $X = PP[text("Charlson score")]$: a comorbidity index summarizing the overall health state of the patient. Higher is bad for the patient.
 
   #pause
-  ❓ What is the effect of early access to MRI on the mortality at 7 days for stroke patients?
+  ❓ What is the effect of early access to MRI on mortality at 7 days for stroke patients?
 ]
 
 #slide(title: [Illustration: observational data])[
@@ -346,7 +346,7 @@
 
   ][
     #set align(center)
-
+    #pause
     == RCT data
     #fletcher-diagram(
       cell-size: 10mm,
@@ -405,21 +405,30 @@
 ] */
 
 #slide(title: [PICO framework @richardson1995well])[
-  Originally designed for clinical research. It is a structured approach to formulate a research question. Critical for
-  health technology assessment (eg. Haute Autorité de santé).
+  == Originally designed for clinical research
 
-  == PICO stands for
+  Structured approach to formulate a research question.
 
-  - Population : Who are we interested in?
-  - Intervention : What treatment/intervention do we study?
-  - Comparison : What are we comparing it to?
-  - Outcome : What are we interested in?
-  //- Define the causal measure //a bit too much for intro
-  #uncover(2)[
-    == Example with the job dataset @lalonde1986evaluating
-    Built to evaluate the impact of the National Supported Work (NSW) program. The NSW is a transitional, subsidized work
-    experience program targeted towards people with longstanding employment problems.
+  Critical for health technology assessment: Haute Autorité de santé / FDA.
+
+  #only(2)[
+    == PICO stands for
+
+    - Population : Who are we interested in?
+    - Intervention : What treatment/intervention do we study?
+    - Comparison : What are we comparing it to?
+    - Outcome : What are we interested in?
+    //- Define the causal measure //a bit too much for intro
   ]
+]
+#slide(title: [PICO framework @richardson1995well])[
+
+  == PICO example with the job dataset @lalonde1986evaluating
+  Built to evaluate the impact of the National Supported Work (NSW) program.
+
+  The NSW is a transitional, subsidized work
+  experience program targeted towards people with longstanding employment problems.
+
 ]
 
 #slide(title: "The PICO framework")[
@@ -484,12 +493,14 @@
     remains.
   ]
 
-  == Steps
-  - Potential outcome framework : mathematical tool to reason about causality
+  #only(2)[
+    == Steps
+    - Potential outcome framework : mathematical tool to reason about causality
 
-  - Directed acyclic graphs (DAG) : graphical tool to reason about causality
+    - Directed acyclic graphs (DAG) : graphical tool to reason about causality
 
-  - Causal estimand : what is the targeted quantity?
+    - Causal estimand : what is the targeted quantity?
+  ]
 ]
 
 #slide(title: [Potential outcomes, @neyman1923applications @rubin1974estimating])[
@@ -497,7 +508,9 @@
   - $Y$ be the outcome,
   - $A$ the (binary) treatment
 
-  For each individual, we have two potential outcomes: $Y(1)$ and $Y(0)$. But only one is observed, depending on the
+  Each individual has two potential outcomes: #c_treated($Y(1)$) and #c_control($Y(0)$).
+
+  But only one is observed, depending on the
   treatment assignment: $Y(A)$.
 
   #pause
@@ -650,7 +663,9 @@
 #slide(title: "Directed acyclic graphs (DAG), a tool to reason about causality")[
   == DAGs encode the causal structure of the data generating process
 
-  Introduced by @pearl1995causal, @pearl2000models. Good practical overview in @vanderweele2019principles.
+  Introduced by @pearl1995causal, @pearl2000models.
+
+  Good practical overview in @vanderweele2019principles.
 
   == Motivation
 
@@ -772,7 +787,7 @@
 
 #slide(title: "DAGs: causal paths")[
 
-  - Paths encode dependencies between random variables: not necessarily causal dependecies, it can be mere associations.
+  - Paths encode dependencies between random variables: not necessarily causal dependencies, it can be mere associations.
 
   #pause
   - We distinguish:
@@ -875,14 +890,14 @@
   ]
 ]
 
-#slide(title: "Three types of directed edges: mutual depence")[
+#slide(title: "Three types of directed edges: mutual dependence")[
 
   == Second, #alert[mutual dependence] or fork or confounder: $A arrow.l B arrow C$
 
 
   - A and C are not causally related but B is a common cause of both.
   - A and C are not independent, but are independent conditional on B.
-  - #alert[Not conditionning on X] introduces bias.
+  - #alert[Not conditioning on X] introduces bias.
 
   #grid(columns: (1fr, 2fr))[
     #align(center)[
@@ -943,7 +958,178 @@
   ]
 ]
 
-#slide(title: "Open and blocked paths by conditionning")[
+= Why do we need DAGs?
+
+#slide(title: "Two data generating processes (DGP) yielding identical data")[
+
+  === Setup
+
+  An HR analyst for a large tech company.
+
+  She has data on three variables for employees:
+
+  - #emoji.books Education (E): eg. university years.
+
+  - #emoji.brain Skills (S): eg. technical tests.
+
+  - #emoji.dollar Income (I): current annual income.
+
+  #only(2)[
+    #hyp_box(title: "Question")[
+      Would free education courses given to employees increase the whole company income ?
+    ]
+  ]
+]
+
+#slide(title: "First DGP: education is useful to increase skills")[
+  #v(1em)
+  #align(top)[
+    Is #emoji.books education  improving #emoji.brain skills,
+    thus increasing #emoji.dollar income ?
+  ]
+  #v(1em)
+  #grid(columns: (1fr, 1fr))[
+    #only(2)[
+      == Equations (simulation)
+      #eq[
+        $E_A = cal(N)(0, 1)$
+      ]
+      #eq[
+        $S_A = 0.8 E_A + cal(N)(0, 0.6^2)$
+      ]
+      #eq[
+        $I_A = 0.8 S_A + cal(N)(0, 0.6^2)$
+      ]
+
+    ]
+  ][
+    #align(center)[
+      #fletcher-diagram(
+        cell-size: 20mm,
+        node-stroke: 0.6pt,
+        spacing: 1.5em,
+        node-shape: circle,
+        let (E, S, I) = ((-1, 1), (0, 0), (1, 1)),
+        node(E, $E$),
+        node(S, $S$),
+        node(I, $I$),
+        edge(E, S, "->"),
+        edge(S, I, "->"),
+      )
+    ]#align(center)[This is a chain]
+  ]
+]
+
+#slide(title: "Second DGP: education is a signal for high skilled workers")[
+  #v(1em)
+  #align(top)[
+    Is #emoji.books education
+    a signal from people with high #emoji.brain skills
+    and #emoji.dollar high income?
+  ]
+  #v(1em)
+  #grid(columns: (1fr, 1fr))[
+    #only(2)[
+      === Equations (simulation)
+      #eq[
+        $S_B = cal(N)(0, 1)$
+      ]
+      #eq[
+        $E_B = 0.8 S_B + cal(N)(0, 0.6^2)$
+      ]
+      #eq[
+        $I_B = 0.8 S_B + cal(N)(0, 0.6^2)$
+      ]
+    ]
+  ][
+    #align(center)[
+      #fletcher-diagram(
+        cell-size: 20mm,
+        node-stroke: 0.6pt,
+        spacing: 1.5em,
+        node-shape: circle,
+        let (E, S, I) = ((-1, 1), (0, 0), (1, 1)),
+        node(E, $E$),
+        node(S, $S$),
+        node(I, $I$),
+        edge(S, E, "->"),
+        edge(S, I, "->"),
+      )
+    ]
+    #align(center)[This is a fork]
+  ]
+]
+
+#slide(title: "Same observed data, different causal effects")[
+  #grid(columns: (1fr, 1fr))[
+
+
+    #figure(
+      image("img/pyfigures/5_dgp_equivalence.svg", width: 85%),
+      caption: [Simulated data from the two DGPs.],
+    )
+  ][
+    #pause
+    Both DGP yield the same data distribution but different causal effects.
+
+    #pause
+    In the first DGP, increasing education increases skills and income
+
+    But not in the second !
+  ]
+]
+
+#slide(title: "Intervention: increase everyone's education by 2 units : DGP 1")[
+
+  #grid(columns: (1fr, 1fr))[
+    == Chain: $E arrow S arrow I$
+    === Equations after intervention
+
+    #eq[
+      $E_text("int") = E_A + 2.0$
+    ]
+    #eq[
+      $S_text("int") = 0.8 times E_text("int") + U_(s,A)$
+    ]
+    #eq[
+      $I_text("int") = 0.8 times S_text("int") + U_(i,A)$
+    ]
+    #eq[
+      $tau_1 = EE[I_text("int")] - EE[I_A]$
+    ]
+  ][
+    #image("img/pyfigures/5_dgp_equivalence_intervened_dgp_0.svg", width: 90%),
+  ]
+]
+
+#slide(title: "Intervention: increase everyone's education by 2 units: DGP 2")[
+  #grid(columns: (1fr, 1fr))[
+    == Fork: $E arrow.l S arrow I$
+    === Equations after intervention
+
+    #eq[
+      $E_text("int") = E_B + 2.0$
+    ]
+    #eq[
+      $S_text("int") = S_B$ #text(size: 0.8em)[(unchanged)]
+    ]
+    #eq[
+      $I_text("int") = 0.8 times S_text("int") + U_(i,B)$
+    ]
+    #eq[
+      $tau_2 = EE[I_text("int")] - EE[I_B] = 0$
+    ]
+  ][
+    #image("img/pyfigures/5_dgp_equivalence_intervened_dgp_1.svg", width: 90%),
+
+  ]
+]
+
+
+
+= Using DAGs to identify causal effects
+
+#slide(title: "Open and blocked paths by conditioning")[
 
   A path is #text(fill: orange)[blocked] (or d-separated) if:
   - the path contains a non-collider that has been conditioned on.
