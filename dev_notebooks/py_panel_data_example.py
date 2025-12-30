@@ -15,23 +15,24 @@
 # %% [markdown]
 # # Python: Real-Data Example for Multi-Period Difference-in-Differences
 #
-# In this example, we replicate a [real-data demo notebook](https://bcallaway11.github.io/did/articles/did-basics.html#an-example-with-real-data) from the [did-R-package](https://bcallaway11.github.io/did/index.html) in order to illustrate the use of `DoubleML` for multi-period difference-in-differences (DiD) models. 
+# In this example, we replicate a [real-data demo notebook](https://bcallaway11.github.io/did/articles/did-basics.html#an-example-with-real-data) from the [did-R-package](https://bcallaway11.github.io/did/index.html) in order to illustrate the use of `DoubleML` for multi-period difference-in-differences (DiD) models.
 #
 #
 #
 # The notebook requires the following packages:
 
 # %%
-import pyreadr
-import pandas as pd
 import numpy as np
-
-from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.dummy import DummyRegressor, DummyClassifier
-from sklearn.linear_model import LassoCV, LogisticRegressionCV
-
+import pyreadr
 from doubleml.data import DoubleMLPanelData
 from doubleml.did import DoubleMLDIDMulti
+from sklearn.dummy import DummyClassifier, DummyRegressor
+from sklearn.linear_model import (
+    LassoCV,
+    LinearRegression,
+    LogisticRegression,
+    LogisticRegressionCV,
+)
 
 # %% [markdown]
 # ## Causal Research Question
@@ -70,7 +71,7 @@ mpdta.head()
 
 # %%
 # Set values for treatment group indicator for never-treated to np.inf
-mpdta.loc[mpdta['first.treat'] == 0, 'first.treat'] = np.inf
+mpdta.loc[mpdta["first.treat"] == 0, "first.treat"] = np.inf
 
 dml_data = DoubleMLPanelData(
     data=mpdta,
@@ -78,7 +79,7 @@ dml_data = DoubleMLPanelData(
     d_cols="first.treat",
     id_col="countyreal",
     t_col="year",
-    x_cols=['lpop']
+    x_cols=["lpop"],
 )
 print(dml_data)
 
@@ -88,7 +89,7 @@ print(dml_data)
 # %% [markdown]
 # ## ATT Estimation: Unconditional Parallel Trends
 #
-# We start with identification under the unconditional parallel trends assumption. To do so, initialize a `DoubleMLDIDMulti` object (see [model documentation](https://docs.doubleml.org/stable/guide/models.html#difference-in-differences-models-did)), which takes the previously initialized `DoubleMLPanelData` object as input. We use scikit-learn's `DummyRegressor` (documentation [here](https://scikit-learn.org/stable/modules/generated/sklearn.dummy.DummyRegressor.html)) and `DummyClassifier` (documentation [here](https://scikit-learn.org/stable/modules/generated/sklearn.dummy.DummyClassifier.html)) to ignore the pre-treatment confounding variable. At this stage, we can also pass further options, for example specifying the number of folds and repetitions used for cross-fitting. 
+# We start with identification under the unconditional parallel trends assumption. To do so, initialize a `DoubleMLDIDMulti` object (see [model documentation](https://docs.doubleml.org/stable/guide/models.html#difference-in-differences-models-did)), which takes the previously initialized `DoubleMLPanelData` object as input. We use scikit-learn's `DummyRegressor` (documentation [here](https://scikit-learn.org/stable/modules/generated/sklearn.dummy.DummyRegressor.html)) and `DummyClassifier` (documentation [here](https://scikit-learn.org/stable/modules/generated/sklearn.dummy.DummyClassifier.html)) to ignore the pre-treatment confounding variable. At this stage, we can also pass further options, for example specifying the number of folds and repetitions used for cross-fitting.
 #
 # When calling the `fit()` method, the model estimates standard combinations of $ATT(g,t)$ parameters, which corresponds to the defaults in the [did-R-package](https://bcallaway11.github.io/did/index.html). These combinations can also be customized through the `gt_combinations` argument, see [the user guide](https://docs.doubleml.org/stable/guide/models.html#panel-data).
 
@@ -98,7 +99,7 @@ dml_obj = DoubleMLDIDMulti(
     ml_g=DummyRegressor(),
     ml_m=DummyClassifier(),
     control_group="never_treated",
-    n_folds=10
+    n_folds=10,
 )
 
 dml_obj.fit()
@@ -128,7 +129,7 @@ print(ci_joint)
 # %% [markdown]
 # A visualization of the effects can be obtained via the `plot_effects()` method.
 #
-# Remark that the plot used joint confidence intervals per default. 
+# Remark that the plot used joint confidence intervals per default.
 
 # %% tags=["nbsphinx-thumbnail"]
 fig, ax = dml_obj.plot_effects()
@@ -145,11 +146,11 @@ fig, ax = dml_obj.plot_effects()
 # ### Event Study Aggregation
 #
 #
-# We can aggregate the $ATT$s relative to the treatment timing. This is done by setting `aggregation="eventstudy"` in the `aggregate()` method. 
+# We can aggregate the $ATT$s relative to the treatment timing. This is done by setting `aggregation="eventstudy"` in the `aggregate()` method.
 #  `aggregation="eventstudy"` aggregates $\widehat{ATT}(\mathrm{g},t_\text{pre},t_\text{eval})$ based on exposure time $e = t_\text{eval} - \mathrm{g}$ (respecting group size).
 
 # %%
-# rerun bootstrap for valid simultaneous inference (as values are not saved) 
+# rerun bootstrap for valid simultaneous inference (as values are not saved)
 dml_obj.bootstrap(n_rep_boot=5000)
 aggregated_eventstudy = dml_obj.aggregate("eventstudy")
 # run bootstrap to obtain simultaneous confidence intervals
@@ -190,12 +191,14 @@ dml_obj_linear_logistic = DoubleMLDIDMulti(
     ml_g=LinearRegression(),
     ml_m=LogisticRegression(penalty=None),
     control_group="never_treated",
-    n_folds=10
+    n_folds=3,
 )
 
 dml_obj_linear_logistic.fit()
 dml_obj_linear_logistic.bootstrap(n_rep_boot=5000)
-dml_obj_linear_logistic.plot_effects(title="Estimated ATTs by Group, Linear and logistic Regression")
+dml_obj_linear_logistic.plot_effects(
+    title="Estimated ATTs by Group, Linear and logistic Regression"
+)
 
 
 # %% [markdown]
@@ -207,7 +210,9 @@ print(dml_obj_linear_logistic)
 # %%
 es_linear_logistic = dml_obj_linear_logistic.aggregate("eventstudy")
 es_linear_logistic.aggregated_frameworks.bootstrap()
-es_linear_logistic.plot_effects(title="Estimated ATTs by Group, Linear and logistic Regression")
+es_linear_logistic.plot_effects(
+    title="Estimated ATTs by Group, Linear and logistic Regression"
+)
 
 # %%
 dml_obj_lasso = DoubleMLDIDMulti(
@@ -215,12 +220,14 @@ dml_obj_lasso = DoubleMLDIDMulti(
     ml_g=LassoCV(),
     ml_m=LogisticRegressionCV(),
     control_group="never_treated",
-    n_folds=10
+    n_folds=10,
 )
 
 dml_obj_lasso.fit()
 dml_obj_lasso.bootstrap(n_rep_boot=5000)
-dml_obj_lasso.plot_effects(title="Estimated ATTs by Group, LassoCV and LogisticRegressionCV()")
+dml_obj_lasso.plot_effects(
+    title="Estimated ATTs by Group, LassoCV and LogisticRegressionCV()"
+)
 
 
 # %%
@@ -230,4 +237,6 @@ print(dml_obj_lasso)
 # %%
 es_rf = dml_obj_lasso.aggregate("eventstudy")
 es_rf.aggregated_frameworks.bootstrap()
-es_rf.plot_effects(title="Estimated ATTs by Group, LassoCV and LogisticRegressionCV()")
+es_rf.plot_effects(
+    title="Estimated ATTs by Group, LassoCV and LogisticRegressionCV()"
+)
