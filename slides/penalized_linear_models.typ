@@ -193,7 +193,7 @@
   == Setting
 
   - Data: n pairs of (features, outcome), $(x_i, y_i) in cal(X) times cal(Y)$ identically and independently distributed (i.i.d.) from an unknown distribution $P$.
-  - Goal: find a function $hat(f): cal(X) -> cal(Y)$ that approximates the true value of $y$ ie. for a new pair $(x, y)$, we should have:
+  - Goal: find a function $hat(f): cal(X) -> cal(Y)$ that approximates the true value of $y$ ie. for a #c_control("new") pair $(x, y)$, we should have:
 
   #eq[$hat(y)=hat(f)(x) approx y$]
 
@@ -234,7 +234,7 @@
 
   == Predictive inference
 
-  - Some problems in economics requires accurate prediction without a causal interpretation @kleinberg2015prediction, only knowledge of y (eg. stratifying on a risk score for loan, preventive care, ...)
+  - Some problems in economics require accurate prediction without a causal interpretation @kleinberg2015prediction, only knowledge of $y$ (eg. stratifying on a risk score for loan, preventive care, ...)
   - Reconstruct missing data: eg. imputation of missing values between two waves of a survey (eg. house prices, production of cultivation plots,...)
 
   #pause
