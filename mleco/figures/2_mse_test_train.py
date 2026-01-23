@@ -141,6 +141,7 @@ style_figs.light_axis()
 
 plt.ylabel("y", size=16, weight=600)
 plt.xlabel("x", size=16, weight=600)
+plt.plot(x_spline, y_spline, linewidth=3)
 
 
 plt.savefig(DIR2FIG / "splines_cubic_w_r2.svg", facecolor="none", edgecolor="none")
@@ -154,7 +155,6 @@ plt.text(
     verticalalignment="top",
     bbox=dict(facecolor="C1", alpha=0.5),
 )
-plt.plot(x_spline, y_spline, linewidth=3)
 
 plt.scatter(diabetes_X_test, diabetes_y_test, color="C1", s=9)
 plt.savefig(DIR2FIG / "splines_test_w_r2.svg", facecolor="none", edgecolor="none")

@@ -279,7 +279,7 @@
 
 #slide(title: "What high-dimension means, concrete example")[
 
-  - #link("https://ssphub.netlify.app/post/parquetrp/", "Population referencing individual files") (INSEE): $n=19, 735, 576$; $n_("cols")=88$ #emoji.fingers
+  - #link("https://ssphub.netlify.app/post/parquetrp/", "Population referencing individual files") (INSEE): $n=19, 735, 576$; $p=88$ #emoji.fingers
 
   - But many variables with cardinality: more than 555 pairs of (variable, category).
 
@@ -352,6 +352,9 @@
   #components.side-by-side(columns: (1fr, 1fr))[
     === Measure the errors on the training data => fitting
     #figure(image("img/pyfigures/ols_simple_w_r2.svg", width: 80%))
+    #only(1)[
+      $R^2$, normalized MSE : 1 is  perfect, 0 is as good as the mean
+    ]
   ][
     #uncover((2, 3))[
       === Measure the performances on test data => generalization
@@ -414,9 +417,9 @@
   - In finite sample regimes, #alert[the expectation $EE$ is not accessible] since we only have access to a finite number of data pairs
 
   #pause
-  - In practice, we minimize the #alert[empirical risk] or average loss $R_(text("emp"))= sum_(i=1)^n (f(x_i) - y_i)^2$:
+  - In practice, minimize the #alert[empirical risk] (average loss) $1/n sum_(i=1)^n (f(x_i) - y_i)^2$
 
-  #eq[$hat(f) = text("argmin")_(f in cal(F)) sum_(i=1)^n (f(x_i) - y_i)^2$]
+  #eq[$hat(f) = text("argmin")_(f in cal(F)) 1/n sum_(i=1)^n (f(x_i) - y_i)^2$]
 
   #pause
   - This creates the #highlight(fill: c_variance)[estimation error], related to sampling noise:
@@ -448,6 +451,8 @@
   == 🪙 Interesting problems exhibit randomness
 
   $y=g(x)+ e$ with $E(e|x)=0$ and $text("Var")(e|x)=sigma^2$
+
+  *Irreducible or Bayes Error or Aleatoric Uncertainty*, due to : randomness or unobserved variables.
 
   #pause
   == 🥇 $g(dot)$ is the best possible estimator
@@ -656,7 +661,7 @@
 
   $epsilon_i tilde cal(N)(0, sigma^2)$ and $epsilon_i tack.t.double X_i$
 
-  Model are typically fitted by linear algebra methods @hastie2009elements.
+  Model typically fitted by linear algebra methods @hastie2009elements.
 ]
 
 #slide(title: "Reminder: Linear regression")[
@@ -664,7 +669,7 @@
 
   #eq[$Y_i = X_i^T beta_0 + epsilon_i$]
 
-  #figure(image("img/penalized_linear_models/linear_fit_red.svg", width: 50%))
+  #figure(image("img/penalized_linear_models/linear_fit_red.svg", width: 45%))
 ]
 
 
@@ -822,13 +827,13 @@
 
 #slide(title: "Takeaway on feature expansion")[
 
-  == Feature expansion increase the family of models
+  == Feature expansion increases the size of the model family
 
   - Linear model can underfit : when n_features small or the problem is not linearly separable.
 
   - Feature expansion is an easy way to capture non-linear relationships.
 
-  - Different feature expansions exists: polynomial, log, splines, embeddings, kernels, ...
+  - Many types of feature expansions: polynomial, log, splines, embeddings, kernels, ...
 ]
 #slide(title: [Encoding categorical features with LLM])[
   #grid(columns: (
@@ -1080,8 +1085,8 @@
   ]
 
   #uncover(3)[
-    === Log likelihood for Lasso classification
-    $L(beta) = 1 / n sum_(i=1)^n [(y_i beta^T X_i - log[1 + exp(beta^T X_i)]] -lambda sum_(j=1)^(p)|beta_j|)$
+    === Log likelihood for Ridge classification
+    $L(beta) = 1 / n sum_(i=1)^n [(y_i beta^T X_i - log[1 + exp(beta^T X_i)]] -lambda sum_(j=1)^(p)beta_j^2)$
   ]
 
   #def_box(title: "🔔 Log likelihood for vanilla logistic regression")[
