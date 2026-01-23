@@ -83,6 +83,12 @@ Here are some datasets that you can use for the project. You can also use your o
      - 67
      - "How do nutrition habits affect long-term health outcomes?"
      - No
+   * - Online News Popularity
+     - `Link <https://archive.ics.uci.edu/dataset/332/online+news+popularity>`__
+     - 39,644
+     - 61
+     - "Does polarization causes a significant increase in shares?"
+     - No
 
 
 Other potential sources for Datasets:
