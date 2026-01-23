@@ -29,8 +29,11 @@ The expected steps or concepts are highlighted by a 🧐 emoticon.
 - Discussion on the assumptions chosen for identification of the effect
 - Estimation with an appropriate causal estimator (double post lasso, double machine learning, generic machine learning, inverse propensity score, augmented propensity score) and regressor (lasso, ridge, random forest, boosting). It is not expected that you test or use every method.🧐
 - Parameter/model selection for the statistical estimator (cross-validation) 🧐
-- Heterogeneous treatment effects: study the effect of the treatment on different subgroups of the population
-- Sensitivity analysis: placebo check, different models, different covariate sets
+- Develop and implement one of the following aspect (one choice among three)🧐:
+  - Compare different statistical estimators or causal models for you estimates of the population effect.
+  - Heterogeneous treatment effects: study the effect of the treatment on different subgroups of the population
+  - Policy learning : What would be the best assignment policy ? Take inspiration from the `doubleml case study <https://docs.doubleml.org/stable/examples/py_double_ml_policy_tree.html>`__.
+- Sensitivity analysis: placebo check, different covariate sets
 - Conclusion and discussion of the results 🧐
 
 NB: Concluding a valid causal inference study with non-randomized data is not always possible. Crucial confounders could be missing, or other bias could be present in the data production process. The goal of the project is to conduct the most rigorous analysis possible with the data that we are providing you and to discuss the limitations of the study (even if the limits are related to the data). We are not expecting you to be able to robustly conclude on a causal effect in all cases.
