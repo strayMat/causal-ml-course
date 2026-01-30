@@ -93,11 +93,12 @@
 
   - Statistical learning 101: bias-variance trade-off
 
-  - Regularization for linear models: Lasso, Ridge, Elastic Net
+  - Regularization for linear models: Lasso, Ridge, Post Lasso
 
   - Transformation of variables: polynomial regression
 
-  #uncover(2)[🤔 But... How to select the best model? the best hyper-parameters?]
+  #uncover(2)[🤔 But... How to select the best model? the best hyper-parameters?\
+   eg. regularization strength for Ridge]
 ]
 
 
@@ -192,13 +193,13 @@
     ```python
     from sklearn.model_selection import cross_validate
     cv_results = cross_validate(
-        regressor, data, target, cv=5, scoring="neg_mean_absolute_error"
+        pipeline, X, y, cv=5, scoring="neg_mean_absolute_error"
     )
     ```
   ]
   #only(2)[
     - 🙂 Robustly estimate generalization performance.
-    - 🤩 Estimate data variability of the performance : bigger source of variation @bouthillier2021accounting.
+    - 🤩 Estimate data variability of the performance : bigger source of variation in ML @bouthillier2021accounting.
     - 🚀 Let's use it to select the best models among several candidates!
   ]
 ]
@@ -235,6 +236,7 @@
         width: 70%,
       ),
     )
+    What is the best $alpha$ value for the Lasso regularization?
   ]
 
   #only((2, 3))[
@@ -267,24 +269,39 @@
   ]
 ]
 
+#slide(title: [Random search more efficient than grid search @bergstra12])[
+
+    #grid(columns: (1fr, 1fr), gutter: 3mm)[
+  #figure(
+    image(
+      "img/flexible_models/grid_vs_random_search.svg",
+      width: 100%,
+    ),
+  )][
+    - Grid search: Explores HP along all fixed directions (waste of time if one parameter is not important)
+    - Grid search: good HP may fall between grid points
+    - Random search: explores hyper-parameters in every direction
+  ]
+]
+
 
 #slide(title: "What final model to use for new prediction?")[
   - Often used in practice: #alert[refit on the full data] the model with the best hyper-parameters.
 
   #uncover((2, 3))[
-    - Theorically motivated: Aggregate the outputs from the cross-validate estimators of the best model:
+    - Theoretically motivated: Aggregate outputs from the cross-validate estimators of the best model:
     #eq[$hat(y) = 1/K sum_(k=1)^K hat(y)_k$] #h(2em)where $hat(y)_k$ is the prediction of the model trained on the $k$-th fold.
   ]
 
   #uncover(3)[
-    - #text(fill: orange)[Averaging cross-validate estimators selects the best model] asymptotically among a family of models @lecue2012oracle
+    - #text(fill: orange)[Averaging the estimators of the best model] selected by cross-validation select the best model for generalization performances @van2007super.
   ]
 ]
 
 #slide(title: [Naive cross-validation to select and estimate the best performances])[
   == Hyper-parameters selection is a kind of model fitting
 
-  Using a single loop of cross-validation, the full dataset is used to:
+  Using a single loop of cross-validation, the #alert[full dataset] is used to:
   - #alert[Select] the best hyper-parameters
   - #alert[Estimate] the generalization performance of the selected model
 
@@ -317,6 +334,9 @@
   ]
 ]
 
+#slide(title: "Nested cross-validation : An overview of the full procedure")[
+    #figure(image("img/flexible_models/grid_search_workflow.png", width: 70%))
+]
 // #slide(title: [Over-optimistic performance estimation: Real life example #emoji.skull])[
 //   //https://www.nature.com/articles/s41746-022-00592-y
 //   // intersting but a bit hard to explain in few words
@@ -545,6 +565,7 @@
     ]
     #only(3)[
       #figure(image("img/flexible_models/bagging0_cross.svg", width: 80%))
+      For a new observation, each tree predicts a class
     ]
   ][
     === Three bootstrap samples
@@ -667,7 +688,8 @@
     ]
     #only(4)[
       #figure(image("img/flexible_models/boosting_trees3.svg"))
-      == At each step, AdaBoost weights mispredicted samples
+      == At each step, reweights \
+      == mispredicted samples
     ]
   ]
 ]
@@ -692,15 +714,14 @@
   ]
   #uncover((5, 6, 7, 8))[
 
-    🔸 Compute $alpha_m = log((1 - "err"_m )/"err"_m)$\
+    🔸 Compute $alpha_m = 1/2 log((1 - "err"_m )/"err"_m)$ ranging from $0$, big overall error to $+infinity$, no error\
   ]
   #uncover((6, 7, 8))[
 
-    🔸 Set $w_i arrow w_i exp[alpha_m bb(1)[y_i !=F_m (x_i )], i = 1..N$\
+    🔸 Set $w_i arrow w_i exp[2 alpha_m bb(1)[y_i !=F_m (x_i )] e^(-alpha_m)$ for $i = 1..N$\
   ]
   #uncover((7, 8))[
-
-    🔸 Output $F(x) = "sign"(sum_(i=1)^M alpha_m G_m(x))$\
+    3.  Output $F(x) = "sign"(sum_(i=1)^M alpha_m F_m(x))$\
   ]
 ]
 
@@ -730,7 +751,7 @@
 
   Expand the loss inside the sum using #text(fill: orange)[a Taylor expansion.]\
 
-  #uncover((3, 4, 5))[
+  #uncover((3, 4))[
     $l(y_i, F_(m-1)(x_i) + h(x_i)) = underbrace(l(y_i, F_(m-1)(x_i)), "constant in "h(x_i)) + h(x_i) underbrace((partial l (y_i, F(x_i))) / (partial F(x_i))]_(F=F_(m-1)), \u{225D} g_i", the gradient")$
   ]
 
@@ -740,7 +761,7 @@
     ]
   ]
 
-  #only(5)[
+  #only(4)[
     Finally:
     $h_m = argmin(h) sum^n_(i=1) h(x_i) g_i$ -> kind of an inner product $<g, h>$
 
@@ -752,8 +773,8 @@
 #slide(title: "Boosting: Gradient boosting, regression example")[
   #grid(columns: (1fr, 1fr), gutter: 3mm)[
     == Regression
-    - The loss is: $l(y, F(x)) = (y - F(x))^2$
-    - The gradient is: $g_i = -2(y_i - F_(m-1)(x_i))$
+    - squared loss: $l(y, F(x)) = (y - F(x))^2$
+    - gradient: $g_i = -2(y_i - F_(m-1)(x_i))$
     💡The new tree should fit the residuals
   ][
     #figure(image("img/pyfigures/gradient_boosting_data.svg", width: 110%))
@@ -781,7 +802,7 @@
   #grid(columns: (1fr, 2fr), gutter: 3mm)[
     == Fit a second tree to the residuals
     - This tree performs well on some residuals.
-    - Let's zoom on one of those.
+    - Zoom on some of these poorly fitted residuals.
   ][
     #figure(image("img/pyfigures/gradient_boosting_residuals_before_zoom.svg", width: 85%))
   ]
