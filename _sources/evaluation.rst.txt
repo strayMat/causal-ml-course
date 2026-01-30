@@ -52,49 +52,42 @@ Here are some datasets that you can use for the project. You can also use your o
      - N
      - P
      - Question Example
-     - Interventional
    * - Wages (french version)
      - `Link <https://www.insee.fr/fr/statistiques/7651654#dictionnaire>`__
      - 2,403,775
      - 31
      - "What factors affect wage disparities?"
-     - No
    * - Diabetes 130-US hospitals
      - `Link <http://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008>`__
      - 101,766
      - 47
      - "What is the effect of HbA1c measurement on hospital readmission rates at 30 days?"
-     - No
    * - Student's dropout and academic success
      - `Link <http://archive.ics.uci.edu/dataset/697/predict+students+dropout+and+academic+success>`__
      - 4,424
      - 36
      - "What factor influence the dropout of students?"
-     - No
    * - Obesity levels in Mexico
      - `Link <http://archive.ics.uci.edu/dataset/544/estimation+of+obesity+levels+based+on+eating+habits+and+physical+condition>`__
      - 2,111
      - 16
      - "What action is the most effective to prevent obesity?"
-     - No
    * - Nutritional Followup (hard)
      - `Link <https://github.com/NickCH-K/causaldata/tree/main/Python/causaldata/nhefs>`__
      - 1,629
      - 67
      - "How do nutrition habits affect long-term health outcomes?"
-     - No
    * - Online News Popularity
      - `Link <https://archive.ics.uci.edu/dataset/332/online+news+popularity>`__
      - 39,644
      - 61
      - "Does polarization causes a significant increase in shares?"
-     - No
    * - Chicago police department (more data management needed)
      - `Link <https://github.com/invinst/chicago-police-data/blob/master/data/unified_data/data-dictionary/data-dictionary.yaml>`__
        - 100,000+
        - 100+
        - "What is the effect of the introduction of tasers on firearm use?" replication of [Ba et al., 2019](https://www.aeaweb.org/articles?id=10.1257/pandp.20191029)
-       - No
+
 
 Other potential sources for Datasets:
 
