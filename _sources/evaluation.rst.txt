@@ -82,11 +82,12 @@ Here are some datasets that you can use for the project. You can also use your o
      - 39,644
      - 61
      - "Does polarization causes a significant increase in shares?"
-   * - Chicago police department (more data management needed)
-     - `Link <https://github.com/invinst/chicago-police-data/blob/master/data/unified_data/data-dictionary/data-dictionary.yaml>`__
-       - 100,000+
-       - 100+
-       - "What is the effect of the introduction of tasers on firearm use?" replication of [Ba et al., 2019](https://www.aeaweb.org/articles?id=10.1257/pandp.20191029)
+   * - Job-search counseling policies
+     - `Link <https://www.openicpsr.org/openicpsr/project/113904/version/V1/view>`__
+     - 200,000+ 
+     - 83
+     - "What is the heterogeneity of the effect of two different job-seeking counseling programs on employment outcomes?"
+     
 
 
 Other potential sources for Datasets:
