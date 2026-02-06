@@ -186,7 +186,7 @@
 
   #figure(
     image("img/po_reminder_and_dags/cross_validation.png", width: 50%),
-    caption: ["Cross validation" @varoquaux2017assessing],
+    caption: [Illustration from @varoquaux2017assessing],
   )
 ]
 
@@ -219,13 +219,15 @@
 #slide(title: "Machine learning might be less successful for what if questions")[
   == Machine learning is not driven by causal mechanisms
 
-  - For example people that go to the hospital die more than people who do not #footnote[Example from #link("sklearn mooc")[https://inria.github.io/scikit-learn-mooc/concluding_remarks.html?highlight=causality]]:
+  Consider the following example #footnote[From #link("sklearn mooc")[https://inria.github.io/scikit-learn-mooc/concluding_remarks.html?highlight=causality]]:
 
-  - Naive data analysis might conclude that hospitals are bad for health.
+  - #emoji.hospital People going to the hospital die more often than others.
+
+  - #emoji.face.monocle Hospitals are bad for health?
 
   #pause
-  - The fallacy is that we are comparing different populations: people who go to the hospital typically have a worse
-    baseline health than people who do not.
+  - The fallacy is that we are comparing different populations: people going to the hospital typically have a worse
+    baseline health than others.
 
   #def_box(
     [
@@ -257,11 +259,11 @@
   ][
     #align(horizon)[
       Causal inference models
-      $(X, A, Y(A=1), Y(A=0))$\
-      ie. the covariate shift between treated and control units.
+      $(X, A, Y(A))$\
+      ie. the covariate shift between differently treated units.
     ]
   ]
-  #hyp_box([No unmeasured variables influencing both treatment and outcome.], title: "Assumption: No counfounders")
+  #hyp_box([No unmeasured variables influencing both treatment and outcome.], title: "Assumption: no unmeasured confounders")
 
 ]
 
@@ -269,6 +271,7 @@
 
   === Population: patients experiencing a stroke
 
+  #only("1")[Crucial to distinguish ischemic from hemorrhagic stroke for adequate follow-up.]
   #pause
   === #c_treated[Intervention $A = 1$: Patients had access to a MRI scan #text(weight: "extrabold")[in less than 3 hours] after the first
     symptoms]
@@ -307,7 +310,7 @@
 ]
 
 #slide(title: [Illustration: observational data, a naive solution])[
-  == Compute the difference in mean (DM): $tau_(text("DM"))=$ $$#c_treated[$EE[Y(1)]$] - #c_control($EE[Y(0)]$)
+  === Compute the difference in mean (DM): $tau_(text("DM"))=$ $$#c_treated[$EE[Y(1)|A=1]$] - #c_control($EE[Y(0)|A=0]$)
 
   #pause
   #figure(
@@ -319,7 +322,7 @@
   (False) conclusion: early access to MRI is associated with a higher mortality at 7 days.
 ]
 
-#slide(title: [RCT case: No problem of confounding])[
+#slide(title: [#emoji.lightbulb Randomized Control Trial (RCT): no problem of confounding])[
 
   #grid(columns: (1fr, 1fr), gutter: 10mm)[
     #set align(center)
@@ -375,10 +378,11 @@
 ]
 
 #slide(title: [Illustration: RCT data, a naive solution that works!])[
-  == Compute the difference in mean (DM): $tau_(text("DM"))=$ $$#c_treated[$EE[Y(1)]$] - #c_control($EE[Y(0)]$)
+  === Compute the difference in mean (DM): $tau_(text("DM"))=$ $$#c_treated[$EE[Y(1)|A=1]$] - #c_control($EE[Y(0)|A=0]$)
 
   #figure(image("img/po_reminder_and_dags/sample_rct_mean_difference.png", width: 75%))
 ]
+
 
 #slide(title: "Causal inference: framing with PICO and identification with DAGs")[
   #set align(horizon)
@@ -394,7 +398,6 @@
 ]
 
 = Framing: How to ask a sound causal question
-
 //lalonde example from the book (I am less fan of no intervention examples).
 
 /* #slide(
@@ -734,6 +737,7 @@
         node(X, "X"),
         edge(X, Y, "->"),
         edge(X, A, "->"),
+        edge(A, Y, "->"),
       )
     ]
   ][
@@ -845,20 +849,18 @@
     edge(X_2, X_4, "->"),
     edge(X_5, X_1, "->"),
     edge(X_5, X_4, "->"),
+    edge(X_3, X_4, "->"),
   )
 
   #pause
-  - $X_5 arrow X_1 arrow X_2 arrow X_4$
-  - $X_5 arrow X_4$
+  - $X_1 arrow X_2 arrow X_4$
+  - $X_1 arrow X_3 arrow X_4$
   - $X_1 arrow.l X_5 arrow X_4$ : non causal
-  - $X_3 arrow.l X_1 arrow X_2 arrow X_4$ : non causal
-
 ]
 
-#slide(title: "Three types of directed edges: path")[
+#slide(title: "Three types of paths: chain")[
 
-  There are three kinds of “triples" or paths with three nodes: These constitute the most basic building blocks for causal
-  DAGs.
+  Three kinds of “triples" or paths with three nodes:  most basic building blocks for causal DAGs.
 
   == First, a #alert[causal path] (or chain): $A arrow B arrow C$
 
@@ -890,7 +892,7 @@
   ]
 ]
 
-#slide(title: "Three types of directed edges: mutual dependence")[
+#slide(title: "Three types of paths: mutual dependence")[
 
   == Second, #alert[mutual dependence] or fork or confounder: $A arrow.l B arrow C$
 
@@ -925,7 +927,7 @@
   ]
 ]
 
-#slide(title: "Three types of directed edges: collider")[
+#slide(title: "Three types of paths: collider")[
 
   == Third, #alert[collider]: $A arrow B arrow.l C$
 
@@ -1161,7 +1163,7 @@
         let (A, X, Y) = ((-1, 1), (0, 0), (1, 1)),
         node(A, $A$),
         node(X, $X$),
-        node(Y, $Y$),
+        node(Y, $Y$, fill: rgb("#9c9c9c")),
         edge(X, A, "->"),
         edge(X, Y, "->", stroke: red),
         edge(A, Y, "->", stroke: red),
@@ -1283,7 +1285,7 @@
   #pause
   $X_1 arrow.l X_5 arrow X_4$
 
-  $X_2 arrow.l arrow.l X_5 arrow X_4$
+  $X_2 arrow.l X_1 arrow.l X_5 arrow X_4$
 
 ]
 
@@ -1323,9 +1325,9 @@
   - Don’t condition on colliders! Eg. don't condition on post-treatment variables.
 
   #pause
-  In the following example, to estimate the effect of T on Y, we should:
+  In the following example, to estimate the effect of A on Y, we should:
   - Condition on X
-  - NOT condition on M because it is a descendant of T
+  - NOT condition on C because it is a descendant of A
 
   #align(center)[
     #fletcher-diagram(
@@ -1527,7 +1529,7 @@
   #pause
   === High-level strategy
 
-  Control solely for pre-treatment variables that influences both the outcomes, the treatment or both.
+  Control solely for pre-treatment variables that influences the outcomes or both the treatment and outcomes.
   /* #set align(bottom)
 
   #grid(
@@ -1642,8 +1644,8 @@
   #figure(image("img/po_reminder_and_dags/tutorial_ci_results_confounders.png", width: 100%))
   #pause
 
-  - Missing imortant confounders lead to bias estimates.
-  - Missing less important confounders lead to less precise estimates: a perfect DAG might not be needed.
+  - Missing important confounders leads to biased estimates.
+  - Missing less important confounders still recover the true estimate: a perfect DAG might not be needed.
 ]
 
 
