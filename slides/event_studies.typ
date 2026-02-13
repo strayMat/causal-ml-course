@@ -31,6 +31,15 @@
   set text(fill: blue)
   body
 }
+#let c_yellow(body) = {
+  set text(fill: rgb("#d39e57"))
+  body
+}
+
+#let c_target(body) = {
+  set text(fill: rgb("#d800a9da"))
+  body
+}
 
 #let eq(body, size: 1.1em) = {
   set align(center)
@@ -214,44 +223,52 @@
   #only(3)[
     ⚠️ $EE[Y_t (0)] = underbrace(EE[Y_t (0) |D=0], "observed") PP(D=0) + underbrace([Y_t (0) |D=1], "counterfactual") PP(D=1)$
   ]
-  #only((4, 5))[
+  #only((4))[
+    === Plotting all observed data
+  ]
+  #only((5, 6))[
     === Our target is the average treatment effect on the treated (ATT)
+  ]
+  #only((4, 5, 6))[
 
     #figure(image("img/pyfigures/did_factual.svg", width: 50%))
   ]
 
-  #only(4)[$tau_("ATT") = EE[Y_2 (1)| D = 1] - EE [Y_2(0)| D = 1]$]
+  #only(5)[$tau_("ATT") = EE[Y_2 (1)| D = 1] - EE [Y_2(0)| D = 1]$]
 
   #only(
-    5,
+    6,
   )[$tau_("ATT") = underbrace([Y_2 (1)| D = 1], #c_treated("treated outcome for t=2")) - underbrace(EE [Y_2(0)| D = 1], "unobserved counterfactual")$]
 
-  #only(6)[
+  #only(7)[
     === First assumption, no anticipation of the treatment
 
     $EE[Y_1(1)|D=1]=EE[Y_1(0)|D=1]$
 
     #figure(image("img/pyfigures/did_no_anticipation.svg", width: 50%))
+
+    ie. No effect of the treatment before implementation.
   ]
 
-  #only((7, 10))[=== Second assumption, parallel trends]
-  #only(7)[
+  #only((8, 11))[=== Second assumption, parallel trends]
+  #only(8)[
     $EE[Y_2(0) - Y_1(0) | D = 1] = EE[Y_2(0) - Y_1(0) | D = 0]$
     #figure(image("img/pyfigures/did_parallel_trends.svg", width: 50%))
   ]
 
-  #only(8)[
+  #only(9)[
     // #only(7)[#footnote[#text("⚠️ Strong assumption ! We will come back to it later.", size: 15pt)]
     $underbrace([Y_2(0) - Y_1(0) | D = 1], #c_treated("Trend(1)")) = underbrace(EE[Y_2(0) - Y_1(0) | D = 0], #c_control("Trend(0)"))$
     #figure(image("img/pyfigures/did_parallel_trends_w_coefs.svg", width: 50%))
   ]
 
-  #only(9)[
-    $EE[Y_2(0) | D = 1]= EE[Y_1(0) | D = 1] + EE[Y_2(0) - Y_1(0) | D = 0]$
+  #only(10)[
+    === Isolating target unobserved counterfactual
+    $#c_target[$EE[Y_2(0) | D = 1]$] = underbrace(EE[Y_1(0) | D = 1], "unobserved counterfactual") + underbrace(EE[Y_2(0) - Y_1(0) | D = 0], #c_control("Trend(0)"))$
     #figure(image("img/pyfigures/did_parallel_trends_w_coefs.svg", width: 50%))
   ]
-  #only(10)[
-    $EE[Y_2(0) | D = 1]= underbrace(EE[Y_1(0) | D = 1], "unobserved counterfactual") + EE[Y_2(0) - Y_1(0) | D = 0]$
+  #only(11)[
+    $#c_target[$EE[Y_2(0) | D = 1]$]= underbrace(EE[Y_1(0) | D = 1], EE [Y_1(1)|D=1] "(no anticipation)") + EE[Y_2(0) - Y_1(0) | D = 0]$
     #figure(image("img/pyfigures/did_parallel_trends_w_coefs.svg", width: 50%))
   ]
 
@@ -259,8 +276,8 @@
 
 #slide(title: "Identification of ATT")[
 
-  $tau_("ATT") &= EE[Y_2(1)| D = 1] - EE [Y_2(0)| D = 1]\
-  &= underbrace(EE[Y_2(1)| D = 1] - EE[Y_1(0)|D=1], #c_treated("Factual Trend(1)")) - underbrace(EE[Y_2(0)|D=0] - EE[Y_1(0)|D=0], #c_control("Trend(0)"))$
+  $tau_("ATT") &= EE[Y_2(1)| D = 1] - #c_target[$EE [Y_2(0)| D = 1]$]\
+  &= underbrace(EE[Y_2(1)| D = 1] - EE[Y_1(1)|D=1], #c_treated("Factual Trend(1)")) - underbrace(EE[Y_2(0)|D=0] - EE[Y_1(0)|D=0], #c_control("Trend(0)"))$
   #figure(image("img/pyfigures/did_att.svg", width: 50%))
 ]
 
@@ -320,7 +337,7 @@
 
   #pause
 
-  == Can we do better: i.e. robust to the parallel trend assumption?
+  == Can we force robust to the parallel trend assumption?
 ]
 
 = Synthetic controls
@@ -347,31 +364,16 @@
   What is the effect of tobacco tax on cigarettes sales? @abadie2010synthetic
 ]
 
-#slide(title: "Examples of application of synthetic controls to epidemiology")[
-
-  - Literature review of the usage of SCM in healthcare (up to 2016): @bouttell2018synthetic
-
-  == Some use cases
-
-  - What is the effect of UK pay-for-performance program in primary care on mortality? @ryan2016long
-
-  - What is the effect of soda taxes on sugar-based product consumption? @puig2021impact
-
-  - What is the effect of Ohio vaccine lottery on covid-19 vaccination? @brehm2022ohio
-
-  - What is the effect of wildfire storm on respiratory hospitalizations? @sheridan2022using
-]
-
 #slide(title: [Synthetic control example: California's Proposition 99 @abadie2010synthetic])[
   == Context
 
-  1988: 25-cent tax/pack of cigarettes, ban of on cigarette vending machines in public areas accessible by juveniles, and ban on single cigarettes sales.
+  1988: 25-cent tax/pack of cigarettes + ban of on cigarette vending machines in public areas accessible by juveniles + ban on single cigarettes sales.
 
   #pause
 
   == Setup
 
-  - Outcome, $Y_(j, t)$: cigarette sales per capita
+  - Outcome, $Y_(j, t)$: cigarette sales per capita in state $j$
 
   #pause
 
@@ -404,7 +406,7 @@
 #slide(title: "Synthetic control example: plot the data")[
   #figure(image("img/pyfigures/scm_california_and_other_states.svg", width: 70%))
   #pause
-  💡 Force parallel trends: Find a weighted average of other states that predicts well the pre-treatment trend of California (before $T_0=1988$).
+  💡 #alert[Force parallel trends] with a weighted average of other states that predicts well the pre-treatment trend of California (before $T_0=1988$).
 ]
 
 #slide(title: "Synthetic control as weighted average of control outcomes")[
@@ -415,11 +417,11 @@
     $#c_treated[$hat(Y)_(1, t)$] = sum_(j=2)^(n_0 + 1) hat(w)_j #c_control[$Y_(j, t)$]$
 
     #only((2, 3, 4))[
-      🤔How to choose the weights?
+      🤔How to choose these weights?
     ]
 
-    #only((2, 3, 4))[
-      Minimize some distance between the treated and the controls.
+    #only((3, 4))[
+      #emoji.lightbulb Minimize some distance between the treated and the controls.
     ]
 
     #only(4)[
@@ -439,9 +441,9 @@
   Pre-treatment characteristics concatenate pre-treatment outcomes and other pre-treatment predictors $Z_1$ eg. cigarette prices:
 
   #grid(columns: (1fr, 1fr), gutter: 3mm)[
-    #c_treated[$X_("treat") = X_1 = vec(Y_(1, 1), Y_(1,2), ..., Y_(1, T_0), Z_1)$] $in R^(p times 1)$
+    #c_treated[$X_("treat") = X_1 = vec(Y_(1, 1), Y_(1,2), ..., Y_(1, T_0), Z_1)$] $in RR^(p times 1)$
   ][
-    #c_control[$X_("control") = (X_2, .., X_(n_0 + 1))$] $in R^(p times n_0)$
+    #c_control[$X_("control") = (X_2, .., X_(n_0 + 1))$] $in RR^(p times n_0)$
   ]
 
   === Minimization problem #only(5)[with constraints]
@@ -452,9 +454,9 @@
   ]
 
   #only(4)[
-    where $||X||_V = sqrt(X^T V X) " with " V in "diag"(R^p)$
+    where $||X||_V = sqrt(X^T V X) " with " V in "diag"(RR^p)$
 
-    //    This gives more importance to some features than others.
+    V gives feature importance (prior knowledge).
   ]
   #only(5)[
     $w^(*) &= "argmin"_(w) ||X_("treat") - X_("control") w||_V^2\
@@ -474,7 +476,7 @@
   #pause
   == Interpolation enforces regularization, thus limits overfitting
 
-  Same kind of regularization than L1 norm in Lasso: forces some coefficient to be zero.
+  Same kind of regularization than L1 norm in Lasso: avoid extreme coefficients.
 
   // (both are #link("https://en.wikipedia.org/wiki/Convex_optimization", [_optimization with constraints on a simplex_])).
 ]
@@ -483,7 +485,7 @@
 
   #set align(horizon)
   #grid(columns: (2fr, 2fr), gutter: 3mm)[
-    $p=2 T_0$ covariates:
+    $p=2 times T_0$ covariates:
 
     $X_j= vec(Y_(j, 1), ..., Y_(j, T_0), Z_(j, 1), ..., Z_(j, T_0))^T in R^(2T_0)$
 
@@ -492,16 +494,17 @@
     #only(2)[
       Model: $underbrace(X_("treat"), p times 1) tilde underbrace(X_("control"), p times n_0) underbrace(w, n_0)$
     ]
-    #only(3)[#alert("-> Simple linear regression estimated by OLS")]
+    #only(3)[#alert("-> Estimation with OLS")]
 
-    #only((3, 4, 5))[
-      Prediction: $hat(Y)_("synth") = vec(Y_(t, j))_(t=1..T#linebreak()j=2..n_0+1) w$
+    #only((3, 4))[
+      Prediction: $hat(Y)_("synth") = vec(Y_(t, j))_(t=1..T#linebreak()j=2..n_0+1) hat(w)$
     ]
   ][
-    #pause
-    #figure(image("img/pyfigures/scm_california_vs_synth_lr.svg", width: 100%))
+     #only((4))[
+      #figure(image("img/pyfigures/scm_california_vs_synth_lr.svg", width: 100%))
+     ]
   ]
-  #only(5)[=== 😭 Overfitting]
+  #only(4)[=== 😭 Overfitting]
 ]
 
 
@@ -515,13 +518,13 @@
   #pause
   3. Minimize pre-treatment mean squared prediction error (MSPE) of the treated unit:
   #text(size: 0.9em)[
-    $"MSPE"(V) &= sum_(t=1)^(T_0) [Y_(1, t) - sum_(j=2)^(n_0+1) w_j^*(V) Y_(j, t)]^2 = || vec(Y_(1, t))_(t=1..T_0) - vec(Y_(j, t))^T_(j=2..n_0+1#linebreak()t=1..T_0) hat(w) ||_(2)^(2)$
+    $"MSPE"(V) &= sum_(t=1)^(T_0) [Y_(1, t) - sum_(j=2)^(n_0+1) w_j^*(V) Y_(j, t)]^2 = || vec(Y_(1, t))_(t=1..T_0) - vec(Y_(j, t))^T_(j=2..n_0+1#linebreak()t=1..T_0) w^*(V) ||_(2)^(2)$
   ]
 
-  This solution is solved by running two optimization problems:
-  - #alert[Inner loop] solving $w^*(V)= "argmin"_(w) ||X_("treat") - X_("control") w||_V^2$
+  This solution is solved by running two optimization problems successively:
+  - #alert[Inner optimization] solving $w^*(V)= "argmin"_(w) ||X_("treat") - X_("control") w||_V^2$
 
-  - #alert[Outer loop] solving $V^*= "argmin"_(V) "MSPE"(V)$
+  - #alert[Outer optimization] solving $V^*= "argmin"_(V) "MSPE"(V)$
 ]
 
 #slide(title: "Synthetic controls: estimation without the outer optimization problem")[
@@ -533,7 +536,8 @@
     Y cigarette sales, Z cigarette prices.
 
 
-    SCM minization with $V = I_(p)$, st, $||X||_V = ||X||_2$.
+    SCM minization with \
+    $V = I_(p)$, ie. $||X||_V = ||X||_2$.
     #v(1em)
 
     $w^(*) &= "argmin"_(w) ||X_("treat") - X_("control") w||_2^2\
@@ -554,9 +558,9 @@
 
 #slide(title: "Synthetic controls: inference")[
 
-  === Variability does not come from the variability of the outcomes
+  === Variability does not come from the variability of the outcomes (often aggregated)
 
-  Indeed, aggregates are often not very noisy (once deseasonalized)...
+  Usually, aggregates are not very noisy (once deseasonalized)...
 
   #pause
   === ... but from the variability of the chosen control units
@@ -590,14 +594,15 @@
   #pause
 
   - More variance after the treatment for California than before.
-  - Some states have pre-treatment trends which are hard to predict.
+  - Some states have pre-treatment trends which are hard to predict : \
+        Expected because interpolation not possible for them.
 ]
 
-#slide(title: "Example of placebo test: For 34 control states with good pre-treatment fit")[
+#slide(title: "Example of placebo test: Focus on 34 controls with good pre-treatment fit")[
 
   #figure(image("img/pyfigures/scm_placebo_test_wo_outliers.svg", width: 70%))
 
-  I removed the states above the 90 percentiles of the distribution of the pre-treatment fit.
+  Removing states above the 90 percentiles of the distribution of the pre-treatment fit.
 ]
 
 #slide(title: "Example of placebo tests: distribution")[
@@ -610,8 +615,11 @@
       $hat(tau)_("scm, california")=-17.00$
 
       === Get a p-value
-      #h(1em)
-      $"PV" &= 1 / (n_0) sum_(j=2)^(n_0) bb(1) big("(") |hat(tau)_("scm, california")| > |hat(tau)_("scm", j)| big(")")\ &= 0.029$
+      In how many repetitions is California's effect above the placebo effect ?
+
+      #v(2em)
+      $p &=1 -  1 / (n_0) sum_(j=2)^(n_0) bb(1) big("(") |hat(tau)_("scm, california")| > |hat(tau)_("scm", j)| big(")")\
+      &= 0.029$
     ]
 
   ][
@@ -635,8 +643,7 @@
   ]
 
   #pause
-  If it has an impact on the outcome after the treatment:
-  For state in [KS, MD, AL, CT, FL], there is a step change in the outcome after the treatment: $bb(1)[t>T_0]$
+  Failure when confounding event has an impact on outcomes for only some control states and the treated (#c_yellow("KS, MD, AL, CT, FL")): $bb(1)[t>T_0]$ so no treatment effect.
 ]
 
 #slide(title: "Synthetic controls failure: appropriate controls")[
@@ -649,12 +656,11 @@
   🤩 We would conclude to no effect of the treatment.
 ]
 
-#slide(title: "Synthetic controls failure: data-driven controls")[
-  === Focus on all comparison states
+#slide(title: "Synthetic controls failure: data-driven controls with all comparison states")[
 
   #figure(image("img/event_studies/scm_failure_data_driven_controls.png", width: 50%))
 
-  SCM matches pre-treatment trends, without taking into account the confounding event.
+  SCM matches pre-treatment trends, fails to detect the confounding event.
 
   😥 We would falsely conclude to a positive treatment effect.
 ]
@@ -680,7 +686,7 @@
   See @arkhangelsky2021synthetic for discussions.
 ]
 
-= Interrupted time-series: methods without a control group
+= Interrupted time-series:\ methods without a control group
 
 #slide(title: "Interrupted Time Series: intuition")[
   == Setup
@@ -1205,7 +1211,7 @@
     table.header("Methods", "Characteristics", "Hypotheses", "Community", "Introduction"),
     "DID/TWFE",
     [Treated/control units, few time periods, no predictors],
-    [Parallel trends, no anticipation, prone to overfitting],
+    [Parallel trends, no anticipation, homogeneous effect],
     [Economics],
     [#link(
       "https://matheusfacure.github.io/python-causality-handbook/13-Difference-in-Differences.html",
@@ -1254,9 +1260,9 @@
     [#link("https://cran.r-project.org/web/packages/did/index.html", "did")],
     "Difference-in-differences",
     [❌],
+    [✅],
     [❌],
-    [❌],
-
+    [#link("https://github.com/lrberge/fixest", "fixest")], "Fixed effects", [✅], [✅], [✅],
     [#link("https://pkg.robjhyndman.com/forecast/reference/Arima.html", "forecast")], "ARIMA, ITS", [✅], [❌], [✅],
     [#link("https://cran.r-project.org/web/packages/Synth/index.html", "Synth")], "Synthetic control", [❌], [✅], [✅],
     [#link("https://github.com/google/CausalImpact", "Causal impact")], "Bayesian state space models", [✅], [❌], [✅],
@@ -1271,36 +1277,25 @@
     columns: 5,
     align: (left, left, center, center, center),
     table.header([Package name], [Methods], [Predictors], [Control units], [Multiple time periods]),
-    [#link("https://www.statsmodels.org/stable/regression.html", "statsmodels.OLS")],
-    "Difference-in-differences, TWFE",
-    [❌],
-    [❌],
-    [❌],
+    [#link("https://py-econometrics.github.io/pyfixest/pyfixest.html", [#emoji.heart pyfixest])],
+    [Fixed effects],
+    [✅],
+    [✅],
+    [✅],
 
     [#link("https://www.statsmodels.org/stable/examples/index.html#state-space-models", "statsmodels")],
-    "ARIMA(X), ITS, bayesian state space models",
+    "ARIMA(X), ITS, bayesian state space models, DID",
     [✅],
     [❌],
     [✅],
 
     [#link("https://alkaline-ml.com/pmdarima/index.html", "pmdarima")], "ARIMA(X), ITS", [✅], [❌], [✅],
-    [#link("https://github.com/OscarEngelbrektson/SyntheticControlMethods", "SyntheticControlMethods")],
-    "Synthetic control",
-    [❌],
-    [✅],
-    [✅],
-
+    [#link("https://docs.doubleml.org/stable/examples/index.html#difference-in-differences", [#emoji.heart DoubleML])], "DID with double ML debiasing", [✅], [✅], [✅],
     [#link("https://github.com/sdfordham/pysyncon", "pysyncon")], "Synthetic control", [❌], [✅], [✅],
-    [#link("https://github.com/jamalsenouci/causalimpact/", "causalimpact (pymc implementation)") ],
-    "Bayesian state space models",
+    [#link("https://causalpy.readthedocs.io", [#emoji.heart CausalPy]) ],
+    "Synthetic control, interrupted time series, DID",
     [✅],
-    [❌],
     [✅],
-
-    [#link("https://github.com/tcassou/causal_impact/tree/master", "causal-impact (statsmodels implementation)")],
-    "Bayesian state space models",
-    [✅],
-    [❌],
     [✅],
   )
 ]
@@ -1337,6 +1332,22 @@
 ]
 
 = Supplementary materials
+
+#slide(title: "Examples of application of synthetic controls to epidemiology")[
+
+  - Literature review of the usage of SCM in healthcare (up to 2016): @bouttell2018synthetic
+
+  == Some use cases
+
+  - What is the effect of UK pay-for-performance program in primary care on mortality? @ryan2016long
+
+  - What is the effect of soda taxes on sugar-based product consumption? @puig2021impact
+
+  - What is the effect of Ohio vaccine lottery on covid-19 vaccination? @brehm2022ohio
+
+  - What is the effect of wildfire storm on respiratory hospitalizations? @sheridan2022using
+]
+
 
 #slide(title: "Synthetic controls: conformal prediction inference")[
 
