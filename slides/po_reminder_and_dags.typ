@@ -81,7 +81,7 @@
   author: [Matthieu Doutreligne],
   title: "Machine Learning for econometrics",
   subtitle: [Reminders of potential outcomes and Directed Acyclic Graphs],
-  date: "January 10, 2025",
+  date: "February 10th, 2026",
   extra: "Thanks to Judith Abecassis for the slides on DAGs",
 )
 
@@ -263,7 +263,10 @@
       ie. the covariate shift between differently treated units.
     ]
   ]
-  #hyp_box([No unmeasured variables influencing both treatment and outcome.], title: "Assumption: no unmeasured confounders")
+  #hyp_box(
+    [No unmeasured variables influencing both treatment and outcome.],
+    title: "Assumption: no unmeasured confounders",
+  )
 
 ]
 

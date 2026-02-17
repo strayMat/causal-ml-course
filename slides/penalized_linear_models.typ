@@ -85,7 +85,7 @@
   title: "Machine Learning for econometrics",
   subtitle: "Statistical learning and regularized linear models",
   extra: [A lot of today's content is taken from the excellent #link("https://inria.github.io/scikit-learn-mooc/toc.html", "sklearn mooc") @loic_esteve_2022_7220307],
-  date: "January 10, 2025",
+  date: "January 27th, 2026",
 )
 
 #slide(title: "About me 👋")[
@@ -840,13 +840,14 @@
       1fr,
       1fr,
     ))[
-      - Transform text data into numerical vectors
-      - Projection into an adapted feature space:\ good notion of distance
-      - Easy to use (but computational-heavy) with #link("https://skrub-data.org/stable/reference/generated/skrub.TextEncoder.html#skrub.TextEncoder")[skrub `Texencoder`]][
-        #figure(
-    image("img/penalized_linear_models/ken_embeddings.png", width: 80%),
-    caption: [2D projection of embedded wikipedia entities @cvetkov2023relational]
-  )]
+    - Transform text data into numerical vectors
+    - Projection into an adapted feature space:\ good notion of distance
+    - Easy to use (but computational-heavy) with #link("https://skrub-data.org/stable/reference/generated/skrub.TextEncoder.html#skrub.TextEncoder")[skrub `Texencoder`]
+  ][
+    #figure(
+      image("img/penalized_linear_models/ken_embeddings.png", width: 80%),
+      caption: [2D projection of embedded wikipedia entities @cvetkov2023relational],
+    )]
 ]
 
 #slide(title: [Encoding with LLM : Is it always worthwhile? #cite(<grinsztajn2023vectorizing>)])[
@@ -854,23 +855,23 @@
       1fr,
       1fr,
     ))[
-      #align(top)[
-        === Findings
+    #align(top)[
+      === Findings
 
-        - Bigger is better !
-        - Bigger is costlier!
-        - Diminishing returns
-        #only(2)[
+      - Bigger is better !
+      - Bigger is costlier!
+      - Diminishing returns
+      #only(2)[
         === Rule of thumb
 
         - Useful for diverse categories:\ eg. 1000 diagnoses
         - Less for few dirty categories:\ eg. 100 fuzzy job titles
-        ]
-        ]
-      ][
-        #figure(
-    image("img/penalized_linear_models/llm_encoding_figure_1.png", width: 100%),
-  )]
+      ]
+    ]
+  ][
+    #figure(
+      image("img/penalized_linear_models/llm_encoding_figure_1.png", width: 100%),
+    )]
 ]
 
 
@@ -891,13 +892,13 @@
 
 #slide(title: "Many features, few observations: illustration in 1D")[
   #grid(columns: (1fr, 1fr))[
-      #only(1)[
-        #figure(image("img/pyfigures/linreg_noreg_0_nogrey.svg", width: 80%))
-      ]
-      #only(2)[
-        #figure(image("img/pyfigures/linreg_noreg_0.svg", width: 80%))
-      ]
-    ][
+    #only(1)[
+      #figure(image("img/pyfigures/linreg_noreg_0_nogrey.svg", width: 80%))
+    ]
+    #only(2)[
+      #figure(image("img/pyfigures/linreg_noreg_0.svg", width: 80%))
+    ]
+  ][
     - Few observations with respect to the number of features.
     - Fit a linear model without regularization.
     #uncover(2)[- Linear model can overfit if data is noisy.]
@@ -1180,7 +1181,7 @@
 
 #slide(title: [Python hands-on: To your notebooks 🧑‍💻!])[
 
-  ==  1b) Common pitfalls in the interpretation of coefficients of linear models
+  == 1b) Common pitfalls in the interpretation of coefficients of linear models
 
   - url: https://straymat.github.io/causal-ml-course/practical_sessions.html
 ]

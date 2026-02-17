@@ -85,7 +85,7 @@
   author: [Matthieu Doutreligne],
   title: "Machine Learning for econometrics",
   subtitle: "Flexible models for tabular data",
-  date: "February 18th, 2025",
+  date: "February 3rd, 2026",
   extra: [A lot of today's content is taken from the excellent #link("https://inria.github.io/scikit-learn-mooc/toc.html", "sklearn mooc") @loic_esteve_2022_7220307],
 )
 
@@ -98,7 +98,7 @@
   - Transformation of variables: polynomial regression
 
   #uncover(2)[🤔 But... How to select the best model? the best hyper-parameters?\
-   eg. regularization strength for Ridge]
+    eg. regularization strength for Ridge]
 ]
 
 
@@ -271,13 +271,13 @@
 
 #slide(title: [Random search more efficient than grid search @bergstra12])[
 
-    #grid(columns: (1fr, 1fr), gutter: 3mm)[
-  #figure(
-    image(
-      "img/flexible_models/grid_vs_random_search.svg",
-      width: 100%,
-    ),
-  )][
+  #grid(columns: (1fr, 1fr), gutter: 3mm)[
+    #figure(
+      image(
+        "img/flexible_models/grid_vs_random_search.svg",
+        width: 100%,
+      ),
+    )][
     - Grid search: Explores HP along all fixed directions (waste of time if one parameter is not important)
     - Grid search: good HP may fall between grid points
     - Random search: explores hyper-parameters in every direction
@@ -335,7 +335,7 @@
 ]
 
 #slide(title: "Nested cross-validation : An overview of the full procedure")[
-    #figure(image("img/flexible_models/grid_search_workflow.png", width: 70%))
+  #figure(image("img/flexible_models/grid_search_workflow.png", width: 70%))
 ]
 // #slide(title: [Over-optimistic performance estimation: Real life example #emoji.skull])[
 //   //https://www.nature.com/articles/s41746-022-00592-y
@@ -382,7 +382,7 @@
     #only(2)[
       #figure(image("img/flexible_models/tree_regression_structure2.svg", width: 90%))
     ]
-    #only((3,4))[
+    #only((3, 4))[
       #figure(image("img/flexible_models/tree_regression_structure3.svg", width: 90%))
     ]
   ][
@@ -392,7 +392,7 @@
     #only(2)[
       #figure(image("img/flexible_models/tree_regression3.svg", width: 90%))
     ]
-    #only((3,4))[
+    #only((3, 4))[
       #figure(image("img/flexible_models/tree_regression4.svg", width: 90%))
     ]
     #only(4)[
@@ -721,7 +721,7 @@
     🔸 Set $w_i arrow w_i exp[2 alpha_m bb(1)[y_i !=F_m (x_i )] e^(-alpha_m)$ for $i = 1..N$\
   ]
   #uncover((7, 8))[
-    3.  Output $F(x) = "sign"(sum_(i=1)^M alpha_m F_m(x))$\
+    3. Output $F(x) = "sign"(sum_(i=1)^M alpha_m F_m(x))$\
   ]
 ]
 

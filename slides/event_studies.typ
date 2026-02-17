@@ -107,7 +107,7 @@
 
   #set text(size: .8em, weight: "light")
   Matthieu Doutreligne
-  March, 11th, 2025
+  February, 17th, 2026
 ]
 
 #let alert = body => {
@@ -115,7 +115,7 @@
   body
 }
 
-#outline(depth:1)
+#outline(depth: 1)
 
 #set align(top)
 
@@ -223,7 +223,7 @@
   #only(3)[
     ⚠️ $EE[Y_t (0)] = underbrace(EE[Y_t (0) |D=0], "observed") PP(D=0) + underbrace([Y_t (0) |D=1], "counterfactual") PP(D=1)$
   ]
-  #only((4))[
+  #only(4)[
     === Plotting all observed data
   ]
   #only((5, 6))[
@@ -500,9 +500,9 @@
       Prediction: $hat(Y)_("synth") = vec(Y_(t, j))_(t=1..T#linebreak()j=2..n_0+1) hat(w)$
     ]
   ][
-     #only((4))[
+    #only(4)[
       #figure(image("img/pyfigures/scm_california_vs_synth_lr.svg", width: 100%))
-     ]
+    ]
   ]
   #only(4)[=== 😭 Overfitting]
 ]
@@ -595,7 +595,7 @@
 
   - More variance after the treatment for California than before.
   - Some states have pre-treatment trends which are hard to predict : \
-        Expected because interpolation not possible for them.
+    Expected because interpolation not possible for them.
 ]
 
 #slide(title: "Example of placebo test: Focus on 34 controls with good pre-treatment fit")[
@@ -618,7 +618,7 @@
       In how many repetitions is California's effect above the placebo effect ?
 
       #v(2em)
-      $p &=1 -  1 / (n_0) sum_(j=2)^(n_0) bb(1) big("(") |hat(tau)_("scm, california")| > |hat(tau)_("scm", j)| big(")")\
+      $p &=1 - 1 / (n_0) sum_(j=2)^(n_0) bb(1) big("(") |hat(tau)_("scm, california")| > |hat(tau)_("scm", j)| big(")")\
       &= 0.029$
     ]
 
@@ -1262,6 +1262,7 @@
     [❌],
     [✅],
     [❌],
+
     [#link("https://github.com/lrberge/fixest", "fixest")], "Fixed effects", [✅], [✅], [✅],
     [#link("https://pkg.robjhyndman.com/forecast/reference/Arima.html", "forecast")], "ARIMA, ITS", [✅], [❌], [✅],
     [#link("https://cran.r-project.org/web/packages/Synth/index.html", "Synth")], "Synthetic control", [❌], [✅], [✅],
@@ -1290,7 +1291,12 @@
     [✅],
 
     [#link("https://alkaline-ml.com/pmdarima/index.html", "pmdarima")], "ARIMA(X), ITS", [✅], [❌], [✅],
-    [#link("https://docs.doubleml.org/stable/examples/index.html#difference-in-differences", [#emoji.heart DoubleML])], "DID with double ML debiasing", [✅], [✅], [✅],
+    [#link("https://docs.doubleml.org/stable/examples/index.html#difference-in-differences", [#emoji.heart DoubleML])],
+    "DID with double ML debiasing",
+    [✅],
+    [✅],
+    [✅],
+
     [#link("https://github.com/sdfordham/pysyncon", "pysyncon")], "Synthetic control", [❌], [✅], [✅],
     [#link("https://causalpy.readthedocs.io", [#emoji.heart CausalPy]) ],
     "Synthetic control, interrupted time series, DID",
